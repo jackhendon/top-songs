@@ -1,7 +1,7 @@
 "use client";
 
 import { Song } from "@/app/api/artist/route";
-import { Lock } from "lucide-react";
+import { Lock, Sparkles } from "lucide-react";
 
 interface SlotCardProps {
   rank: number;
@@ -13,52 +13,53 @@ export default function SlotCard({ rank, song, isRevealed }: SlotCardProps) {
   return (
     <div
       className={`
-        relative overflow-hidden rounded-lg border-2 transition-all duration-500
+        relative overflow-hidden rounded-xl border-2 transition-all duration-300
         ${
           isRevealed
-            ? "bg-green-50 dark:bg-green-900/20 border-green-500 dark:border-green-600"
-            : "bg-gray-100 dark:bg-gray-700 border-gray-300 dark:border-gray-600"
+            ? "bg-correct-light border-correct animate-bounce-in"
+            : "bg-gray-50 border-locked"
         }
       `}
     >
-      <div className="flex items-center p-4">
-        {/* Rank */}
+      <div className="flex items-center p-3 sm:p-4">
+        {/* Rank Badge */}
         <div
           className={`
-            flex items-center justify-center w-10 h-10 rounded-full font-bold text-lg mr-4
+            flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-full font-bold text-sm sm:text-base mr-3
             ${
               isRevealed
-                ? "bg-green-500 text-white"
-                : "bg-gray-300 dark:bg-gray-600 text-gray-600 dark:text-gray-300"
+                ? "bg-correct text-white"
+                : "bg-locked text-gray-400"
             }
           `}
         >
-          #{rank}
+          {rank}
         </div>
 
         {/* Content */}
-        <div className="flex-1">
+        <div className="flex-1 min-w-0">
           {isRevealed ? (
             <>
-              <div className="font-bold text-lg text-gray-900 dark:text-white">
+              <div className="font-bold text-base text-gray-900 truncate">
                 {song.title}
               </div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">
-                {song.totalStreams.toLocaleString()} streams
+              <div className="flex items-center gap-1 text-sm text-gray-500">
+                <Sparkles className="w-3.5 h-3.5 text-brand-purple" />
+                <span>{song.totalStreams.toLocaleString()} streams</span>
               </div>
             </>
           ) : (
-            <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
+            <div className="flex items-center gap-2 text-gray-400">
               <Lock className="w-4 h-4" />
-              <span className="font-medium">Not yet guessed</span>
+              <span className="font-medium text-sm">Not yet guessed</span>
             </div>
           )}
         </div>
       </div>
 
-      {/* Reveal Animation */}
+      {/* Reveal Flash Overlay */}
       {isRevealed && (
-        <div className="absolute inset-0 bg-green-500 animate-reveal-flash pointer-events-none" />
+        <div className="absolute inset-0 bg-correct/30 animate-reveal-flash pointer-events-none" />
       )}
     </div>
   );

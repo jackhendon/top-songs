@@ -10,6 +10,7 @@ export default function GuessInput() {
     type: "success" | "overflow" | "error" | null;
     message: string;
   }>({ type: null, message: "" });
+  const [shaking, setShaking] = useState(false);
 
   const { makeGuess } = useGameStore();
 
@@ -24,7 +25,7 @@ export default function GuessInput() {
       case "correct-top10":
         setFeedback({
           type: "success",
-          message: "✓ Correct! That's in the top 10!",
+          message: "That's in the top 10!",
         });
         setGuess("");
         break;
@@ -32,7 +33,7 @@ export default function GuessInput() {
       case "correct-overflow":
         setFeedback({
           type: "overflow",
-          message: "~ Correct song, but not in the top 10",
+          message: "Correct song, but not in the top 10",
         });
         setGuess("");
         break;
@@ -42,13 +43,15 @@ export default function GuessInput() {
           type: "error",
           message: "You already guessed that song",
         });
+        triggerShake();
         break;
 
       case "incorrect":
         setFeedback({
           type: "error",
-          message: "✗ Not a match. Try again!",
+          message: "Not a match. Try again!",
         });
+        triggerShake();
         break;
     }
 
@@ -58,55 +61,62 @@ export default function GuessInput() {
     }, 3000);
   };
 
+  const triggerShake = () => {
+    setShaking(true);
+    setTimeout(() => setShaking(false), 500);
+  };
+
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label
-            htmlFor="guess"
-            className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+    <div
+      className={`bg-white rounded-2xl shadow-lg p-4 sm:p-5 ${shaking ? "animate-shake" : ""}`}
+    >
+      <form onSubmit={handleSubmit} className="space-y-3">
+        <label
+          htmlFor="guess"
+          className="block text-sm font-semibold text-gray-700 mb-1"
+        >
+          Guess a song
+        </label>
+        <div className="flex gap-2">
+          <input
+            id="guess"
+            type="text"
+            value={guess}
+            onChange={(e) => setGuess(e.target.value)}
+            placeholder="Enter song title..."
+            className="flex-1 px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-purple/50 focus:border-brand-purple transition-colors text-base"
+            autoComplete="off"
+            autoFocus
+          />
+          <button
+            type="submit"
+            className="px-5 py-3 bg-gradient-brand text-white font-semibold rounded-xl transition-all hover:shadow-brand active:scale-95 min-h-[44px]"
           >
-            Guess a song:
-          </label>
-          <div className="flex gap-2">
-            <input
-              id="guess"
-              type="text"
-              value={guess}
-              onChange={(e) => setGuess(e.target.value)}
-              placeholder="Enter song title..."
-              className="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              autoComplete="off"
-              autoFocus
-            />
-            <button
-              type="submit"
-              className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors"
-            >
-              Guess
-            </button>
-          </div>
+            Guess
+          </button>
         </div>
 
         {/* Feedback Message */}
         {feedback.type && (
           <div
-            className={`flex items-center gap-2 p-3 rounded-lg ${
+            className={`flex items-center gap-2 p-3 rounded-xl text-sm font-medium ${
               feedback.type === "success"
-                ? "bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200"
+                ? "bg-correct-light text-correct"
                 : feedback.type === "overflow"
-                  ? "bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200"
-                  : "bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200"
+                  ? "bg-overflow-light text-overflow"
+                  : "bg-error-light text-error"
             }`}
           >
             {feedback.type === "success" && (
-              <CheckCircle2 className="w-5 h-5" />
+              <CheckCircle2 className="w-5 h-5 shrink-0" />
             )}
             {feedback.type === "overflow" && (
-              <AlertCircle className="w-5 h-5" />
+              <AlertCircle className="w-5 h-5 shrink-0" />
             )}
-            {feedback.type === "error" && <XCircle className="w-5 h-5" />}
-            <span className="font-medium">{feedback.message}</span>
+            {feedback.type === "error" && (
+              <XCircle className="w-5 h-5 shrink-0" />
+            )}
+            <span>{feedback.message}</span>
           </div>
         )}
       </form>

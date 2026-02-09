@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Search } from "lucide-react";
+import { Search, Music2 } from "lucide-react";
 import { ArtistData } from "@/app/api/artist/route";
 
 interface ArtistSelectorProps {
@@ -57,8 +57,8 @@ export default function ArtistSelector({
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
-      <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 text-center">
+    <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8">
+      <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
         Choose an Artist
       </h2>
 
@@ -72,40 +72,66 @@ export default function ArtistSelector({
               value={artistName}
               onChange={(e) => setArtistName(e.target.value)}
               placeholder="Search for an artist..."
-              className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl bg-gray-50 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-purple/50 focus:border-brand-purple transition-colors text-base"
               disabled={loading}
             />
           </div>
           <button
             type="submit"
             disabled={loading || !artistName.trim()}
-            className="px-6 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 dark:disabled:bg-gray-600 text-white font-semibold rounded-lg transition-colors disabled:cursor-not-allowed"
+            className="px-6 py-3 bg-gradient-brand text-white font-semibold rounded-xl transition-all disabled:opacity-40 disabled:cursor-not-allowed hover:shadow-brand active:scale-95"
           >
-            {loading ? "Loading..." : "Play"}
+            {loading ? (
+              <span className="inline-flex items-center gap-2">
+                <svg
+                  className="animate-spin w-4 h-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                >
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="3"
+                    className="opacity-25"
+                  />
+                  <path
+                    d="M4 12a8 8 0 018-8"
+                    stroke="currentColor"
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                    className="opacity-75"
+                  />
+                </svg>
+                Loading
+              </span>
+            ) : (
+              "Play"
+            )}
           </button>
         </div>
       </form>
 
       {/* Error Message */}
       {error && (
-        <div className="mb-6 p-4 bg-red-100 dark:bg-red-900 border border-red-400 dark:border-red-600 text-red-700 dark:text-red-200 rounded-lg">
+        <div className="mb-6 p-4 bg-error-light border border-error/20 text-error rounded-xl text-sm">
           {error}
         </div>
       )}
 
       {/* Popular Artists */}
       <div>
-        <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
-          Or try a popular artist:
-        </p>
+        <p className="text-sm text-gray-500 mb-3">Or try a popular artist:</p>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
           {popularArtists.map((artist) => (
             <button
               key={artist}
               onClick={() => handleSearch(artist)}
               disabled={loading}
-              className="px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-white text-sm rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex items-center justify-center gap-1.5 px-4 py-3 bg-gray-50 hover:bg-brand-purple/5 hover:text-brand-purple border border-gray-100 hover:border-brand-purple/20 text-gray-700 text-sm font-medium rounded-xl transition-all disabled:opacity-40 disabled:cursor-not-allowed active:scale-95 min-h-[44px]"
             >
+              <Music2 className="w-3.5 h-3.5 opacity-50" />
               {artist}
             </button>
           ))}

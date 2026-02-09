@@ -6,9 +6,11 @@ import { ArtistData } from "./api/artist/route";
 import ArtistSelector from "@/components/ArtistSelector";
 import GameBoard from "@/components/GameBoard";
 import GuessInput from "@/components/GuessInput";
+import { Music2, RotateCcw } from "lucide-react";
 
 export default function HomePage() {
-  const { artistName, isGameWon, resetGame } = useGameStore();
+  const { artistName, artistImage, revealedIndices, isGameWon, resetGame } =
+    useGameStore();
   const [isStarted, setIsStarted] = useState(false);
 
   const handleArtistSelected = async (artistData: ArtistData) => {
@@ -30,15 +32,20 @@ export default function HomePage() {
     setIsStarted(false);
   };
 
+  const progress = revealedIndices.size;
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-gray-900 dark:to-gray-800">
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
+    <div className="min-h-screen bg-gradient-game">
+      <div className="mx-auto px-4 py-6 sm:py-8 max-w-2xl">
         {/* Header */}
         <header className="text-center mb-8">
-          <h1 className="text-5xl font-bold text-gray-900 dark:text-white mb-2">
-            🎵 Top Songs
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-gradient-brand mb-3 shadow-brand">
+            <Music2 className="w-7 h-7 text-white" />
+          </div>
+          <h1 className="text-4xl sm:text-5xl font-extrabold text-gradient-brand mb-1">
+            Top Songs
           </h1>
-          <p className="text-gray-600 dark:text-gray-400">
+          <p className="text-gray-500 text-base">
             Guess the top 10 most-streamed songs on Spotify
           </p>
         </header>
@@ -47,18 +54,41 @@ export default function HomePage() {
         {!isStarted ? (
           <ArtistSelector onArtistSelected={handleArtistSelected} />
         ) : (
-          <div className="space-y-6">
-            {/* Current Artist Header */}
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-              <div className="flex items-center justify-between">
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-                  {artistName}
-                </h2>
+          <div className="space-y-4">
+            {/* Artist Header */}
+            <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-5">
+              <div className="flex items-center gap-4">
+                {/* Artist Image */}
+                {artistImage && (
+                  <img
+                    src={artistImage}
+                    alt={artistName}
+                    className="w-14 h-14 sm:w-16 sm:h-16 rounded-full object-cover border-2 border-brand-purple/20"
+                  />
+                )}
+                <div className="flex-1 min-w-0">
+                  <h2 className="text-xl sm:text-2xl font-bold text-gray-900 truncate">
+                    {artistName}
+                  </h2>
+                  <div className="flex items-center gap-2 mt-1">
+                    <span className="text-sm font-semibold text-brand-purple">
+                      {progress}/10
+                    </span>
+                    <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-gradient-brand rounded-full progress-bar-fill"
+                        style={{ width: `${(progress / 10) * 100}%` }}
+                      />
+                    </div>
+                  </div>
+                </div>
                 <button
                   onClick={handleReset}
-                  className="px-4 py-2 text-sm bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 rounded-lg transition-colors"
+                  className="flex items-center gap-1.5 px-3 py-2 text-sm text-gray-500 hover:text-brand-purple hover:bg-brand-purple/5 rounded-xl transition-colors"
+                  title="Change artist"
                 >
-                  Change Artist
+                  <RotateCcw className="w-4 h-4" />
+                  <span className="hidden sm:inline">New Artist</span>
                 </button>
               </div>
             </div>
@@ -66,26 +96,28 @@ export default function HomePage() {
             {/* Guess Input */}
             {!isGameWon && <GuessInput />}
 
-            {/* Game Board */}
-            <GameBoard />
-
             {/* Win Message */}
             {isGameWon && (
-              <div className="bg-green-100 dark:bg-green-900 border border-green-400 dark:border-green-600 rounded-lg p-6 text-center">
-                <h3 className="text-2xl font-bold text-green-800 dark:text-green-200 mb-2">
-                  🎉 You Win! 🎉
+              <div className="bg-gradient-brand rounded-2xl p-6 text-center shadow-brand">
+                <div className="text-4xl mb-2">🎉</div>
+                <h3 className="text-2xl font-bold text-white mb-1">
+                  You got them all!
                 </h3>
-                <p className="text-green-700 dark:text-green-300 mb-4">
-                  You guessed all top 10 songs for {artistName}!
+                <p className="text-white/80 mb-4">
+                  All top 10 songs for {artistName} revealed
                 </p>
                 <button
                   onClick={handleReset}
-                  className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-white text-brand-purple font-semibold rounded-xl hover:bg-white/90 transition-colors"
                 >
+                  <RotateCcw className="w-4 h-4" />
                   Play Again
                 </button>
               </div>
             )}
+
+            {/* Game Board */}
+            <GameBoard />
           </div>
         )}
       </div>
