@@ -140,50 +140,64 @@ export async function GET(request: NextRequest) {
     const html = await response.text();
     const $ = cheerio.load(html);
 
-    // Parse the table - Kworb uses a specific table structure
-    // We're looking for the main songs table with streaming data
+    // Parse the table - Kworb uses class "addpos sortable"
     const songs: Song[] = [];
 
-    // Find the table - typically the main table on the page
-    // Kworb tables have headers like: Song, Total Streams, Daily Streams, etc.
-    const table = $("table").first();
+    // Find the songs table - it has class "addpos sortable"
+    const table = $("table.addpos.sortable");
 
     if (!table.length) {
       return NextResponse.json(
-        { error: "Could not find song data table" },
+        { error: "Could not find song data table on Kworb page" },
         { status: 500 },
       );
     }
 
-    // Parse table rows
-    table.find("tbody tr").each((index, row) => {
+    // Parse table rows from tbody
+    const rows = table.find("tbody tr");
+
+    console.log(`Found ${rows.length} rows in table`);
+
+    rows.each((index, row) => {
       const $row = $(row);
       const cells = $row.find("td");
 
-      if (cells.length < 3) return; // Skip malformed rows
+      if (cells.length < 2) return; // Skip malformed rows
 
-      // Extract song title - usually in the first or second column
-      let title = cells.eq(0).text().trim();
+      // Strategy: Find the song title and stream counts
+      // Based on Kworb structure:
+      // - Song title is usually in a <td> with a link (<a> tag)
+      // - Stream counts are in <td class="text"> or plain <td> with numbers
 
-      // If first cell is just a number (rank), title is in second cell
-      if (!isNaN(Number(title))) {
-        title = cells.eq(1).text().trim();
-      }
+      let title = "";
+      const streamCounts: number[] = [];
 
-      // Extract stream counts - need to handle formatting like "1,234,567,890"
-      const totalStreamsText = cells
-        .eq(cells.length - 2)
-        .text()
-        .trim();
-      const dailyStreamsText = cells
-        .eq(cells.length - 1)
-        .text()
-        .trim();
+      cells.each((i, cell) => {
+        const $cell = $(cell);
+        const cellText = $cell.text().trim();
 
-      const totalStreams = parseStreamCount(totalStreamsText);
-      const dailyStreams = parseStreamCount(dailyStreamsText);
+        // Check if this cell contains a song title (has a link)
+        const link = $cell.find("a");
+        if (link.length > 0 && !title) {
+          title = link.text().trim();
+        }
 
-      if (title && totalStreams > 0) {
+        // Check if this cell contains a number (stream count)
+        const parsed = parseStreamCount(cellText);
+        if (parsed > 0) {
+          streamCounts.push(parsed);
+        }
+      });
+
+      // Heuristic: The largest number is likely total streams
+      // The second-largest (or second number) is likely daily streams
+      if (title && streamCounts.length > 0) {
+        // Sort to find the largest values
+        const sortedStreams = [...streamCounts].sort((a, b) => b - a);
+
+        const totalStreams = sortedStreams[0] || 0;
+        const dailyStreams = sortedStreams[1] || 0;
+
         songs.push({
           rank: index + 1,
           title,
@@ -194,11 +208,19 @@ export async function GET(request: NextRequest) {
     });
 
     if (songs.length === 0) {
+      console.error(
+        "No songs parsed from table. HTML structure might have changed.",
+      );
       return NextResponse.json(
-        { error: "No songs found for this artist" },
+        {
+          error:
+            "No songs found for this artist. The page structure might have changed.",
+        },
         { status: 404 },
       );
     }
+
+    console.log(`Successfully parsed ${songs.length} songs`);
 
     // Sort by total streams (descending)
     songs.sort((a, b) => b.totalStreams - a.totalStreams);
@@ -230,13 +252,19 @@ export async function GET(request: NextRequest) {
 }
 
 /**
- * Parse stream count strings like "1,234,567,890" to numbers
+ * Parse stream count strings like "1,234,567,890" or "3,238,421,886" to numbers
  */
 function parseStreamCount(text: string): number {
-  if (!text) return 0;
+  if (!text || text.trim() === "") return 0;
 
-  // Remove commas and any non-digit characters except decimal points
+  // Remove all commas and whitespace
   const cleaned = text.replace(/[,\s]/g, "");
+
+  // Check if it's a valid number string
+  if (!/^\d+(\.\d+)?$/.test(cleaned)) {
+    return 0;
+  }
+
   const num = parseFloat(cleaned);
 
   return isNaN(num) ? 0 : Math.floor(num);
