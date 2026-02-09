@@ -1,6 +1,7 @@
 "use client";
 
-import { Trophy, RotateCcw, Share2 } from "lucide-react";
+import { useState } from "react";
+import { Trophy, RotateCcw, Share2, Check } from "lucide-react";
 
 interface VictoryScreenProps {
   artistName: string;
@@ -9,24 +10,31 @@ interface VictoryScreenProps {
   onPlayAgain: () => void;
 }
 
+function isMobileDevice(): boolean {
+  return window.matchMedia("(pointer: coarse)").matches;
+}
+
 export default function VictoryScreen({
   artistName,
   totalGuesses,
   overflowCount,
   onPlayAgain,
 }: VictoryScreenProps) {
+  const [copied, setCopied] = useState(false);
+
   const handleShare = async () => {
     const text = `I guessed all of ${artistName}'s top 10 songs in ${totalGuesses} tries! 🎵\n\nPlay Top Songs at topsongs.io`;
 
-    if (navigator.share) {
+    if (isMobileDevice() && navigator.share) {
       try {
         await navigator.share({ text });
       } catch {
         // User cancelled
       }
     } else {
-      navigator.clipboard.writeText(text);
-      alert("Copied to clipboard!");
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
     }
   };
 
@@ -111,8 +119,17 @@ export default function VictoryScreen({
           onClick={handleShare}
           className="btn-secondary inline-flex items-center justify-center gap-2 cursor-pointer"
         >
-          <Share2 className="w-5 h-5" />
-          Share Result
+          {copied ? (
+            <>
+              <Check className="w-5 h-5" />
+              Copied!
+            </>
+          ) : (
+            <>
+              <Share2 className="w-5 h-5" />
+              Share Result
+            </>
+          )}
         </button>
       </div>
     </div>
