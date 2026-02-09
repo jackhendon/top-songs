@@ -6,7 +6,7 @@ import { ArtistData } from "@/lib/types";
 import Header from "@/components/Header";
 import ArtistSelector from "@/components/ArtistSelector";
 import GameBoard from "@/components/GameBoard";
-import GuessInput from "@/components/GuessInput";
+
 import VictoryScreen from "@/components/VictoryScreen";
 
 export default function HomePage() {
@@ -54,10 +54,7 @@ export default function HomePage() {
             onPlayAgain={handleReset}
           />
         ) : (
-          <div className="space-y-4">
-            <GuessInput />
-            <GameBoard />
-          </div>
+          <GameBoard />
         )}
       </main>
 
