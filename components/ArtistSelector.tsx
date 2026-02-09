@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Search, Music2 } from "lucide-react";
 import { ArtistData } from "@/lib/types";
+import { trackArtistSearch, trackError } from "@/lib/analytics";
 
 interface ArtistSelectorProps {
   onArtistSelected: (artistData: ArtistData) => void;
@@ -43,9 +44,12 @@ export default function ArtistSelector({
       }
 
       const data: ArtistData = await response.json();
+      trackArtistSearch(data.artistName, "search");
       onArtistSelected(data);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Unknown error");
+      const message = err instanceof Error ? err.message : "Unknown error";
+      trackError("artist_search", message, { artist_name: name });
+      setError(message);
     } finally {
       setLoading(false);
     }

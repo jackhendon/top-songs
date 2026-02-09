@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import PostHogInit from "@/components/PostHogInit";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -15,6 +16,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="paper-texture">
+        <PostHogInit />
         {children}
       </body>
     </html>

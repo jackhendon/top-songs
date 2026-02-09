@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Trophy, RotateCcw, Share2, Check } from "lucide-react";
+import { trackShare } from "@/lib/analytics";
 
 interface VictoryScreenProps {
   artistName: string;
@@ -28,11 +29,13 @@ export default function VictoryScreen({
     if (isMobileDevice() && navigator.share) {
       try {
         await navigator.share({ text });
+        trackShare(artistName, "native");
       } catch {
         // User cancelled
       }
     } else {
       await navigator.clipboard.writeText(text);
+      trackShare(artistName, "clipboard");
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     }

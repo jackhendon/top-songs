@@ -16,6 +16,7 @@ export default function HomePage() {
     overflowSongs,
     totalGuesses,
     isGameWon,
+    isGaveUp,
     resetGame,
   } = useGameStore();
   const [isStarted, setIsStarted] = useState(false);
@@ -46,7 +47,7 @@ export default function HomePage() {
       <main className="flex-1 container mx-auto px-4 py-8 max-w-4xl">
         {!isStarted ? (
           <ArtistSelector onArtistSelected={handleArtistSelected} />
-        ) : isGameWon ? (
+        ) : isGameWon && !isGaveUp ? (
           <VictoryScreen
             artistName={artistName}
             totalGuesses={totalGuesses}
@@ -54,7 +55,7 @@ export default function HomePage() {
             onPlayAgain={handleReset}
           />
         ) : (
-          <GameBoard />
+          <GameBoard onReset={handleReset} />
         )}
       </main>
 

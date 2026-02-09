@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { Song } from "./types";
 import { findBestMatch } from "./songMatcher";
+import { trackGameStart, trackGuess, trackGameWon, trackGameAbandoned } from "./analytics";
 
 export interface GameState {
   // Artist data
@@ -19,7 +20,9 @@ export interface GameState {
 
   // Game status
   totalGuesses: number;
+  gameStartedAt: number | null;
   isGameWon: boolean;
+  isGaveUp: boolean;
   isLoading: boolean;
   error: string | null;
 
@@ -34,6 +37,7 @@ export interface GameState {
   makeGuess: (
     guess: string,
   ) => "correct-top10" | "correct-overflow" | "incorrect" | "duplicate";
+  giveUp: () => void;
   resetGame: () => void;
 }
 
@@ -48,7 +52,9 @@ export const useGameStore = create<GameState>((set, get) => ({
   overflowSongs: [],
   guessedTitles: new Set(),
   totalGuesses: 0,
+  gameStartedAt: null,
   isGameWon: false,
+  isGaveUp: false,
   isLoading: false,
   error: null,
 
@@ -64,9 +70,12 @@ export const useGameStore = create<GameState>((set, get) => ({
       overflowSongs: [],
       guessedTitles: new Set(),
       totalGuesses: 0,
+      gameStartedAt: Date.now(),
       isGameWon: false,
+      isGaveUp: false,
       error: null,
     });
+    trackGameStart(artistName, artistId);
   },
 
   // Process a guess
@@ -85,6 +94,13 @@ export const useGameStore = create<GameState>((set, get) => ({
     const match = findBestMatch(guess, allSongTitles, 0.75);
 
     if (!match) {
+      trackGuess({
+        artistName: state.artistName,
+        guessText: guess,
+        correct: false,
+        isOverflow: false,
+        totalGuesses: state.totalGuesses + 1,
+      });
       return "incorrect"; // No match found
     }
 
@@ -113,12 +129,35 @@ export const useGameStore = create<GameState>((set, get) => ({
 
       // Check if game is won
       const isWon = newRevealed.size === 10;
+      const newTotalGuesses = state.totalGuesses + 1;
 
       set({
         revealedIndices: newRevealed,
         guessedTitles: newGuessed,
         isGameWon: isWon,
       });
+
+      trackGuess({
+        artistName: state.artistName,
+        guessText: guess,
+        correct: true,
+        isOverflow: false,
+        position: topTenIndex + 1,
+        totalGuesses: newTotalGuesses,
+      });
+
+      if (isWon) {
+        const timeSeconds = state.gameStartedAt
+          ? Math.round((Date.now() - state.gameStartedAt) / 1000)
+          : 0;
+        trackGameWon({
+          artistName: state.artistName,
+          artistId: state.artistId,
+          totalGuesses: newTotalGuesses,
+          timeSeconds,
+          overflowCount: state.overflowSongs.length,
+        });
+      }
 
       return "correct-top10";
     } else {
@@ -132,8 +171,30 @@ export const useGameStore = create<GameState>((set, get) => ({
         guessedTitles: newGuessed,
       });
 
+      trackGuess({
+        artistName: state.artistName,
+        guessText: guess,
+        correct: true,
+        isOverflow: true,
+        totalGuesses: state.totalGuesses + 1,
+      });
+
       return "correct-overflow";
     }
+  },
+
+  // Give up - reveal all slots
+  giveUp: () => {
+    const state = get();
+    trackGameAbandoned({
+      artistName: state.artistName,
+      guessesUsed: state.totalGuesses,
+      slotsRevealed: state.revealedIndices.size,
+    });
+    set({
+      revealedIndices: new Set([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]),
+      isGaveUp: true,
+    });
   },
 
   // Reset the game
@@ -148,7 +209,9 @@ export const useGameStore = create<GameState>((set, get) => ({
       overflowSongs: [],
       guessedTitles: new Set(),
       totalGuesses: 0,
+      gameStartedAt: null,
       isGameWon: false,
+      isGaveUp: false,
       isLoading: false,
       error: null,
     });
