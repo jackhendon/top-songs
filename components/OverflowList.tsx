@@ -1,5 +1,5 @@
 import { Star } from "lucide-react";
-import { Song } from "@/app/api/artist/route";
+import { Song } from "@/lib/types";
 
 interface OverflowListProps {
   songs: Song[];

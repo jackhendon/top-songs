@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Search, Music2 } from "lucide-react";
-import { ArtistData } from "@/app/api/artist/route";
+import { ArtistData } from "@/lib/types";
 
 interface ArtistSelectorProps {
   onArtistSelected: (artistData: ArtistData) => void;

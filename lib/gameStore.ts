@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { Song } from "@/app/api/artist/route";
+import { Song } from "./types";
 import { findBestMatch } from "./songMatcher";
 
 export interface GameState {

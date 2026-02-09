@@ -1,6 +1,6 @@
 "use client";
 
-import { Song } from "@/app/api/artist/route";
+import { Song } from "@/lib/types";
 import { Lock, Sparkles } from "lucide-react";
 
 interface SlotCardProps {

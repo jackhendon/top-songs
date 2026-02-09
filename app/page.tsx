@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useGameStore } from "@/lib/gameStore";
-import { ArtistData } from "./api/artist/route";
+import { ArtistData } from "@/lib/types";
 import Header from "@/components/Header";
 import ArtistSelector from "@/components/ArtistSelector";
 import GameBoard from "@/components/GameBoard";
