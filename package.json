@@ -9,7 +9,6 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@types/string-similarity": "^4.0.2",
     "cheerio": "^1.2.0",
     "clsx": "^2.1.1",
     "lucide-react": "^0.563.0",
@@ -26,6 +25,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/string-similarity": "^4.0.2",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
     "tailwindcss": "^4",
