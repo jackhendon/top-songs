@@ -68,12 +68,12 @@ export default function GuessInput() {
 
   return (
     <div
-      className={`bg-white rounded-2xl shadow-lg p-4 sm:p-5 ${shaking ? "animate-shake" : ""}`}
+      className={`song-slot p-4 sm:p-5 ${shaking ? "animate-shake" : ""}`}
     >
       <form onSubmit={handleSubmit} className="space-y-3">
         <label
           htmlFor="guess"
-          className="block text-sm font-semibold text-gray-700 mb-1"
+          className="block text-sm font-semibold text-charcoal-700 mb-1"
         >
           Guess a song
         </label>
@@ -84,13 +84,13 @@ export default function GuessInput() {
             value={guess}
             onChange={(e) => setGuess(e.target.value)}
             placeholder="Enter song title..."
-            className="flex-1 px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-purple/50 focus:border-brand-purple transition-colors text-base"
+            className="input-field flex-1 text-base"
             autoComplete="off"
             autoFocus
           />
           <button
             type="submit"
-            className="px-5 py-3 bg-gradient-brand text-white font-semibold rounded-xl transition-all hover:shadow-brand active:scale-95 min-h-[44px] cursor-pointer"
+            className="btn-primary min-h-[44px] cursor-pointer"
           >
             Guess
           </button>
@@ -99,12 +99,12 @@ export default function GuessInput() {
         {/* Feedback Message */}
         {feedback.type && (
           <div
-            className={`flex items-center gap-2 p-3 rounded-xl text-sm font-medium ${
+            className={`flex items-center gap-2 p-3 rounded-card text-sm font-medium border-2 ${
               feedback.type === "success"
-                ? "bg-correct-light text-correct"
+                ? "bg-sage-400/10 border-sage-600 text-sage-600"
                 : feedback.type === "overflow"
-                  ? "bg-overflow-light text-overflow"
-                  : "bg-error-light text-error"
+                  ? "bg-mustard-400/10 border-mustard-500 text-mustard-500"
+                  : "bg-burnt-orange/10 border-burnt-orange text-burnt-sienna"
             }`}
           >
             {feedback.type === "success" && (

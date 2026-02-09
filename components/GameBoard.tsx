@@ -1,17 +1,75 @@
 "use client";
 
 import { useGameStore } from "@/lib/gameStore";
-import { Sparkles } from "lucide-react";
+import { Music2, Trophy } from "lucide-react";
 import SlotCard from "./SlotCard";
+import OverflowList from "./OverflowList";
 
 export default function GameBoard() {
-  const { topTen, revealedIndices, overflowSongs } = useGameStore();
+  const {
+    artistName,
+    artistImage,
+    topTen,
+    revealedIndices,
+    overflowSongs,
+    totalGuesses,
+  } = useGameStore();
 
   return (
     <div className="space-y-4">
+      {/* Now Playing Header */}
+      <div className="song-slot p-4 sm:p-6">
+        <div className="text-center pb-6 border-b-2 border-charcoal-700/15">
+          {artistImage && (
+            <img
+              src={artistImage}
+              alt={artistName}
+              className="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover border-2 border-charcoal-700/15 mx-auto mb-3"
+            />
+          )}
+          <div className="inline-flex items-center gap-2 mb-2">
+            <Music2 className="w-5 h-5 text-burnt-orange" />
+            <span className="text-sm uppercase tracking-wide text-charcoal-700/60 font-medium">
+              Now Playing
+            </span>
+          </div>
+          <h2 className="font-display text-3xl md:text-4xl font-bold text-charcoal-800">
+            {artistName}
+          </h2>
+          <p className="text-charcoal-700/70 mt-2">
+            Guess the top 10 most-streamed songs
+          </p>
+        </div>
+
+        {/* Progress Section */}
+        <div className="pt-4 space-y-3">
+          <div className="flex items-center justify-between px-1">
+            <div className="flex items-center gap-2">
+              <Trophy className="w-5 h-5 text-mustard-500" />
+              <span className="font-medium text-charcoal-800">
+                {revealedIndices.size} / 10 found
+              </span>
+            </div>
+            <span className="text-sm text-charcoal-700/60">
+              {totalGuesses} {totalGuesses === 1 ? "guess" : "guesses"}
+            </span>
+          </div>
+
+          {/* Progress Bar */}
+          <div className="h-2 bg-cream-200 rounded-full overflow-hidden border-2 border-charcoal-700/10">
+            <div
+              className="h-full bg-sage-500 transition-all duration-500 ease-out"
+              style={{ width: `${(revealedIndices.size / 10) * 100}%` }}
+            />
+          </div>
+        </div>
+      </div>
+
       {/* Top 10 Grid */}
-      <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-5">
-        <h3 className="text-lg font-bold text-gray-900 mb-3">Top 10 Songs</h3>
+      <div className="song-slot p-4 sm:p-5">
+        <h3 className="font-display text-lg font-bold text-charcoal-800 mb-3">
+          Top 10 Songs
+        </h3>
         <div className="grid grid-cols-1 gap-2.5">
           {topTen.map((song, index) => (
             <SlotCard
@@ -25,39 +83,7 @@ export default function GameBoard() {
       </div>
 
       {/* Overflow/Honorable Mentions */}
-      {overflowSongs.length > 0 && (
-        <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-5">
-          <div className="mb-3">
-            <h3 className="text-lg font-bold text-gray-900">
-              Honorable Mentions
-            </h3>
-            <p className="text-sm text-gray-400">
-              Correct, but not in the top 10
-            </p>
-          </div>
-          <div className="space-y-2">
-            {overflowSongs.map((song, index) => (
-              <div
-                key={index}
-                className="flex items-center justify-between p-3 bg-overflow-light border border-overflow/20 rounded-xl"
-              >
-                <div className="min-w-0 flex-1">
-                  <div className="font-medium text-gray-900 truncate">
-                    {song.title}
-                  </div>
-                  <div className="text-sm text-overflow font-medium">
-                    Rank #{song.rank}
-                  </div>
-                </div>
-                <div className="flex items-center gap-1 text-sm text-gray-500 ml-3 shrink-0">
-                  <Sparkles className="w-3.5 h-3.5 text-overflow" />
-                  {song.totalStreams.toLocaleString()}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
+      <OverflowList songs={overflowSongs} />
     </div>
   );
 }

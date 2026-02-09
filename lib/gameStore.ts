@@ -18,6 +18,7 @@ export interface GameState {
   guessedTitles: Set<string>; // All song titles that have been guessed (prevents duplicates)
 
   // Game status
+  totalGuesses: number;
   isGameWon: boolean;
   isLoading: boolean;
   error: string | null;
@@ -46,6 +47,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   revealedIndices: new Set(),
   overflowSongs: [],
   guessedTitles: new Set(),
+  totalGuesses: 0,
   isGameWon: false,
   isLoading: false,
   error: null,
@@ -61,6 +63,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       revealedIndices: new Set(),
       overflowSongs: [],
       guessedTitles: new Set(),
+      totalGuesses: 0,
       isGameWon: false,
       error: null,
     });
@@ -73,6 +76,9 @@ export const useGameStore = create<GameState>((set, get) => ({
     if (state.isGameWon) {
       return "duplicate"; // Game already won
     }
+
+    // Increment total guesses counter
+    set({ totalGuesses: state.totalGuesses + 1 });
 
     // Find best match among all songs
     const allSongTitles = state.allSongs.map((s) => s.title);
@@ -141,6 +147,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       revealedIndices: new Set(),
       overflowSongs: [],
       guessedTitles: new Set(),
+      totalGuesses: 0,
       isGameWon: false,
       isLoading: false,
       error: null,

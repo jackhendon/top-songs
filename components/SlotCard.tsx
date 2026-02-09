@@ -13,11 +13,11 @@ export default function SlotCard({ rank, song, isRevealed }: SlotCardProps) {
   return (
     <div
       className={`
-        relative overflow-hidden rounded-xl border-2 transition-all duration-300
+        relative overflow-hidden transition-all duration-300
         ${
           isRevealed
-            ? "bg-correct-light border-correct animate-bounce-in"
-            : "bg-gray-50 border-locked"
+            ? "song-slot song-slot--revealed animate-bounce-in"
+            : "song-slot"
         }
       `}
     >
@@ -25,11 +25,11 @@ export default function SlotCard({ rank, song, isRevealed }: SlotCardProps) {
         {/* Rank Badge */}
         <div
           className={`
-            flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-full font-bold text-sm sm:text-base mr-3
+            rank-badge w-9 h-9 sm:w-10 sm:h-10 text-sm sm:text-base mr-3
             ${
               isRevealed
-                ? "bg-correct text-white"
-                : "bg-locked text-gray-400"
+                ? "bg-sage-600 border-sage-600 text-white"
+                : ""
             }
           `}
         >
@@ -40,16 +40,16 @@ export default function SlotCard({ rank, song, isRevealed }: SlotCardProps) {
         <div className="flex-1 min-w-0">
           {isRevealed ? (
             <>
-              <div className="font-bold text-base text-gray-900 truncate">
+              <div className="font-semibold text-base text-charcoal-800 truncate">
                 {song.title}
               </div>
-              <div className="flex items-center gap-1 text-sm text-gray-500">
-                <Sparkles className="w-3.5 h-3.5 text-brand-purple" />
+              <div className="flex items-center gap-1 text-sm text-charcoal-700/60">
+                <Sparkles className="w-3.5 h-3.5 text-burnt-orange" />
                 <span>{song.totalStreams.toLocaleString()} streams</span>
               </div>
             </>
           ) : (
-            <div className="flex items-center gap-2 text-gray-400">
+            <div className="flex items-center gap-2 text-charcoal-700/40">
               <Lock className="w-4 h-4" />
               <span className="font-medium text-sm">Not yet guessed</span>
             </div>
@@ -59,7 +59,7 @@ export default function SlotCard({ rank, song, isRevealed }: SlotCardProps) {
 
       {/* Reveal Flash Overlay */}
       {isRevealed && (
-        <div className="absolute inset-0 bg-correct/30 animate-reveal-flash pointer-events-none" />
+        <div className="absolute inset-0 bg-sage-500/30 animate-reveal-flash pointer-events-none" />
       )}
     </div>
   );

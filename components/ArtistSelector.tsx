@@ -57,8 +57,8 @@ export default function ArtistSelector({
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8">
-      <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+    <div className="song-slot p-6 sm:p-8 fade-in">
+      <h2 className="font-display text-2xl font-bold text-charcoal-800 mb-6 text-center">
         Choose an Artist
       </h2>
 
@@ -66,20 +66,20 @@ export default function ArtistSelector({
       <form onSubmit={handleSubmit} className="mb-6">
         <div className="flex gap-2">
           <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-charcoal-700/40 w-5 h-5" />
             <input
               type="text"
               value={artistName}
               onChange={(e) => setArtistName(e.target.value)}
               placeholder="Search for an artist..."
-              className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl bg-gray-50 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-purple/50 focus:border-brand-purple transition-colors text-base"
+              className="input-field w-full pl-10 text-base"
               disabled={loading}
             />
           </div>
           <button
             type="submit"
             disabled={loading || !artistName.trim()}
-            className="px-6 py-3 bg-gradient-brand text-white font-semibold rounded-xl transition-all disabled:opacity-40 disabled:cursor-not-allowed hover:shadow-brand active:scale-95 cursor-pointer"
+            className="btn-primary disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
           >
             {loading ? (
               <span className="inline-flex items-center gap-2">
@@ -115,27 +115,60 @@ export default function ArtistSelector({
 
       {/* Error Message */}
       {error && (
-        <div className="mb-6 p-4 bg-error-light border border-error/20 text-error rounded-xl text-sm">
+        <div className="mb-6 p-4 bg-burnt-orange/10 border-2 border-burnt-orange text-burnt-sienna rounded-card text-sm font-medium">
           {error}
         </div>
       )}
 
       {/* Popular Artists */}
       <div>
-        <p className="text-sm text-gray-500 mb-3">Or try a popular artist:</p>
+        <p className="text-sm text-charcoal-700/60 mb-3">
+          Or try a popular artist:
+        </p>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
           {popularArtists.map((artist) => (
             <button
               key={artist}
               onClick={() => handleSearch(artist)}
               disabled={loading}
-              className="flex items-center justify-center gap-1.5 px-4 py-3 bg-gray-50 hover:bg-brand-purple/5 hover:text-brand-purple border border-gray-100 hover:border-brand-purple/20 text-gray-700 text-sm font-medium rounded-xl transition-all disabled:opacity-40 disabled:cursor-not-allowed active:scale-95 min-h-[44px] cursor-pointer"
+              className="song-slot flex items-center justify-center gap-1.5 px-4 py-3 hover:bg-cream-100 text-charcoal-700 text-sm font-medium disabled:opacity-40 disabled:cursor-not-allowed active:translate-y-0.5 min-h-[44px] cursor-pointer"
             >
-              <Music2 className="w-3.5 h-3.5 opacity-50" />
+              <Music2 className="w-3.5 h-3.5 text-burnt-orange opacity-60" />
               {artist}
             </button>
           ))}
         </div>
+      </div>
+
+      {/* How to Play */}
+      <div
+        className="mt-12 overflow-area fade-in"
+        style={{ animationDelay: "300ms" }}
+      >
+        <h3 className="font-display text-lg font-semibold text-charcoal-800 mb-3">
+          How to Play
+        </h3>
+        <ul className="space-y-2 text-charcoal-700/80">
+          <li className="flex gap-2">
+            <span className="text-mustard-500 font-bold">1.</span>
+            <span>Select an artist to begin</span>
+          </li>
+          <li className="flex gap-2">
+            <span className="text-mustard-500 font-bold">2.</span>
+            <span>Type song titles to guess their top 10 tracks</span>
+          </li>
+          <li className="flex gap-2">
+            <span className="text-mustard-500 font-bold">3.</span>
+            <span>Correct guesses reveal their ranking position</span>
+          </li>
+          <li className="flex gap-2">
+            <span className="text-mustard-500 font-bold">4.</span>
+            <span>
+              Songs outside the top 10 appear in &ldquo;Honorable
+              Mentions&rdquo;
+            </span>
+          </li>
+        </ul>
       </div>
     </div>
   );
