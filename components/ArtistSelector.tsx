@@ -79,7 +79,7 @@ export default function ArtistSelector({
           <button
             type="submit"
             disabled={loading || !artistName.trim()}
-            className="px-6 py-3 bg-gradient-brand text-white font-semibold rounded-xl transition-all disabled:opacity-40 disabled:cursor-not-allowed hover:shadow-brand active:scale-95"
+            className="px-6 py-3 bg-gradient-brand text-white font-semibold rounded-xl transition-all disabled:opacity-40 disabled:cursor-not-allowed hover:shadow-brand active:scale-95 cursor-pointer"
           >
             {loading ? (
               <span className="inline-flex items-center gap-2">
@@ -129,7 +129,7 @@ export default function ArtistSelector({
               key={artist}
               onClick={() => handleSearch(artist)}
               disabled={loading}
-              className="flex items-center justify-center gap-1.5 px-4 py-3 bg-gray-50 hover:bg-brand-purple/5 hover:text-brand-purple border border-gray-100 hover:border-brand-purple/20 text-gray-700 text-sm font-medium rounded-xl transition-all disabled:opacity-40 disabled:cursor-not-allowed active:scale-95 min-h-[44px]"
+              className="flex items-center justify-center gap-1.5 px-4 py-3 bg-gray-50 hover:bg-brand-purple/5 hover:text-brand-purple border border-gray-100 hover:border-brand-purple/20 text-gray-700 text-sm font-medium rounded-xl transition-all disabled:opacity-40 disabled:cursor-not-allowed active:scale-95 min-h-[44px] cursor-pointer"
             >
               <Music2 className="w-3.5 h-3.5 opacity-50" />
               {artist}

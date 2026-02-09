@@ -90,7 +90,7 @@ export default function GuessInput() {
           />
           <button
             type="submit"
-            className="px-5 py-3 bg-gradient-brand text-white font-semibold rounded-xl transition-all hover:shadow-brand active:scale-95 min-h-[44px]"
+            className="px-5 py-3 bg-gradient-brand text-white font-semibold rounded-xl transition-all hover:shadow-brand active:scale-95 min-h-[44px] cursor-pointer"
           >
             Guess
           </button>
