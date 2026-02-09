@@ -5,29 +5,29 @@
 
 @theme {
   /* Warm, earthy color palette */
-  --color-cream-50: #FDFBF7;
-  --color-cream-100: #FAF6F0;
-  --color-cream-200: #F5EFE5;
-  --color-cream-300: #EDE4D3;
+  --color-cream-50: #fdfbf7;
+  --color-cream-100: #faf6f0;
+  --color-cream-200: #f5efe5;
+  --color-cream-300: #ede4d3;
 
-  --color-charcoal-600: #3D3D3D;
-  --color-charcoal-700: #2A2A2A;
-  --color-charcoal-800: #1F1F1F;
+  --color-charcoal-600: #3d3d3d;
+  --color-charcoal-700: #2a2a2a;
+  --color-charcoal-800: #1f1f1f;
   --color-charcoal-900: #141414;
 
-  --color-sage-400: #9CAF88;
-  --color-sage-500: #7A9B6D;
-  --color-sage-600: #5F7C54;
+  --color-sage-400: #9caf88;
+  --color-sage-500: #7a9b6d;
+  --color-sage-600: #5f7c54;
 
-  --color-burnt-orange: #D97941;
-  --color-burnt-sienna: #C65D32;
+  --color-burnt-orange: #d97941;
+  --color-burnt-sienna: #c65d32;
 
-  --color-mustard-400: #E8B44D;
-  --color-mustard-500: #D4A03A;
+  --color-mustard-400: #e8b44d;
+  --color-mustard-500: #d4a03a;
 
-  --color-forest-600: #2D4A3E;
-  --color-forest-700: #1F3A2E;
-  --color-forest-800: #14261D;
+  --color-forest-600: #2d4a3e;
+  --color-forest-700: #1f3a2e;
+  --color-forest-800: #14261d;
 
   /* Typography */
   --font-display: "Playfair Display", Georgia, serif;
@@ -94,7 +94,6 @@
     @apply bg-burnt-orange text-white font-medium px-6 py-3 rounded-card;
     @apply border-2 border-burnt-sienna;
     @apply hover:bg-burnt-sienna active:translate-y-0.5;
-    @apply shadow-[0_3px_0_0_#C65D32] active:shadow-none;
     @apply transition-all duration-150;
   }
 
