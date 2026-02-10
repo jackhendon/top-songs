@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useGameStore } from "@/lib/gameStore";
 import { CheckCircle2, XCircle, AlertCircle } from "lucide-react";
 
 export default function GuessInput() {
+  const inputRef = useRef<HTMLInputElement>(null);
   const [guess, setGuess] = useState("");
   const [feedback, setFeedback] = useState<{
     type: "success" | "overflow" | "error" | null;
@@ -16,6 +17,7 @@ export default function GuessInput() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    inputRef.current?.blur();
 
     if (!guess.trim()) return;
 
@@ -79,6 +81,7 @@ export default function GuessInput() {
         </label>
         <div className="flex gap-2">
           <input
+            ref={inputRef}
             id="guess"
             type="text"
             value={guess}
