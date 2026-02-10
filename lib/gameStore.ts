@@ -36,7 +36,7 @@ export interface GameState {
   ) => void;
   makeGuess: (
     guess: string,
-  ) => "correct-top10" | "correct-overflow" | "incorrect" | "duplicate";
+  ) => { result: "correct-top10" | "correct-overflow" | "incorrect" | "duplicate"; rank?: number };
   giveUp: () => void;
   resetGame: () => void;
 }
@@ -83,7 +83,7 @@ export const useGameStore = create<GameState>((set, get) => ({
     const state = get();
 
     if (state.isGameWon) {
-      return "duplicate"; // Game already won
+      return { result: "duplicate" }; // Game already won
     }
 
     // Increment total guesses counter
@@ -101,19 +101,19 @@ export const useGameStore = create<GameState>((set, get) => ({
         isOverflow: false,
         totalGuesses: state.totalGuesses + 1,
       });
-      return "incorrect"; // No match found
+      return { result: "incorrect" }; // No match found
     }
 
     // Check if this song was already guessed
     if (state.guessedTitles.has(match.song)) {
-      return "duplicate";
+      return { result: "duplicate" };
     }
 
     // Find the matched song in our data
     const matchedSong = state.allSongs.find((s) => s.title === match.song);
 
     if (!matchedSong) {
-      return "incorrect";
+      return { result: "incorrect" };
     }
 
     // Check if it's in the top 10
@@ -159,7 +159,7 @@ export const useGameStore = create<GameState>((set, get) => ({
         });
       }
 
-      return "correct-top10";
+      return { result: "correct-top10", rank: topTenIndex + 1 };
     } else {
       // It's a correct song, but not in top 10 (overflow)
       const newOverflow = [...state.overflowSongs, matchedSong];
@@ -179,7 +179,7 @@ export const useGameStore = create<GameState>((set, get) => ({
         totalGuesses: state.totalGuesses + 1,
       });
 
-      return "correct-overflow";
+      return { result: "correct-overflow", rank: matchedSong.rank };
     }
   },
 

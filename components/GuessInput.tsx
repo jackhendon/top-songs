@@ -21,13 +21,13 @@ export default function GuessInput() {
 
     if (!guess.trim()) return;
 
-    const result = makeGuess(guess);
+    const { result, rank } = makeGuess(guess);
 
     switch (result) {
       case "correct-top10":
         setFeedback({
           type: "success",
-          message: "That's in the top 10!",
+          message: `Well done! That's #${rank} on the list!`,
         });
         setGuess("");
         break;
@@ -35,7 +35,7 @@ export default function GuessInput() {
       case "correct-overflow":
         setFeedback({
           type: "overflow",
-          message: "Correct song, but not in the top 10",
+          message: `Good guess! That's #${rank} on the list.`,
         });
         setGuess("");
         break;
@@ -69,9 +69,7 @@ export default function GuessInput() {
   };
 
   return (
-    <div
-      className={`song-slot p-4 sm:p-5 ${shaking ? "animate-shake" : ""}`}
-    >
+    <div className={`song-slot p-4 sm:p-5 ${shaking ? "animate-shake" : ""}`}>
       <form onSubmit={handleSubmit} className="space-y-3">
         <label
           htmlFor="guess"
