@@ -19,6 +19,9 @@ export function normalizeSongTitle(title: string): string {
   // Remove common featuring indicators
   normalized = normalized.replace(/\b(feat\.?|ft\.?|featuring|with)\b.*/gi, "");
 
+  // Normalize '&' to 'and'
+  normalized = normalized.replace(/&/g, "and");
+
   // Remove punctuation and special characters
   normalized = normalized.replace(/[^\w\s]/g, "");
 
