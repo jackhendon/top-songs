@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { Song } from "./types";
 import { findBestMatch } from "./songMatcher";
 import { trackGameStart, trackGuess, trackGameWon, trackGameAbandoned } from "./analytics";
+import { useHistoryStore } from "./historyStore";
 
 export interface GameState {
   // Artist data
@@ -157,6 +158,18 @@ export const useGameStore = create<GameState>((set, get) => ({
           timeSeconds,
           overflowCount: state.overflowSongs.length,
         });
+        useHistoryStore.getState().addGame({
+          id: crypto.randomUUID(),
+          artistName: state.artistName,
+          artistId: state.artistId,
+          artistImage: state.artistImage,
+          datePlayed: Date.now(),
+          totalGuesses: newTotalGuesses,
+          slotsRevealed: 10,
+          overflowCount: state.overflowSongs.length,
+          outcome: "won",
+          timeSeconds,
+        });
       }
 
       return { result: "correct-top10", rank: topTenIndex + 1 };
@@ -190,6 +203,21 @@ export const useGameStore = create<GameState>((set, get) => ({
       artistName: state.artistName,
       guessesUsed: state.totalGuesses,
       slotsRevealed: state.revealedIndices.size,
+    });
+    const timeSeconds = state.gameStartedAt
+      ? Math.round((Date.now() - state.gameStartedAt) / 1000)
+      : 0;
+    useHistoryStore.getState().addGame({
+      id: crypto.randomUUID(),
+      artistName: state.artistName,
+      artistId: state.artistId,
+      artistImage: state.artistImage,
+      datePlayed: Date.now(),
+      totalGuesses: state.totalGuesses,
+      slotsRevealed: state.revealedIndices.size,
+      overflowCount: state.overflowSongs.length,
+      outcome: "gave_up",
+      timeSeconds,
     });
     set({
       revealedIndices: new Set([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]),
