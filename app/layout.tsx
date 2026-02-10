@@ -3,6 +3,9 @@ import PostHogInit from "@/components/PostHogInit";
 import "./globals.css";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_BASE_URL || "https://topsongs.io",
+  ),
   title: "Top Songs - Guess the Hits",
   description:
     "Can you guess an artist's top 10 most-streamed songs on Spotify?",

@@ -1,8 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { Search, Music2 } from "lucide-react";
 import { ArtistData } from "@/lib/types";
+import { POPULAR_ARTISTS, artistNameToSlug } from "@/lib/slugs";
 import { trackArtistSearch, trackError } from "@/lib/analytics";
 
 interface ArtistSelectorProps {
@@ -16,16 +18,7 @@ export default function ArtistSelector({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const popularArtists = [
-    "Taylor Swift",
-    "Drake",
-    "The Weeknd",
-    "Bad Bunny",
-    "Ed Sheeran",
-    "Ariana Grande",
-    "Post Malone",
-    "Billie Eilish",
-  ];
+  const popularArtists = Object.values(POPULAR_ARTISTS);
 
   const handleSearch = async (name: string) => {
     if (!name.trim()) return;
@@ -131,15 +124,14 @@ export default function ArtistSelector({
         </p>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
           {popularArtists.map((artist) => (
-            <button
+            <Link
               key={artist}
-              onClick={() => handleSearch(artist)}
-              disabled={loading}
-              className="song-slot flex items-center justify-center gap-1.5 px-4 py-3 hover:bg-cream-100 text-charcoal-700 text-sm font-medium disabled:opacity-40 disabled:cursor-not-allowed active:translate-y-0.5 min-h-[44px] cursor-pointer"
+              href={`/${artistNameToSlug(artist)}`}
+              className="song-slot flex items-center justify-center gap-1.5 px-4 py-3 hover:bg-cream-100 text-charcoal-700 text-sm font-medium active:translate-y-0.5 min-h-[44px]"
             >
               <Music2 className="w-3.5 h-3.5 text-burnt-orange opacity-60" />
               {artist}
-            </button>
+            </Link>
           ))}
         </div>
       </div>

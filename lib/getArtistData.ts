@@ -6,7 +6,7 @@ import { Song, ArtistData } from "./types";
 
 let cachedToken: { token: string; expiresAt: number } | null = null;
 
-async function getSpotifyAccessToken(): Promise<string> {
+export async function getSpotifyAccessToken(): Promise<string> {
   if (cachedToken && Date.now() < cachedToken.expiresAt) {
     return cachedToken.token;
   }
@@ -47,7 +47,7 @@ async function getSpotifyAccessToken(): Promise<string> {
 
 // --- Spotify artist search ---
 
-async function searchSpotifyArtist(
+export async function searchSpotifyArtist(
   artistName: string,
   accessToken: string,
 ): Promise<{ id: string; name: string; imageUrl?: string } | null> {
