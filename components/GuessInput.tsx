@@ -69,11 +69,11 @@ export default function GuessInput() {
   };
 
   return (
-    <div className={`song-slot p-4 sm:p-5 ${shaking ? "animate-shake" : ""}`}>
+    <div className={`card bg-card-surface p-4 sm:p-5 overflow-hidden ${shaking ? "animate-shake" : ""}`}>
       <form onSubmit={handleSubmit} className="space-y-3">
         <label
           htmlFor="guess"
-          className="block text-sm font-semibold text-charcoal-700 mb-1"
+          className="block text-sm font-semibold text-text-secondary font-sans mb-1"
         >
           Guess a song
         </label>
@@ -85,13 +85,13 @@ export default function GuessInput() {
             value={guess}
             onChange={(e) => setGuess(e.target.value)}
             placeholder="Enter song title..."
-            className="input-field flex-1 text-base"
+            className="input-field flex-1 min-w-0 text-sm sm:text-base"
             autoComplete="off"
             autoFocus
           />
           <button
             type="submit"
-            className="btn-primary min-h-[44px] cursor-pointer"
+            className="btn-primary shrink-0 px-4 sm:px-6 min-h-[44px] cursor-pointer"
           >
             Guess
           </button>
@@ -100,12 +100,12 @@ export default function GuessInput() {
         {/* Feedback Message */}
         {feedback.type && (
           <div
-            className={`flex items-center gap-2 p-3 rounded-card text-sm font-medium border-2 ${
+            className={`flex items-center gap-2 p-3 rounded-card text-sm font-medium font-sans border-2 ${
               feedback.type === "success"
-                ? "bg-sage-400/10 border-sage-600 text-sage-600"
+                ? "bg-sage/10 border-sage text-sage-dark"
                 : feedback.type === "overflow"
-                  ? "bg-mustard-400/10 border-mustard-500 text-mustard-500"
-                  : "bg-burnt-orange/10 border-burnt-orange text-burnt-sienna"
+                  ? "bg-mustard/10 border-mustard text-mustard dark:bg-mint-secondary/10 dark:border-mint-secondary dark:text-mint-secondary"
+                  : "bg-error/10 border-error text-error-dark"
             }`}
           >
             {feedback.type === "success" && (

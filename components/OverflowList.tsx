@@ -11,11 +11,11 @@ export default function OverflowList({ songs }: OverflowListProps) {
   return (
     <div className="overflow-area space-y-3">
       <div className="flex items-center gap-2 mb-4">
-        <Star className="w-5 h-5 text-mustard-500" />
-        <h3 className="font-display text-xl font-semibold text-charcoal-800">
+        <Star className="w-5 h-5 text-mustard dark:text-mint-secondary" />
+        <h3 className="font-display text-xl font-bold text-text-primary">
           Honorable Mentions
         </h3>
-        <span className="text-sm text-charcoal-700/60">
+        <span className="text-sm text-text-muted font-sans">
           ({songs.length} {songs.length === 1 ? "song" : "songs"})
         </span>
       </div>
@@ -24,19 +24,18 @@ export default function OverflowList({ songs }: OverflowListProps) {
         {songs.map((song, index) => (
           <div
             key={index}
-            className="bg-cream-50 border-2 border-mustard-500/20 rounded-card p-3 hover:border-mustard-500/40 transition-colors"
+            className="bg-bg-primary rounded-card p-3 transition-colors"
+            style={{ border: "1px solid var(--raw-card-border)" }}
           >
             <div className="flex items-start gap-3">
-              <div className="w-8 h-8 rounded-full bg-mustard-400/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                <span className="text-sm font-bold font-display text-mustard-600">
-                  {song.rank}
-                </span>
+              <div className="w-8 h-8 rounded-full bg-mustard/20 dark:bg-mint-secondary/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                <span className="text-sm font-bold font-sans">{song.rank}</span>
               </div>
               <div className="min-w-0 flex-1">
-                <h4 className="font-medium text-charcoal-800 text-sm truncate">
+                <h4 className="font-sans font-medium text-text-primary text-sm truncate">
                   {song.title}
                 </h4>
-                <p className="text-xs text-charcoal-700/60 mt-0.5">
+                <p className="text-xs text-text-muted font-sans mt-0.5">
                   {song.totalStreams.toLocaleString()} streams
                 </p>
               </div>

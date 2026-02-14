@@ -59,37 +59,38 @@ export default function GameBoard({ onReset }: GameBoardProps) {
           <img
             src={artistImage}
             alt={artistName}
-            className="w-10 h-10 rounded-full object-cover border-2 border-charcoal-700/15 shrink-0"
+            className="w-10 h-10 rounded-full object-cover shrink-0"
+            style={{ border: '2px solid var(--raw-card-border)' }}
           />
         )}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-1.5">
-            <Music2 className="w-3.5 h-3.5 text-burnt-orange shrink-0" />
-            <span className="text-xs uppercase tracking-wide text-charcoal-700/50 font-medium">
+            <Music2 className="w-3.5 h-3.5 text-mustard dark:text-mint shrink-0" />
+            <span className="text-xs uppercase tracking-wide text-text-muted font-sans font-medium">
               Now Playing
             </span>
           </div>
-          <h2 className="font-display text-lg font-bold text-charcoal-800 truncate">
+          <h2 className="font-display text-lg font-bold text-text-primary truncate">
             {artistName}
           </h2>
         </div>
         <div className="text-right shrink-0">
           <div className="flex items-center gap-1.5">
-            <Trophy className="w-4 h-4 text-mustard-500" />
-            <span className="font-semibold text-sm text-charcoal-800">
+            <Trophy className="w-4 h-4 text-mustard dark:text-mint" />
+            <span className="font-sans font-semibold text-sm text-text-primary">
               {revealedIndices.size}/10
             </span>
           </div>
-          <span className="text-xs text-charcoal-700/50">
+          <span className="text-xs text-text-muted font-sans">
             {totalGuesses} {totalGuesses === 1 ? "guess" : "guesses"}
           </span>
         </div>
       </div>
 
       {/* Progress Bar */}
-      <div className="h-1.5 bg-cream-200 rounded-full overflow-hidden border border-charcoal-700/10">
+      <div className="h-2 bg-bg-tertiary rounded-full overflow-hidden border border-card-border">
         <div
-          className="h-full bg-sage-500 transition-all duration-500 ease-out"
+          className="h-full bg-sage rounded-full transition-all duration-500 ease-out"
           style={{ width: `${(revealedIndices.size / 10) * 100}%` }}
         />
       </div>
@@ -108,7 +109,7 @@ export default function GameBoard({ onReset }: GameBoardProps) {
             href={kworbUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 text-xs text-charcoal-700/40 hover:text-charcoal-700/60 transition-colors"
+            className="inline-flex items-center gap-1 text-xs text-text-faint hover:text-text-muted transition-colors font-sans"
           >
             View full stats on Kworb
             <ExternalLink className="w-3 h-3" />
@@ -121,7 +122,7 @@ export default function GameBoard({ onReset }: GameBoardProps) {
             <button
               onClick={handleGiveUp}
               onBlur={() => setConfirmingGiveUp(false)}
-              className="inline-flex items-center gap-1 text-xs text-charcoal-700/40 hover:text-charcoal-700/60 transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1 text-xs text-text-faint hover:text-text-muted transition-colors cursor-pointer font-sans"
             >
               <Flag className="w-3 h-3" />
               {confirmingGiveUp ? "Are you sure?" : "Give up"}

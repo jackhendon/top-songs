@@ -41,7 +41,7 @@ export default function HomePage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-cream-50">
+    <div className="min-h-screen flex flex-col bg-bg-primary">
       <Header onReset={handleReset} showNewArtist={isStarted} />
 
       <main className="flex-1 container mx-auto px-4 py-8 max-w-4xl">
@@ -59,9 +59,9 @@ export default function HomePage() {
         )}
       </main>
 
-      <footer className="py-6 border-t-2 border-charcoal-700/10">
-        <div className="container mx-auto px-4 text-center text-sm text-charcoal-700/60">
-          <p>Data sourced from Kworb.net · Made with ♫ for music lovers</p>
+      <footer className="py-6" style={{ borderTop: '1px solid var(--raw-card-border)' }}>
+        <div className="container mx-auto px-4 text-center text-sm text-text-muted font-sans">
+          <p>Data sourced from Kworb.net · Made with music for music lovers</p>
         </div>
       </footer>
     </div>

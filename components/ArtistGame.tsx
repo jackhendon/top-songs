@@ -88,19 +88,19 @@ export default function ArtistGame({
   // Error state
   if (error) {
     return (
-      <div className="min-h-screen flex flex-col bg-cream-50">
+      <div className="min-h-screen flex flex-col bg-bg-primary">
         <Header logoHref="/" showNewArtist onReset={handleReset} />
         <main className="flex-1 container mx-auto px-4 py-8 max-w-4xl">
-          <div className="song-slot p-6 sm:p-8 text-center space-y-4">
-            <p className="text-burnt-sienna font-medium">{error}</p>
+          <div className="card p-6 sm:p-8 text-center space-y-4">
+            <p className="text-error-dark font-medium font-sans">{error}</p>
             <Link href="/" className="btn-primary inline-block">
               Back to Home
             </Link>
           </div>
         </main>
-        <footer className="py-6 border-t-2 border-charcoal-700/10">
-          <div className="container mx-auto px-4 text-center text-sm text-charcoal-700/60">
-            <p>Data sourced from Kworb.net · Made with ♫ for music lovers</p>
+        <footer className="py-6" style={{ borderTop: '1px solid var(--raw-card-border)' }}>
+          <div className="container mx-auto px-4 text-center text-sm text-text-muted font-sans">
+            <p>Data sourced from Kworb.net · Made with music for music lovers</p>
           </div>
         </footer>
       </div>
@@ -110,7 +110,7 @@ export default function ArtistGame({
   // Loading skeleton
   if (loading) {
     return (
-      <div className="min-h-screen flex flex-col bg-cream-50">
+      <div className="min-h-screen flex flex-col bg-bg-primary">
         <Header logoHref="/" />
         <main className="flex-1 container mx-auto px-4 py-8 max-w-4xl">
           <div className="space-y-3">
@@ -120,48 +120,49 @@ export default function ArtistGame({
                 <img
                   src={artistImage}
                   alt={artistName}
-                  className="w-10 h-10 rounded-full object-cover border-2 border-charcoal-700/15 shrink-0"
+                  className="w-10 h-10 rounded-full object-cover shrink-0"
+                  style={{ border: '2px solid var(--raw-card-border)' }}
                 />
               ) : (
-                <div className="w-10 h-10 rounded-full bg-cream-200 animate-pulse shrink-0" />
+                <div className="w-10 h-10 rounded-full bg-bg-tertiary animate-pulse shrink-0" />
               )}
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-1.5">
-                  <Music2 className="w-3.5 h-3.5 text-burnt-orange shrink-0" />
-                  <span className="text-xs uppercase tracking-wide text-charcoal-700/50 font-medium">
+                  <Music2 className="w-3.5 h-3.5 text-mustard dark:text-mint shrink-0" />
+                  <span className="text-xs uppercase tracking-wide text-text-muted font-sans font-medium">
                     Now Playing
                   </span>
                 </div>
-                <h2 className="font-display text-lg font-bold text-charcoal-800 truncate">
+                <h2 className="font-display text-lg font-bold text-text-primary truncate">
                   {artistName}
                 </h2>
               </div>
               <div className="text-right shrink-0">
-                <div className="h-5 w-12 bg-cream-200 rounded animate-pulse" />
-                <div className="h-3 w-16 bg-cream-200 rounded animate-pulse mt-1" />
+                <div className="h-5 w-12 bg-bg-tertiary rounded animate-pulse" />
+                <div className="h-3 w-16 bg-bg-tertiary rounded animate-pulse mt-1" />
               </div>
             </div>
 
             {/* Progress bar skeleton */}
-            <div className="h-1.5 bg-cream-200 rounded-full overflow-hidden border border-charcoal-700/10" />
+            <div className="h-1.5 bg-bg-tertiary rounded-full overflow-hidden" style={{ border: '1px solid var(--raw-card-border)' }} />
 
             {/* Guess input skeleton */}
-            <div className="h-12 bg-cream-200 rounded-card animate-pulse" />
+            <div className="h-12 bg-bg-tertiary rounded-card animate-pulse" />
 
             {/* 10 slot card skeletons in 2-col grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
               {Array.from({ length: 10 }).map((_, i) => (
                 <div
                   key={i}
-                  className="song-slot h-16 animate-pulse bg-cream-100"
+                  className="song-slot h-16 animate-pulse bg-bg-secondary"
                 />
               ))}
             </div>
           </div>
         </main>
-        <footer className="py-6 border-t-2 border-charcoal-700/10">
-          <div className="container mx-auto px-4 text-center text-sm text-charcoal-700/60">
-            <p>Data sourced from Kworb.net · Made with ♫ for music lovers</p>
+        <footer className="py-6" style={{ borderTop: '1px solid var(--raw-card-border)' }}>
+          <div className="container mx-auto px-4 text-center text-sm text-text-muted font-sans">
+            <p>Data sourced from Kworb.net · Made with music for music lovers</p>
           </div>
         </footer>
       </div>
@@ -170,7 +171,7 @@ export default function ArtistGame({
 
   // Game loaded
   return (
-    <div className="min-h-screen flex flex-col bg-cream-50">
+    <div className="min-h-screen flex flex-col bg-bg-primary">
       <Header logoHref="/" showNewArtist onReset={handleReset} />
 
       <main className="flex-1 container mx-auto px-4 py-8 max-w-4xl">
@@ -186,9 +187,9 @@ export default function ArtistGame({
         )}
       </main>
 
-      <footer className="py-6 border-t-2 border-charcoal-700/10">
-        <div className="container mx-auto px-4 text-center text-sm text-charcoal-700/60">
-          <p>Data sourced from Kworb.net · Made with ♫ for music lovers</p>
+      <footer className="py-6" style={{ borderTop: '1px solid var(--raw-card-border)' }}>
+        <div className="container mx-auto px-4 text-center text-sm text-text-muted font-sans">
+          <p>Data sourced from Kworb.net · Made with music for music lovers</p>
         </div>
       </footer>
     </div>

@@ -45,8 +45,8 @@ export default function VictoryScreen({
     <div className="max-w-2xl mx-auto text-center space-y-8 py-12">
       {/* Trophy Icon */}
       <div className="flex justify-center fade-in">
-        <div className="w-24 h-24 rounded-full bg-mustard-400/20 border-4 border-mustard-500 flex items-center justify-center">
-          <Trophy className="w-12 h-12 text-mustard-600" />
+        <div className="w-24 h-24 rounded-full bg-mustard/20 dark:bg-mint/20 border-4 border-mustard dark:border-mint flex items-center justify-center">
+          <Trophy className="w-12 h-12 text-mustard dark:text-mint" />
         </div>
       </div>
 
@@ -55,12 +55,12 @@ export default function VictoryScreen({
         className="space-y-4 fade-in"
         style={{ animationDelay: "100ms" }}
       >
-        <h2 className="font-display text-4xl md:text-5xl font-bold text-charcoal-800">
+        <h2 className="font-display text-4xl md:text-5xl font-extrabold text-text-primary tracking-[-0.04em]">
           Congratulations!
         </h2>
-        <p className="text-xl text-charcoal-700/80">
+        <p className="text-xl text-text-muted font-sans">
           You guessed all of{" "}
-          <span className="font-semibold text-burnt-orange">
+          <span className="font-semibold text-mustard dark:text-mint">
             {artistName}&apos;s
           </span>{" "}
           top 10 songs!
@@ -69,23 +69,23 @@ export default function VictoryScreen({
 
       {/* Stats */}
       <div
-        className="song-slot p-8 fade-in"
+        className="card p-8 fade-in"
         style={{ animationDelay: "200ms" }}
       >
         <div className="grid grid-cols-2 gap-8">
           <div>
-            <div className="text-4xl font-display font-bold text-burnt-orange mb-2">
+            <div className="text-4xl font-display font-extrabold text-mustard dark:text-mint mb-2">
               {totalGuesses}
             </div>
-            <div className="text-sm text-charcoal-700/60 uppercase tracking-wide">
+            <div className="text-sm text-text-muted uppercase tracking-wide font-sans font-medium">
               Total Guesses
             </div>
           </div>
           <div>
-            <div className="text-4xl font-display font-bold text-sage-600 mb-2">
+            <div className="text-4xl font-display font-extrabold text-sage-dark mb-2">
               {overflowCount}
             </div>
-            <div className="text-sm text-charcoal-700/60 uppercase tracking-wide">
+            <div className="text-sm text-text-muted uppercase tracking-wide font-sans font-medium">
               Honorable Mentions
             </div>
           </div>
@@ -97,12 +97,12 @@ export default function VictoryScreen({
         className="overflow-area fade-in"
         style={{ animationDelay: "300ms" }}
       >
-        <p className="text-charcoal-700/80">
-          {totalGuesses <= 10 && "🎯 Perfect game! You're a true fan!"}
+        <p className="text-text-muted font-sans">
+          {totalGuesses <= 10 && "Perfect game! You're a true fan!"}
           {totalGuesses > 10 &&
             totalGuesses <= 20 &&
-            "🎵 Impressive! You know your music!"}
-          {totalGuesses > 20 && "🎼 Well done! You completed the challenge!"}
+            "Impressive! You know your music!"}
+          {totalGuesses > 20 && "Well done! You completed the challenge!"}
         </p>
       </div>
 

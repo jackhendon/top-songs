@@ -59,8 +59,8 @@ export default function ArtistSelector({
   };
 
   return (
-    <div className="song-slot p-6 sm:p-8 fade-in">
-      <h2 className="font-display text-2xl font-bold text-charcoal-800 mb-6 text-center">
+    <div className="card bg-card-surface p-6 sm:p-8 fade-in">
+      <h2 className="font-display text-2xl font-extrabold text-text-primary mb-6 text-center tracking-[-0.04em]">
         Choose an Artist
       </h2>
 
@@ -68,13 +68,13 @@ export default function ArtistSelector({
       <form onSubmit={handleSubmit} className="mb-6">
         <div className="flex gap-2">
           <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-charcoal-700/40 w-5 h-5" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-text-faint w-4 h-4 sm:w-5 sm:h-5" />
             <input
               type="text"
               value={artistName}
               onChange={(e) => setArtistName(e.target.value)}
               placeholder="Search for an artist..."
-              className="input-field w-full pl-10 text-base"
+              className="input-field w-full pl-10 sm:pl-11 text-sm sm:text-base"
               disabled={loading}
             />
           </div>
@@ -117,24 +117,24 @@ export default function ArtistSelector({
 
       {/* Error Message */}
       {error && (
-        <div className="mb-6 p-4 bg-burnt-orange/10 border-2 border-burnt-orange text-burnt-sienna rounded-card text-sm font-medium">
+        <div className="mb-6 p-4 bg-error/10 border-2 border-error text-error-dark rounded-card text-sm font-medium font-sans">
           {error}
         </div>
       )}
 
       {/* Popular Artists */}
       <div>
-        <p className="text-sm text-charcoal-700/60 mb-3">
+        <p className="text-sm text-text-muted mb-3 font-sans font-medium">
           Or try a popular artist:
         </p>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-2">
           {popularArtists.map((artist) => (
             <Link
               key={artist}
               href={`/${artistNameToSlug(artist)}`}
-              className="song-slot flex items-center justify-center gap-1.5 px-4 py-3 hover:bg-cream-100 text-charcoal-700 text-sm font-medium active:translate-y-0.5 min-h-[44px]"
+              className="artist-card text-sm"
             >
-              <Music2 className="w-3.5 h-3.5 text-burnt-orange opacity-60" />
+              <Music2 className="w-3.5 h-3.5 text-mustard dark:text-mint opacity-60" />
               {artist}
             </Link>
           ))}
@@ -146,24 +146,24 @@ export default function ArtistSelector({
         className="mt-12 overflow-area fade-in"
         style={{ animationDelay: "300ms" }}
       >
-        <h3 className="font-display text-lg font-semibold text-charcoal-800 mb-3">
+        <h3 className="font-display text-lg font-bold text-text-primary mb-3">
           How to Play
         </h3>
-        <ul className="space-y-2 text-charcoal-700/80">
+        <ul className="space-y-2 text-text-muted font-sans">
           <li className="flex gap-2">
-            <span className="text-mustard-500 font-bold">1.</span>
+            <span className="text-mustard dark:text-mint font-bold">1.</span>
             <span>Select an artist to begin</span>
           </li>
           <li className="flex gap-2">
-            <span className="text-mustard-500 font-bold">2.</span>
+            <span className="text-mustard dark:text-mint font-bold">2.</span>
             <span>Type song titles to guess their top 10 tracks</span>
           </li>
           <li className="flex gap-2">
-            <span className="text-mustard-500 font-bold">3.</span>
+            <span className="text-mustard dark:text-mint font-bold">3.</span>
             <span>Correct guesses reveal their ranking position</span>
           </li>
           <li className="flex gap-2">
-            <span className="text-mustard-500 font-bold">4.</span>
+            <span className="text-mustard dark:text-mint font-bold">4.</span>
             <span>
               Songs outside the top 10 appear in &ldquo;Honorable
               Mentions&rdquo;

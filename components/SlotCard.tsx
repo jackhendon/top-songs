@@ -1,7 +1,7 @@
 "use client";
 
 import { Song } from "@/lib/types";
-import { Lock, Sparkles } from "lucide-react";
+import { Lock, CheckCircle2 } from "lucide-react";
 
 interface SlotCardProps {
   rank: number;
@@ -28,7 +28,7 @@ export default function SlotCard({ rank, song, isRevealed }: SlotCardProps) {
             rank-badge w-9 h-9 sm:w-10 sm:h-10 text-sm sm:text-base mr-3
             ${
               isRevealed
-                ? "bg-sage-600 border-sage-600 text-white"
+                ? "bg-sage-dark text-white border-sage-dark"
                 : ""
             }
           `}
@@ -40,18 +40,20 @@ export default function SlotCard({ rank, song, isRevealed }: SlotCardProps) {
         <div className="flex-1 min-w-0">
           {isRevealed ? (
             <>
-              <div className="font-semibold text-base text-charcoal-800 truncate">
-                {song.title}
+              <div className="flex items-center gap-1.5">
+                <span className="font-sans font-semibold text-base text-text-primary truncate">
+                  {song.title}
+                </span>
+                <CheckCircle2 className="w-4 h-4 text-sage-dark shrink-0" />
               </div>
-              <div className="flex items-center gap-1 text-sm text-charcoal-700/60">
-                <Sparkles className="w-3.5 h-3.5 text-burnt-orange" />
+              <div className="flex items-center gap-1 text-sm text-text-muted font-sans">
                 <span>{song.totalStreams.toLocaleString()} streams</span>
               </div>
             </>
           ) : (
-            <div className="flex items-center gap-2 text-charcoal-700/40">
+            <div className="flex items-center gap-2 text-text-faint">
               <Lock className="w-4 h-4" />
-              <span className="font-medium text-sm">Not yet guessed</span>
+              <span className="font-sans font-medium text-sm">Not yet guessed</span>
             </div>
           )}
         </div>
@@ -59,7 +61,7 @@ export default function SlotCard({ rank, song, isRevealed }: SlotCardProps) {
 
       {/* Reveal Flash Overlay */}
       {isRevealed && (
-        <div className="absolute inset-0 bg-sage-500/30 animate-reveal-flash pointer-events-none" />
+        <div className="absolute inset-0 bg-sage/30 animate-reveal-flash pointer-events-none" />
       )}
     </div>
   );

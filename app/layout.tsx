@@ -25,7 +25,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="paper-texture">
+      <body>
         <PostHogInit />
         {children}
       </body>
