@@ -4,7 +4,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_BASE_URL || "https://topsongs.io",
+    process.env.NEXT_PUBLIC_BASE_URL || "https://www.topsongs.io",
   ),
   title: "Top Songs - Guess the Hits",
   description:

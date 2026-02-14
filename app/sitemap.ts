@@ -2,7 +2,7 @@ import { MetadataRoute } from "next";
 import { POPULAR_ARTISTS } from "@/lib/slugs";
 
 const baseUrl =
-  process.env.NEXT_PUBLIC_BASE_URL || "https://topsongs.io";
+  process.env.NEXT_PUBLIC_BASE_URL || "https://www.topsongs.io";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const artistEntries = Object.keys(POPULAR_ARTISTS).map((slug) => ({
