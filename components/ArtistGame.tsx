@@ -10,6 +10,7 @@ import GameBoard from "@/components/GameBoard";
 import VictoryScreen from "@/components/VictoryScreen";
 import Link from "next/link";
 import { Music2 } from "lucide-react";
+import Footer from "@/components/Footer";
 
 interface ArtistGameProps {
   artistName: string;
@@ -98,11 +99,7 @@ export default function ArtistGame({
             </Link>
           </div>
         </main>
-        <footer className="py-6" style={{ borderTop: '1px solid var(--raw-card-border)' }}>
-          <div className="container mx-auto px-4 text-center text-sm text-text-muted font-sans">
-            <p>Data sourced from Kworb.net · Made with music for music lovers</p>
-          </div>
-        </footer>
+        <Footer />
       </div>
     );
   }
@@ -160,11 +157,7 @@ export default function ArtistGame({
             </div>
           </div>
         </main>
-        <footer className="py-6" style={{ borderTop: '1px solid var(--raw-card-border)' }}>
-          <div className="container mx-auto px-4 text-center text-sm text-text-muted font-sans">
-            <p>Data sourced from Kworb.net · Made with music for music lovers</p>
-          </div>
-        </footer>
+        <Footer />
       </div>
     );
   }
@@ -187,11 +180,7 @@ export default function ArtistGame({
         )}
       </main>
 
-      <footer className="py-6" style={{ borderTop: '1px solid var(--raw-card-border)' }}>
-        <div className="container mx-auto px-4 text-center text-sm text-text-muted font-sans">
-          <p>Data sourced from Kworb.net · Made with music for music lovers</p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

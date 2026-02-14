@@ -1,6 +1,3 @@
-/* Import Google Fonts */
-@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500;600&display=swap");
-
 @import "tailwindcss";
 
 @variant dark (&:where(.dark, .dark *));
@@ -126,9 +123,9 @@
   --color-card-border: var(--raw-card-border);
   --color-card-border-hover: var(--raw-card-border-hover);
 
-  /* Typography */
-  --font-display: "Plus Jakarta Sans", system-ui, sans-serif;
-  --font-sans: "Inter", system-ui, sans-serif;
+  /* Typography — CSS vars set by next/font/google in layout.tsx */
+  --font-display: var(--font-plus-jakarta), system-ui, sans-serif;
+  --font-sans: var(--font-inter), system-ui, sans-serif;
 
   /* Shadows */
   --shadow-card: var(--raw-shadow-card);
