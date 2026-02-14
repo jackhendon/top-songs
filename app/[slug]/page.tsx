@@ -8,9 +8,16 @@ interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
+// Generate static pages for popular artists at build time
 export function generateStaticParams() {
   return Object.keys(POPULAR_ARTISTS).map((slug) => ({ slug }));
 }
+
+// Allow dynamic params for artists not in POPULAR_ARTISTS
+export const dynamicParams = true;
+
+// Enable ISR: cache pages for 24 hours, regenerate in background
+export const revalidate = 86400;
 
 export async function generateMetadata({
   params,

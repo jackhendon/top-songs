@@ -18,7 +18,7 @@ export default function ArtistSelector({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const popularArtists = Object.values(POPULAR_ARTISTS);
+  const popularArtists = Object.values(POPULAR_ARTISTS).slice(0, 8);
 
   const handleSearch = async (name: string) => {
     if (!name.trim()) return;
