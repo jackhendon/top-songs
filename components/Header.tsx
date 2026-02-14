@@ -20,7 +20,7 @@ export default function Header({
         <Music className="w-6 h-6 text-white" />
       </div>
       <div className="text-left">
-        <h1 className="font-display text-2xl md:text-3xl font-bold text-charcoal-800">
+        <h1 className="font-display text-2xl md:text-3xl font-black text-charcoal-800 tracking-tight">
           Top Songs
         </h1>
         <p className="text-xs text-charcoal-700/60 hidden sm:block">

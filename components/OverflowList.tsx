@@ -28,7 +28,7 @@ export default function OverflowList({ songs }: OverflowListProps) {
           >
             <div className="flex items-start gap-3">
               <div className="w-8 h-8 rounded-full bg-mustard-400/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                <span className="text-sm font-bold text-mustard-600">
+                <span className="text-sm font-bold font-display text-mustard-600">
                   {song.rank}
                 </span>
               </div>

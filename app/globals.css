@@ -1,5 +1,5 @@
 /* Import Google Fonts */
-@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Merriweather:wght@300;400;700&family=Inter:wght@300;400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:wght@700;900&family=Outfit:wght@400;600&display=swap");
 
 @import "tailwindcss";
 
@@ -30,9 +30,8 @@
   --color-forest-800: #14261d;
 
   /* Typography */
-  --font-display: "Playfair Display", Georgia, serif;
-  --font-sans: "Inter", system-ui, sans-serif;
-  --font-serif: "Merriweather", Georgia, serif;
+  --font-display: "Fraunces", Georgia, serif;
+  --font-sans: "Outfit", system-ui, sans-serif;
 
   /* Shadows */
   --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.08);
@@ -91,14 +90,14 @@
   }
 
   .btn-primary {
-    @apply bg-burnt-orange text-white font-medium px-6 py-3 rounded-card;
+    @apply bg-burnt-orange text-white font-semibold uppercase tracking-wide px-6 py-3 rounded-card;
     @apply border-2 border-burnt-sienna;
     @apply hover:bg-burnt-sienna active:translate-y-0.5;
     @apply transition-all duration-150;
   }
 
   .btn-secondary {
-    @apply bg-white text-charcoal-700 font-medium px-6 py-3 rounded-card;
+    @apply bg-white text-charcoal-700 font-semibold uppercase tracking-wide px-6 py-3 rounded-card;
     @apply border-2 border-charcoal-700/20;
     @apply hover:border-charcoal-700/40 hover:bg-cream-100;
     @apply transition-all duration-200;
@@ -127,7 +126,7 @@
 
   .rank-badge {
     @apply inline-flex items-center justify-center w-8 h-8 rounded-full;
-    @apply bg-charcoal-800 text-cream-50 text-sm font-semibold;
+    @apply bg-charcoal-800 text-cream-50 text-sm font-bold font-display;
     @apply border-2 border-charcoal-700;
   }
 
