@@ -1,5 +1,6 @@
 import { Music, User } from "lucide-react";
 import Link from "next/link";
+import ThemeToggle from "./ThemeToggle";
 
 interface HeaderProps {
   onReset?: () => void;
@@ -31,7 +32,7 @@ export default function Header({
   );
 
   return (
-    <header className="border-b-2 border-charcoal-700/15 bg-white/80 backdrop-blur-sm sticky top-0 z-10">
+    <header className="border-b-2 border-charcoal-700/15 bg-cream-50/80 backdrop-blur-sm sticky top-0 z-10">
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           {logoHref ? (
@@ -60,6 +61,7 @@ export default function Header({
                 New Artist
               </button>
             )}
+            <ThemeToggle />
             {!rightContent && (
               <Link
                 href="/profile"

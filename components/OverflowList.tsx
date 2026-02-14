@@ -24,7 +24,7 @@ export default function OverflowList({ songs }: OverflowListProps) {
         {songs.map((song, index) => (
           <div
             key={index}
-            className="bg-white border-2 border-mustard-500/20 rounded-card p-3 hover:border-mustard-500/40 transition-colors"
+            className="bg-cream-50 border-2 border-mustard-500/20 rounded-card p-3 hover:border-mustard-500/40 transition-colors"
           >
             <div className="flex items-start gap-3">
               <div className="w-8 h-8 rounded-full bg-mustard-400/20 flex items-center justify-center flex-shrink-0 mt-0.5">

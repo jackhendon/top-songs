@@ -3,54 +3,124 @@
 
 @import "tailwindcss";
 
+@variant dark (&:where(.dark, .dark *));
+
+/*
+  Define raw CSS variables on :root and .dark, then reference them
+  with var() in @theme so Tailwind keeps them as dynamic variables
+  instead of inlining static values at build time.
+*/
+
+@layer base {
+  :root {
+    --raw-cream-50: #fdfbf7;
+    --raw-cream-100: #faf6f0;
+    --raw-cream-200: #f5efe5;
+    --raw-cream-300: #ede4d3;
+
+    --raw-charcoal-600: #3d3d3d;
+    --raw-charcoal-700: #2a2a2a;
+    --raw-charcoal-800: #1f1f1f;
+    --raw-charcoal-900: #141414;
+
+    --raw-sage-400: #9caf88;
+    --raw-sage-500: #7a9b6d;
+    --raw-sage-600: #5f7c54;
+
+    --raw-burnt-orange: #d97941;
+    --raw-burnt-sienna: #c65d32;
+
+    --raw-mustard-400: #e8b44d;
+    --raw-mustard-500: #d4a03a;
+
+    --raw-forest-600: #2d4a3e;
+    --raw-forest-700: #1f3a2e;
+    --raw-forest-800: #14261d;
+
+    --raw-shadow-card: 0 2px 8px rgba(0, 0, 0, 0.08);
+    --raw-shadow-card-hover: 0 4px 12px rgba(0, 0, 0, 0.12);
+    --raw-shadow-inner-subtle: inset 0 1px 3px rgba(0, 0, 0, 0.06);
+
+    --raw-card-surface: #ffffff;
+  }
+
+  .dark {
+    --raw-cream-50: #121212;
+    --raw-cream-100: #1a1a1a;
+    --raw-cream-200: #242424;
+    --raw-cream-300: #2e2e2e;
+
+    --raw-charcoal-600: #a3a3a3;
+    --raw-charcoal-700: #d4d0ca;
+    --raw-charcoal-800: #ebe7e0;
+    --raw-charcoal-900: #f5f2ec;
+
+    --raw-sage-400: #a8bc94;
+    --raw-sage-500: #8dae7f;
+    --raw-sage-600: #7a9b6d;
+
+    --raw-burnt-orange: #e08a55;
+    --raw-burnt-sienna: #d97941;
+
+    --raw-mustard-400: #ecc060;
+    --raw-mustard-500: #e0b04a;
+
+    --raw-forest-600: #3d7a63;
+    --raw-forest-700: #2d6a53;
+    --raw-forest-800: #1f5a43;
+
+    --raw-shadow-card: 0 2px 8px rgba(0, 0, 0, 0.3);
+    --raw-shadow-card-hover: 0 4px 12px rgba(0, 0, 0, 0.4);
+    --raw-shadow-inner-subtle: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+
+    --raw-card-surface: #1e1e1e;
+
+    color-scheme: dark;
+  }
+}
+
 @theme {
-  /* Warm, earthy color palette */
-  --color-cream-50: #fdfbf7;
-  --color-cream-100: #faf6f0;
-  --color-cream-200: #f5efe5;
-  --color-cream-300: #ede4d3;
+  /* Warm, earthy color palette — indirected through var() so dark mode works */
+  --color-cream-50: var(--raw-cream-50);
+  --color-cream-100: var(--raw-cream-100);
+  --color-cream-200: var(--raw-cream-200);
+  --color-cream-300: var(--raw-cream-300);
 
-  --color-charcoal-600: #3d3d3d;
-  --color-charcoal-700: #2a2a2a;
-  --color-charcoal-800: #1f1f1f;
-  --color-charcoal-900: #141414;
+  --color-charcoal-600: var(--raw-charcoal-600);
+  --color-charcoal-700: var(--raw-charcoal-700);
+  --color-charcoal-800: var(--raw-charcoal-800);
+  --color-charcoal-900: var(--raw-charcoal-900);
 
-  --color-sage-400: #9caf88;
-  --color-sage-500: #7a9b6d;
-  --color-sage-600: #5f7c54;
+  --color-sage-400: var(--raw-sage-400);
+  --color-sage-500: var(--raw-sage-500);
+  --color-sage-600: var(--raw-sage-600);
 
-  --color-burnt-orange: #d97941;
-  --color-burnt-sienna: #c65d32;
+  --color-burnt-orange: var(--raw-burnt-orange);
+  --color-burnt-sienna: var(--raw-burnt-sienna);
 
-  --color-mustard-400: #e8b44d;
-  --color-mustard-500: #d4a03a;
+  --color-mustard-400: var(--raw-mustard-400);
+  --color-mustard-500: var(--raw-mustard-500);
 
-  --color-forest-600: #2d4a3e;
-  --color-forest-700: #1f3a2e;
-  --color-forest-800: #14261d;
+  --color-forest-600: var(--raw-forest-600);
+  --color-forest-700: var(--raw-forest-700);
+  --color-forest-800: var(--raw-forest-800);
+
+  --color-card-surface: var(--raw-card-surface);
 
   /* Typography */
   --font-display: "Fraunces", Georgia, serif;
   --font-sans: "Outfit", system-ui, sans-serif;
 
   /* Shadows */
-  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.08);
-  --shadow-card-hover: 0 4px 12px rgba(0, 0, 0, 0.12);
-  --shadow-inner-subtle: inset 0 1px 3px rgba(0, 0, 0, 0.06);
+  --shadow-card: var(--raw-shadow-card);
+  --shadow-card-hover: var(--raw-shadow-card-hover);
+  --shadow-inner-subtle: var(--raw-shadow-inner-subtle);
 
   /* Border radius */
   --radius-card: 4px;
 }
 
 @layer base {
-  :root {
-    --cream-bg: #fdfbf7;
-    --charcoal-text: #2a2a2a;
-    --sage-accent: #7a9b6d;
-    --burnt-orange: #d97941;
-    --mustard: #d4a03a;
-  }
-
   * {
     @apply border-charcoal-700/20;
   }
@@ -60,6 +130,9 @@
     font-feature-settings:
       "liga" 1,
       "calt" 1;
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease;
   }
 
   h1,
@@ -80,7 +153,7 @@
 
 @layer components {
   .song-slot {
-    @apply bg-white border-2 border-charcoal-700/15 rounded-card shadow-card;
+    @apply bg-card-surface border-2 border-charcoal-700/15 rounded-card shadow-card;
     @apply hover:shadow-card-hover hover:border-charcoal-700/25;
     @apply transition-all duration-200;
   }
@@ -97,14 +170,14 @@
   }
 
   .btn-secondary {
-    @apply bg-white text-charcoal-700 font-semibold uppercase tracking-wide px-6 py-3 rounded-card;
+    @apply bg-card-surface text-charcoal-700 font-semibold uppercase tracking-wide px-6 py-3 rounded-card;
     @apply border-2 border-charcoal-700/20;
     @apply hover:border-charcoal-700/40 hover:bg-cream-100;
     @apply transition-all duration-200;
   }
 
   .input-field {
-    @apply bg-white border-2 border-charcoal-700/20 rounded-card px-4 py-3;
+    @apply bg-card-surface border-2 border-charcoal-700/20 rounded-card px-4 py-3;
     @apply focus:outline-none focus:border-forest-600 focus:ring-2 focus:ring-forest-600/20;
     @apply placeholder:text-charcoal-700/40;
     @apply transition-all duration-200;
@@ -121,6 +194,16 @@
       transparent 2px,
       rgba(0, 0, 0, 0.01) 2px,
       rgba(0, 0, 0, 0.01) 4px
+    );
+  }
+
+  .dark .paper-texture {
+    background-image: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(255, 255, 255, 0.01) 2px,
+      rgba(255, 255, 255, 0.01) 4px
     );
   }
 
@@ -183,4 +266,16 @@
 
 ::-webkit-scrollbar-thumb:hover {
   @apply bg-charcoal-700/30;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background-color: #1a1a1a;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.25);
 }
