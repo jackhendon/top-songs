@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Search, Music2 } from "lucide-react";
 import { ArtistData } from "@/lib/types";
@@ -14,6 +15,7 @@ interface ArtistSelectorProps {
 export default function ArtistSelector({
   onArtistSelected,
 }: ArtistSelectorProps) {
+  const router = useRouter();
   const [artistName, setArtistName] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -38,7 +40,10 @@ export default function ArtistSelector({
 
       const data: ArtistData = await response.json();
       trackArtistSearch(data.artistName, "search");
-      onArtistSelected(data);
+
+      // Navigate to the artist's page instead of loading inline
+      const slug = artistNameToSlug(data.artistName);
+      router.push(`/${slug}`);
     } catch (err) {
       const message = err instanceof Error ? err.message : "Unknown error";
       trackError("artist_search", message, { artist_name: name });
