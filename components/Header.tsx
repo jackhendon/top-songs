@@ -1,4 +1,4 @@
-import { Music, User } from "lucide-react";
+import { Music, User, RotateCcw } from "lucide-react";
 import Link from "next/link";
 import ThemeToggle from "./ThemeToggle";
 
@@ -56,9 +56,11 @@ export default function Header({
             {showNewArtist && (
               <button
                 onClick={onReset}
-                className="btn-secondary text-sm whitespace-nowrap py-2 sm:px-6 sm:py-3 cursor-pointer"
+                className="btn-secondary text-sm whitespace-nowrap cursor-pointer w-9 h-9 p-0 flex items-center justify-center sm:w-auto sm:h-auto sm:px-4 sm:py-2"
+                aria-label="New Game"
               >
-                New Artist
+                <RotateCcw className="w-4 h-4 sm:hidden" />
+                <span className="hidden sm:inline">New Game</span>
               </button>
             )}
             <ThemeToggle />
