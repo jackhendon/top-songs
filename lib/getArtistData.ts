@@ -121,7 +121,7 @@ async function fetchArtistData(artistName: string): Promise<ArtistData> {
 
   if (!response.ok) {
     if (response.status === 404) {
-      throw new Error(`Artist not found on Kworb: ${artistName}`);
+      throw new Error(`Streaming data not found: ${artistName}`);
     }
     throw new Error(`HTTP error! status: ${response.status}`);
   }
@@ -204,8 +204,6 @@ async function fetchArtistData(artistName: string): Promise<ArtistData> {
 
 // --- Cached version (revalidates every 24 hours) ---
 
-export const getArtistData = unstable_cache(
-  fetchArtistData,
-  ["artist-data"],
-  { revalidate: 86400 },
-);
+export const getArtistData = unstable_cache(fetchArtistData, ["artist-data"], {
+  revalidate: 86400,
+});

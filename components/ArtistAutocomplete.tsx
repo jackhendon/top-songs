@@ -181,7 +181,7 @@ export default function ArtistAutocomplete({
         <button
           type="button"
           disabled={disabled || !query.trim()}
-          className="btn-primary disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+          className="btn-primary disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer text-sm sm:text-base"
           onClick={handleFreeformSubmit}
         >
           {disabled ? (

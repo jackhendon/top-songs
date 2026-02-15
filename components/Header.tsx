@@ -51,12 +51,12 @@ export default function Header({
             </button>
           )}
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1">
             {rightContent}
             {showNewArtist && (
               <button
                 onClick={onReset}
-                className="btn-secondary text-sm whitespace-nowrap px-3 py-2 sm:px-6 sm:py-3 cursor-pointer"
+                className="btn-secondary text-sm whitespace-nowrap py-2 sm:px-6 sm:py-3 cursor-pointer"
               >
                 New Artist
               </button>

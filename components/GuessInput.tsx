@@ -71,14 +71,10 @@ export default function GuessInput() {
   };
 
   return (
-    <div className={`card bg-card-surface p-4 sm:p-5 overflow-hidden ${shaking ? "animate-shake" : ""}`}>
+    <div
+      className={`card bg-card-surface p-4 sm:p-5 overflow-hidden ${shaking ? "animate-shake" : ""}`}
+    >
       <form onSubmit={handleSubmit} className="space-y-3">
-        <label
-          htmlFor="guess"
-          className="block text-sm font-semibold text-text-secondary font-sans mb-1"
-        >
-          Guess a song
-        </label>
         <div className="flex gap-2">
           <input
             ref={inputRef}
