@@ -15,9 +15,11 @@ export default function GuessInput() {
 
   const { makeGuess } = useGameStore();
 
+  const isMobile = typeof window !== "undefined" && "ontouchstart" in window;
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    inputRef.current?.blur();
+    if (isMobile) inputRef.current?.blur();
 
     if (!guess.trim()) return;
 

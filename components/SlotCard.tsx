@@ -1,16 +1,47 @@
 "use client";
 
+import { useState } from "react";
 import { Song } from "@/lib/types";
-import { Lock, CheckCircle2, Eye } from "lucide-react";
+import { Lock, CheckCircle2, Eye, Lightbulb } from "lucide-react";
 
 interface SlotCardProps {
   rank: number;
   song: Song;
   isRevealed: boolean;
   isGuessed: boolean;
+  hintLevel: number;
+  onRevealHint: () => void;
+  gameOver: boolean;
 }
 
-export default function SlotCard({ rank, song, isRevealed, isGuessed }: SlotCardProps) {
+function formatHintText(title: string): string {
+  const firstChar = title.charAt(0);
+  const rest = title.slice(1).replace(/[^\s]/g, "_");
+  return firstChar + rest;
+}
+
+export default function SlotCard({
+  rank,
+  song,
+  isRevealed,
+  isGuessed,
+  hintLevel,
+  onRevealHint,
+  gameOver,
+}: SlotCardProps) {
+  const [confirming, setConfirming] = useState(false);
+
+  const handleHintClick = () => {
+    if (!confirming) {
+      setConfirming(true);
+      return;
+    }
+    onRevealHint();
+    setConfirming(false);
+  };
+
+  const showHintButton = !gameOver && !isRevealed && hintLevel < 2;
+
   return (
     <div
       className={`
@@ -59,6 +90,12 @@ export default function SlotCard({ rank, song, isRevealed, isGuessed }: SlotCard
                 <span>{song.totalStreams.toLocaleString()} streams</span>
               </div>
             </>
+          ) : hintLevel === 1 ? (
+            <div className="flex items-center gap-2">
+              <span className="font-mono font-semibold text-base text-mustard dark:text-mint tracking-wide">
+                {formatHintText(song.title)}
+              </span>
+            </div>
           ) : (
             <div className="flex items-center gap-2 text-text-faint">
               <Lock className="w-4 h-4" />
@@ -66,6 +103,22 @@ export default function SlotCard({ rank, song, isRevealed, isGuessed }: SlotCard
             </div>
           )}
         </div>
+
+        {/* Hint Button */}
+        {showHintButton && (
+          <button
+            onClick={handleHintClick}
+            onBlur={() => setConfirming(false)}
+            className="ml-2 inline-flex items-center gap-1 text-xs text-mustard dark:text-mint hover:text-mustard/80 dark:hover:text-mint/80 transition-colors cursor-pointer font-sans shrink-0"
+          >
+            <Lightbulb className="w-3.5 h-3.5" />
+            {confirming
+              ? "Are you sure?"
+              : hintLevel === 0
+                ? "Reveal letter"
+                : "Reveal title"}
+          </button>
+        )}
       </div>
 
       {/* Reveal Flash Overlay */}

@@ -36,7 +36,9 @@ export default function GameBoard({ onReset, onPlayAgain }: GameBoardProps) {
     gameStartedAt,
     isGameWon,
     isGaveUp,
+    hintLevels,
     giveUp,
+    revealHint,
   } = useGameStore();
 
   const score = guessedIndices.size;
@@ -219,6 +221,9 @@ export default function GameBoard({ onReset, onPlayAgain }: GameBoardProps) {
             song={song}
             isRevealed={revealedIndices.has(index)}
             isGuessed={guessedIndices.has(index)}
+            hintLevel={hintLevels.get(index) ?? 0}
+            onRevealHint={() => revealHint(index)}
+            gameOver={gameOver}
           />
         ))}
       </div>

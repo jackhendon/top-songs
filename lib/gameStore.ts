@@ -17,6 +17,7 @@ export interface GameState {
   // Game progress
   revealedIndices: Set<number>; // Which top 10 slots have been revealed (0-9)
   guessedIndices: Set<number>; // Which top 10 slots were guessed by the player (subset of revealedIndices)
+  hintLevels: Map<number, number>; // Maps slot index → hint level (1=first letter, 2=full reveal)
   overflowSongs: Song[]; // Songs that were guessed correctly but aren't in top 10
   guessedTitles: Set<string>; // All song titles that have been guessed (prevents duplicates)
 
@@ -39,6 +40,7 @@ export interface GameState {
   makeGuess: (
     guess: string,
   ) => { result: "correct-top10" | "correct-overflow" | "incorrect" | "duplicate"; rank?: number };
+  revealHint: (index: number) => void;
   giveUp: () => void;
   resetGame: () => void;
 }
@@ -52,6 +54,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   topTen: [],
   revealedIndices: new Set(),
   guessedIndices: new Set(),
+  hintLevels: new Map(),
   overflowSongs: [],
   guessedTitles: new Set(),
   totalGuesses: 0,
@@ -70,7 +73,8 @@ export const useGameStore = create<GameState>((set, get) => ({
       allSongs: songs,
       topTen,
       revealedIndices: new Set(),
-  guessedIndices: new Set(),
+      guessedIndices: new Set(),
+      hintLevels: new Map(),
       overflowSongs: [],
       guessedTitles: new Set(),
       totalGuesses: 0,
@@ -203,6 +207,27 @@ export const useGameStore = create<GameState>((set, get) => ({
     }
   },
 
+  // Reveal a hint for a slot
+  revealHint: (index: number) => {
+    const state = get();
+    if (state.revealedIndices.has(index)) return;
+
+    const currentLevel = state.hintLevels.get(index) ?? 0;
+    if (currentLevel >= 2) return;
+
+    const newHintLevels = new Map(state.hintLevels);
+    newHintLevels.set(index, currentLevel + 1);
+
+    if (currentLevel === 1) {
+      // Going from first letter → full reveal: add to revealedIndices (but not guessedIndices)
+      const newRevealed = new Set(state.revealedIndices);
+      newRevealed.add(index);
+      set({ hintLevels: newHintLevels, revealedIndices: newRevealed });
+    } else {
+      set({ hintLevels: newHintLevels });
+    }
+  },
+
   // Give up - reveal all slots
   giveUp: () => {
     const state = get();
@@ -221,7 +246,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       artistImage: state.artistImage,
       datePlayed: Date.now(),
       totalGuesses: state.totalGuesses,
-      slotsRevealed: state.revealedIndices.size,
+      slotsRevealed: state.guessedIndices.size,
       overflowCount: state.overflowSongs.length,
       outcome: "gave_up",
       timeSeconds,
@@ -241,7 +266,8 @@ export const useGameStore = create<GameState>((set, get) => ({
       allSongs: [],
       topTen: [],
       revealedIndices: new Set(),
-  guessedIndices: new Set(),
+      guessedIndices: new Set(),
+      hintLevels: new Map(),
       overflowSongs: [],
       guessedTitles: new Set(),
       totalGuesses: 0,
