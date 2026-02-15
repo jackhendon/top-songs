@@ -11,6 +11,8 @@ import {
   ExternalLink,
   Share2,
   Check,
+  Clock,
+  Hash,
 } from "lucide-react";
 import SlotCard from "./SlotCard";
 import OverflowList from "./OverflowList";
@@ -31,14 +33,33 @@ export default function GameBoard({ onReset, onPlayAgain }: GameBoardProps) {
     guessedIndices,
     overflowSongs,
     totalGuesses,
+    gameStartedAt,
+    isGameWon,
     isGaveUp,
     giveUp,
   } = useGameStore();
 
   const score = guessedIndices.size;
+  const gameOver = isGameWon || isGaveUp;
 
   const [confirmingGiveUp, setConfirmingGiveUp] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [elapsed, setElapsed] = useState(0);
+
+  useEffect(() => {
+    if (!gameStartedAt || gameOver) return;
+    setElapsed(Math.floor((Date.now() - gameStartedAt) / 1000));
+    const id = setInterval(() => {
+      setElapsed(Math.floor((Date.now() - gameStartedAt) / 1000));
+    }, 1000);
+    return () => clearInterval(id);
+  }, [gameStartedAt, gameOver]);
+
+  const formatTime = (seconds: number) => {
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${m}:${s.toString().padStart(2, "0")}`;
+  };
 
   useEffect(() => {
     return () => {
@@ -105,17 +126,38 @@ export default function GameBoard({ onReset, onPlayAgain }: GameBoardProps) {
             {artistName}
           </h2>
         </div>
-        <div className="text-right shrink-0">
-          <div className="flex items-center gap-1.5">
-            <Trophy className="w-4 h-4 text-mustard dark:text-mint" />
-            <span className="font-sans font-semibold text-sm text-text-primary">
-              {score}/10
-            </span>
-          </div>
-          <span className="text-xs text-text-muted font-sans">
+      </div>
+
+      {/* Stats Bar */}
+      <div className="flex items-center gap-3 px-1">
+        <div className="flex items-center gap-1.5">
+          <Trophy className="w-3.5 h-3.5 text-mustard dark:text-mint" />
+          <span className="font-sans font-semibold text-sm text-text-primary">
+            {score}/10
+          </span>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <Hash className="w-3.5 h-3.5 text-text-muted" />
+          <span className="font-sans text-sm text-text-muted">
             {totalGuesses} {totalGuesses === 1 ? "guess" : "guesses"}
           </span>
         </div>
+        <div className="flex items-center gap-1.5">
+          <Clock className="w-3.5 h-3.5 text-text-muted" />
+          <span className="font-sans text-sm text-text-muted tabular-nums">
+            {formatTime(elapsed)}
+          </span>
+        </div>
+        {!gameOver && (
+          <button
+            onClick={handleGiveUp}
+            onBlur={() => setConfirmingGiveUp(false)}
+            className="ml-auto inline-flex items-center gap-1 text-xs text-text-faint hover:text-text-muted transition-colors cursor-pointer font-sans"
+          >
+            <Flag className="w-3 h-3" />
+            {confirmingGiveUp ? "Are you sure?" : "Give up"}
+          </button>
+        )}
       </div>
 
       {/* Progress Bar */}
@@ -165,19 +207,7 @@ export default function GameBoard({ onReset, onPlayAgain }: GameBoardProps) {
           </a>
         </div>
       ) : (
-        <div className="space-y-2">
-          <GuessInput />
-          <div className="flex justify-end px-1">
-            <button
-              onClick={handleGiveUp}
-              onBlur={() => setConfirmingGiveUp(false)}
-              className="inline-flex items-center gap-1 text-xs text-text-faint hover:text-text-muted transition-colors cursor-pointer font-sans"
-            >
-              <Flag className="w-3 h-3" />
-              {confirmingGiveUp ? "Are you sure?" : "Give up"}
-            </button>
-          </div>
-        </div>
+        <GuessInput />
       )}
 
       {/* Top 10 Grid - 2 columns on desktop */}
