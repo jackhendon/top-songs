@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { useGameStore } from "@/lib/gameStore";
-import { trackGameAbandoned } from "@/lib/analytics";
-import { Music2, Trophy, Flag, RotateCcw, ExternalLink } from "lucide-react";
+import { trackGameAbandoned, trackShare } from "@/lib/analytics";
+import { Music2, Trophy, Flag, RotateCcw, ExternalLink, Share2, Check } from "lucide-react";
 import SlotCard from "./SlotCard";
 import OverflowList from "./OverflowList";
 import GuessInput from "./GuessInput";
@@ -27,6 +27,7 @@ export default function GameBoard({ onReset, onPlayAgain }: GameBoardProps) {
   } = useGameStore();
 
   const [confirmingGiveUp, setConfirmingGiveUp] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     return () => {
@@ -48,6 +49,27 @@ export default function GameBoard({ onReset, onPlayAgain }: GameBoardProps) {
     }
     giveUp();
     setConfirmingGiveUp(false);
+  };
+
+  const handleShare = async () => {
+    const text = `I guessed ${revealedIndices.size} of ${artistName}'s top 10 songs in ${totalGuesses} tries! 🎵\n\nPlay Top Songs at topsongs.io`;
+
+    if (
+      window.matchMedia("(pointer: coarse)").matches &&
+      navigator.share
+    ) {
+      try {
+        await navigator.share({ text });
+        trackShare(artistName, "native");
+      } catch {
+        // User cancelled
+      }
+    } else {
+      await navigator.clipboard.writeText(text);
+      trackShare(artistName, "clipboard");
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
   };
 
   const kworbUrl = `https://kworb.net/spotify/artist/${artistId}_songs.html`;
@@ -98,14 +120,32 @@ export default function GameBoard({ onReset, onPlayAgain }: GameBoardProps) {
 
       {/* Guess Input or Give Up state */}
       {isGaveUp ? (
-        <div className="flex items-center justify-between gap-3 px-1">
-          <button
-            onClick={onPlayAgain}
-            className="btn-primary inline-flex items-center gap-2 cursor-pointer"
-          >
-            <RotateCcw className="w-4 h-4" />
-            Play Again
-          </button>
+        <div className="space-y-2 px-1">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={onPlayAgain}
+              className="btn-primary inline-flex items-center gap-2 cursor-pointer"
+            >
+              <RotateCcw className="w-4 h-4" />
+              Play Again
+            </button>
+            <button
+              onClick={handleShare}
+              className="btn-secondary inline-flex items-center gap-2 cursor-pointer"
+            >
+              {copied ? (
+                <>
+                  <Check className="w-4 h-4" />
+                  Copied!
+                </>
+              ) : (
+                <>
+                  <Share2 className="w-4 h-4" />
+                  Share Result
+                </>
+              )}
+            </button>
+          </div>
           <a
             href={kworbUrl}
             target="_blank"
