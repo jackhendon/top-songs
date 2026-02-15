@@ -34,6 +34,14 @@ export default function Footer() {
           >
             Privacy
           </Link>
+          <a
+            href="https://buymeacoffee.com/topsongs"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline underline-offset-2 hover:text-text-secondary transition-colors"
+          >
+            Support the dev
+          </a>
         </p>
       </div>
     </footer>

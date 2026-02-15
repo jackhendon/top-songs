@@ -145,9 +145,17 @@ export default function FAQPage() {
                 </p>
                 <p className="mt-2">
                   That said, if you enjoy the game and feel like buying me a
-                  beer, I certainly won&apos;t say no. A donation link will be
-                  here soon &mdash; watch this space!
+                  beer, I certainly won&apos;t say no!
                 </p>
+                <a
+                  href="https://buymeacoffee.com/topsongs"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-primary inline-flex items-center gap-2 mt-3"
+                >
+                  <Beer className="w-4 h-4" />
+                  Donate beer money
+                </a>
               </div>
             </div>
           </section>
