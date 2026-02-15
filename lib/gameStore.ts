@@ -16,6 +16,7 @@ export interface GameState {
 
   // Game progress
   revealedIndices: Set<number>; // Which top 10 slots have been revealed (0-9)
+  guessedIndices: Set<number>; // Which top 10 slots were guessed by the player (subset of revealedIndices)
   overflowSongs: Song[]; // Songs that were guessed correctly but aren't in top 10
   guessedTitles: Set<string>; // All song titles that have been guessed (prevents duplicates)
 
@@ -50,6 +51,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   allSongs: [],
   topTen: [],
   revealedIndices: new Set(),
+  guessedIndices: new Set(),
   overflowSongs: [],
   guessedTitles: new Set(),
   totalGuesses: 0,
@@ -68,6 +70,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       allSongs: songs,
       topTen,
       revealedIndices: new Set(),
+  guessedIndices: new Set(),
       overflowSongs: [],
       guessedTitles: new Set(),
       totalGuesses: 0,
@@ -125,6 +128,9 @@ export const useGameStore = create<GameState>((set, get) => ({
       const newRevealed = new Set(state.revealedIndices);
       newRevealed.add(topTenIndex);
 
+      const newGuessedIndices = new Set(state.guessedIndices);
+      newGuessedIndices.add(topTenIndex);
+
       const newGuessed = new Set(state.guessedTitles);
       newGuessed.add(match.song);
 
@@ -134,6 +140,7 @@ export const useGameStore = create<GameState>((set, get) => ({
 
       set({
         revealedIndices: newRevealed,
+        guessedIndices: newGuessedIndices,
         guessedTitles: newGuessed,
         isGameWon: isWon,
       });
@@ -234,6 +241,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       allSongs: [],
       topTen: [],
       revealedIndices: new Set(),
+  guessedIndices: new Set(),
       overflowSongs: [],
       guessedTitles: new Set(),
       totalGuesses: 0,

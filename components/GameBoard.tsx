@@ -20,11 +20,14 @@ export default function GameBoard({ onReset, onPlayAgain }: GameBoardProps) {
     artistImage,
     topTen,
     revealedIndices,
+    guessedIndices,
     overflowSongs,
     totalGuesses,
     isGaveUp,
     giveUp,
   } = useGameStore();
+
+  const score = guessedIndices.size;
 
   const [confirmingGiveUp, setConfirmingGiveUp] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -52,7 +55,7 @@ export default function GameBoard({ onReset, onPlayAgain }: GameBoardProps) {
   };
 
   const handleShare = async () => {
-    const text = `I guessed ${revealedIndices.size} of ${artistName}'s top 10 songs in ${totalGuesses} tries! 🎵\n\nPlay Top Songs at topsongs.io`;
+    const text = `I guessed ${score} of ${artistName}'s top 10 songs in ${totalGuesses} tries! 🎵\n\nPlay Top Songs at topsongs.io`;
 
     if (
       window.matchMedia("(pointer: coarse)").matches &&
@@ -101,7 +104,7 @@ export default function GameBoard({ onReset, onPlayAgain }: GameBoardProps) {
           <div className="flex items-center gap-1.5">
             <Trophy className="w-4 h-4 text-mustard dark:text-mint" />
             <span className="font-sans font-semibold text-sm text-text-primary">
-              {revealedIndices.size}/10
+              {score}/10
             </span>
           </div>
           <span className="text-xs text-text-muted font-sans">
@@ -114,7 +117,7 @@ export default function GameBoard({ onReset, onPlayAgain }: GameBoardProps) {
       <div className="h-2 bg-bg-tertiary rounded-full overflow-hidden border border-card-border">
         <div
           className="h-full bg-sage rounded-full transition-all duration-500 ease-out"
-          style={{ width: `${(revealedIndices.size / 10) * 100}%` }}
+          style={{ width: `${(score / 10) * 100}%` }}
         />
       </div>
 
@@ -180,6 +183,7 @@ export default function GameBoard({ onReset, onPlayAgain }: GameBoardProps) {
             rank={index + 1}
             song={song}
             isRevealed={revealedIndices.has(index)}
+            isGuessed={guessedIndices.has(index)}
           />
         ))}
       </div>

@@ -197,6 +197,11 @@
     border-color: var(--raw-sage);
   }
 
+  .song-slot--missed {
+    @apply border-solid opacity-60;
+    border-color: var(--raw-card-border);
+  }
+
   .btn-primary {
     @apply bg-mustard text-white font-sans font-semibold px-6 py-3 rounded-pill;
     @apply border-2 border-mustard-hover;
