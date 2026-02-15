@@ -63,7 +63,7 @@ export default function ArtistSelector({
 
   return (
     <div className="card bg-card-surface p-6 sm:p-8 fade-in">
-      <h2 className="font-display text-2xl font-extrabold text-text-primary mb-6 text-center tracking-[-0.04em]">
+      <h2 className="font-display text-xl sm:text-2xl font-extrabold text-text-primary mb-6 text-center tracking-[-0.04em]">
         Choose a musician or group
       </h2>
 
