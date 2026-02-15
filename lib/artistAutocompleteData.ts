@@ -5,10 +5,12 @@
 import type { ArtistAutocompleteItem } from "./artistAutocomplete";
 
 export const AUTOCOMPLETE_ARTISTS: ArtistAutocompleteItem[] = [
-  { name: "Drake", slug: "drake" },
   { name: "Taylor Swift", slug: "taylor-swift" },
+  { name: "Drake", slug: "drake" },
+  { name: "BTS", slug: "bts" },
   { name: "Bad Bunny", slug: "bad-bunny" },
   { name: "The Weeknd", slug: "the-weeknd" },
+  { name: "Adele", slug: "adele" },
   { name: "Justin Bieber", slug: "justin-bieber" },
   { name: "Ariana Grande", slug: "ariana-grande" },
   { name: "Travis Scott", slug: "travis-scott" },
@@ -22,7 +24,6 @@ export const AUTOCOMPLETE_ARTISTS: ArtistAutocompleteItem[] = [
   { name: "J Balvin", slug: "j-balvin" },
   { name: "Future", slug: "future" },
   { name: "Bruno Mars", slug: "bruno-mars" },
-  { name: "BTS", slug: "bts" },
   { name: "Ozuna", slug: "ozuna" },
   { name: "Juice WRLD", slug: "juice-wrld" },
   { name: "Coldplay", slug: "coldplay" },
@@ -65,7 +66,6 @@ export const AUTOCOMPLETE_ARTISTS: ArtistAutocompleteItem[] = [
   { name: "Queen", slug: "queen" },
   { name: "One Direction", slug: "one-direction" },
   { name: "Metro Boomin", slug: "metro-boomin" },
-  { name: "Adele", slug: "adele" },
   { name: "Harry Styles", slug: "harry-styles" },
   { name: "Gunna", slug: "gunna" },
   { name: "Arctic Monkeys", slug: "arctic-monkeys" },
