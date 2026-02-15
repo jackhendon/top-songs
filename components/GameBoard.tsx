@@ -3,7 +3,15 @@
 import { useState, useEffect } from "react";
 import { useGameStore } from "@/lib/gameStore";
 import { trackGameAbandoned, trackShare } from "@/lib/analytics";
-import { Music2, Trophy, Flag, RotateCcw, ExternalLink, Share2, Check } from "lucide-react";
+import {
+  Music2,
+  Trophy,
+  Flag,
+  RotateCcw,
+  ExternalLink,
+  Share2,
+  Check,
+} from "lucide-react";
 import SlotCard from "./SlotCard";
 import OverflowList from "./OverflowList";
 import GuessInput from "./GuessInput";
@@ -55,12 +63,9 @@ export default function GameBoard({ onReset, onPlayAgain }: GameBoardProps) {
   };
 
   const handleShare = async () => {
-    const text = `I guessed ${score} of ${artistName}'s top 10 songs in ${totalGuesses} tries! 🎵\n\nPlay Top Songs at topsongs.io`;
+    const text = `I guessed ${score} of ${artistName}'s top 10 songs in ${totalGuesses} tries! 🎵\n\nThink you can beat me?\n\nPlay Top Songs at topsongs.io`;
 
-    if (
-      window.matchMedia("(pointer: coarse)").matches &&
-      navigator.share
-    ) {
+    if (window.matchMedia("(pointer: coarse)").matches && navigator.share) {
       try {
         await navigator.share({ text });
         trackShare(artistName, "native");
@@ -86,7 +91,7 @@ export default function GameBoard({ onReset, onPlayAgain }: GameBoardProps) {
             src={artistImage}
             alt={artistName}
             className="w-10 h-10 rounded-full object-cover shrink-0"
-            style={{ border: '2px solid var(--raw-card-border)' }}
+            style={{ border: "2px solid var(--raw-card-border)" }}
           />
         )}
         <div className="flex-1 min-w-0">
