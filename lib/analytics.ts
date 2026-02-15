@@ -27,7 +27,7 @@ function capture(event: string, properties?: Record<string, unknown>) {
 
 export function trackArtistSearch(
   artistName: string,
-  method: "search" | "seo-page" | "url-direct",
+  method: "search" | "seo-page" | "url-direct" | "autocomplete",
 ) {
   capture("artist_search", { artist_name: artistName, method });
 }

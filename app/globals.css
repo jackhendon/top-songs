@@ -275,6 +275,75 @@
   .artist-card:active {
     @apply translate-y-0;
   }
+
+  /* Autocomplete dropdown */
+  .autocomplete-dropdown {
+    @apply bg-card-surface rounded-card shadow-card-hover;
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    z-index: 50;
+    max-height: 352px;
+    overflow-y: auto;
+    border: 1px solid var(--raw-card-border);
+    animation: dropdownIn 0.15s ease-out;
+  }
+
+  @keyframes dropdownIn {
+    from {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .autocomplete-item {
+    @apply w-full text-left px-4 py-3 font-sans font-semibold text-text-secondary;
+    @apply transition-colors duration-100 cursor-pointer;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-left: 3px solid transparent;
+  }
+
+  .autocomplete-item + .autocomplete-item {
+    border-top: 1px solid var(--raw-card-border);
+  }
+
+  .autocomplete-item-icon {
+    @apply text-text-faint;
+    @apply transition-colors duration-100;
+  }
+
+  .autocomplete-item:hover,
+  .autocomplete-item[data-highlighted="true"] {
+    @apply bg-bg-secondary;
+    border-left-color: var(--raw-mustard);
+  }
+
+  :is(.dark) .autocomplete-item:hover,
+  :is(.dark) .autocomplete-item[data-highlighted="true"] {
+    border-left-color: var(--raw-mint);
+  }
+
+  .autocomplete-item:hover .autocomplete-item-icon,
+  .autocomplete-item[data-highlighted="true"] .autocomplete-item-icon {
+    color: var(--raw-mustard);
+  }
+
+  :is(.dark) .autocomplete-item:hover .autocomplete-item-icon,
+  :is(.dark) .autocomplete-item[data-highlighted="true"] .autocomplete-item-icon {
+    color: var(--raw-mint);
+  }
+
+  .autocomplete-item:active {
+    @apply bg-bg-tertiary;
+  }
 }
 
 @layer utilities {
