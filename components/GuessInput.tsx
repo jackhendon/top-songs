@@ -82,8 +82,8 @@ export default function GuessInput() {
             type="text"
             value={guess}
             onChange={(e) => setGuess(e.target.value)}
-            placeholder="Enter song title..."
-            className="input-field flex-1 min-w-0 text-sm sm:text-base"
+            placeholder="Enter song title"
+            className="input-field flex-1 min-w-0 text-base"
             autoComplete="off"
             autoFocus
           />

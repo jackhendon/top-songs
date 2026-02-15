@@ -164,8 +164,8 @@ export default function ArtistAutocomplete({
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
             onFocus={handleFocus}
-            placeholder="Search for an artist..."
-            className="input-field w-full pl-10 sm:pl-11 text-sm sm:text-base"
+            placeholder="Search artists"
+            className="input-field w-full pl-10 sm:pl-11 text-base"
             disabled={disabled}
             role="combobox"
             aria-autocomplete="list"
@@ -181,7 +181,7 @@ export default function ArtistAutocomplete({
         <button
           type="button"
           disabled={disabled || !query.trim()}
-          className="btn-primary disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer text-sm sm:text-base"
+          className="btn-primary disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer text-base"
           onClick={handleFreeformSubmit}
         >
           {disabled ? (
