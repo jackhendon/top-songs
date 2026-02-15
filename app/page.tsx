@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useGameStore } from "@/lib/gameStore";
 import { ArtistData } from "@/lib/types";
 import Header from "@/components/Header";
@@ -41,6 +41,26 @@ export default function HomePage() {
     setIsStarted(false);
   };
 
+  const handlePlayAgain = useCallback(async () => {
+    const currentArtist = useGameStore.getState().artistName;
+    if (!currentArtist) return;
+
+    const response = await fetch(
+      `/api/artist?name=${encodeURIComponent(currentArtist)}`,
+    );
+    if (!response.ok) return;
+
+    const data: ArtistData = await response.json();
+    const { startGame } = useGameStore.getState();
+    startGame(
+      data.artistName,
+      data.artistId,
+      data.imageUrl,
+      data.songs,
+      data.topTen,
+    );
+  }, []);
+
   return (
     <div className="min-h-screen flex flex-col bg-bg-primary">
       <Header onReset={handleReset} showNewArtist={isStarted} />
@@ -53,10 +73,10 @@ export default function HomePage() {
             artistName={artistName}
             totalGuesses={totalGuesses}
             overflowCount={overflowSongs.length}
-            onPlayAgain={handleReset}
+            onPlayAgain={handlePlayAgain}
           />
         ) : (
-          <GameBoard onReset={handleReset} />
+          <GameBoard onReset={handleReset} onPlayAgain={handlePlayAgain} />
         )}
       </main>
 

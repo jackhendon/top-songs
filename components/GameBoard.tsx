@@ -10,9 +10,10 @@ import GuessInput from "./GuessInput";
 
 interface GameBoardProps {
   onReset: () => void;
+  onPlayAgain: () => void;
 }
 
-export default function GameBoard({ onReset }: GameBoardProps) {
+export default function GameBoard({ onReset, onPlayAgain }: GameBoardProps) {
   const {
     artistName,
     artistId,
@@ -99,7 +100,7 @@ export default function GameBoard({ onReset }: GameBoardProps) {
       {isGaveUp ? (
         <div className="flex items-center justify-between gap-3 px-1">
           <button
-            onClick={onReset}
+            onClick={onPlayAgain}
             className="btn-primary inline-flex items-center gap-2 cursor-pointer"
           >
             <RotateCcw className="w-4 h-4" />

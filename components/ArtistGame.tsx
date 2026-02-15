@@ -42,48 +42,54 @@ export default function ArtistGame({
 
   const isGameActive = gameArtist === artistName && totalGuesses >= 0 && !loading;
 
+  const fetchAndStart = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const response = await fetch(
+        `/api/artist?name=${encodeURIComponent(artistName)}`,
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to fetch artist data");
+      }
+
+      const data: ArtistData = await response.json();
+      const { startGame } = useGameStore.getState();
+
+      startGame(
+        data.artistName,
+        data.artistId,
+        data.imageUrl,
+        data.songs,
+        data.topTen,
+      );
+
+      trackArtistSearch(artistName, "seo-page");
+      setLoading(false);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Unknown error";
+      trackError("seo_page_fetch", message, { artist_name: artistName });
+      setError(message);
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (hasFetched.current) return;
     hasFetched.current = true;
-
-    async function fetchAndStart() {
-      try {
-        const response = await fetch(
-          `/api/artist?name=${encodeURIComponent(artistName)}`,
-        );
-
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.error || "Failed to fetch artist data");
-        }
-
-        const data: ArtistData = await response.json();
-        const { startGame } = useGameStore.getState();
-
-        startGame(
-          data.artistName,
-          data.artistId,
-          data.imageUrl,
-          data.songs,
-          data.topTen,
-        );
-
-        trackArtistSearch(artistName, "seo-page");
-        setLoading(false);
-      } catch (err) {
-        const message = err instanceof Error ? err.message : "Unknown error";
-        trackError("seo_page_fetch", message, { artist_name: artistName });
-        setError(message);
-        setLoading(false);
-      }
-    }
-
     fetchAndStart();
   }, [artistName]);
 
   const handleReset = () => {
     resetGame();
     router.push("/");
+  };
+
+  const handlePlayAgain = () => {
+    fetchAndStart();
   };
 
   // Error state
@@ -173,10 +179,10 @@ export default function ArtistGame({
             artistName={gameArtist}
             totalGuesses={totalGuesses}
             overflowCount={overflowSongs.length}
-            onPlayAgain={handleReset}
+            onPlayAgain={handlePlayAgain}
           />
         ) : (
-          <GameBoard onReset={handleReset} />
+          <GameBoard onReset={handleReset} onPlayAgain={handlePlayAgain} />
         )}
       </main>
 
