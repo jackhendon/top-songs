@@ -152,7 +152,7 @@ export default function GameBoard({ onReset, onPlayAgain }: GameBoardProps) {
           <button
             onClick={handleGiveUp}
             onBlur={() => setConfirmingGiveUp(false)}
-            className="ml-auto inline-flex items-center gap-1 text-xs text-text-faint hover:text-text-muted transition-colors cursor-pointer font-sans"
+            className="ml-auto inline-flex items-center gap-1 text-xs text-red-400 hover:text-red-500 dark:text-red-400 dark:hover:text-red-300 transition-colors cursor-pointer font-sans"
           >
             <Flag className="w-3 h-3" />
             {confirmingGiveUp ? "Are you sure?" : "Give up"}
