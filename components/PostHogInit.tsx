@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect } from "react";
-import { initPostHog } from "@/lib/analytics";
+import { initPostHog, hasConsented } from "@/lib/analytics";
 
 export default function PostHogInit() {
   useEffect(() => {
-    initPostHog();
+    if (hasConsented()) {
+      initPostHog();
+    }
   }, []);
 
   return null;

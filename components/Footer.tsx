@@ -7,7 +7,7 @@ export default function Footer() {
       style={{ borderTop: "1px solid var(--raw-card-border)" }}
     >
       <div className="container mx-auto px-4 text-center text-sm text-text-muted font-sans space-y-1">
-        <p>&copy; 2026 Jack Hendon. All rights reserved.</p>
+        <p>&copy; 2026 Top Songs. All rights reserved.</p>
         <p className="text-text-faint text-xs">
           Artist data and streaming figures sourced from{" "}
           <a

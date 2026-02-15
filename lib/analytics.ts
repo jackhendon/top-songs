@@ -1,6 +1,24 @@
 import posthog from "posthog-js";
 
+const CONSENT_KEY = "analytics-consent";
+
 let initialized = false;
+
+export function getConsent(): "yes" | "no" | null {
+  if (typeof window === "undefined") return null;
+  const value = localStorage.getItem(CONSENT_KEY);
+  if (value === "yes" || value === "no") return value;
+  return null;
+}
+
+export function hasConsented(): boolean {
+  return getConsent() === "yes";
+}
+
+export function setConsent(value: "yes" | "no") {
+  if (typeof window === "undefined") return;
+  localStorage.setItem(CONSENT_KEY, value);
+}
 
 export function initPostHog() {
   if (typeof window === "undefined" || initialized) return;
@@ -14,6 +32,7 @@ export function initPostHog() {
     api_host: host,
     capture_pageview: true,
     capture_pageleave: true,
+    persistence: "memory",
     debug: process.env.NODE_ENV === "development",
   });
 

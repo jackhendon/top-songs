@@ -13,7 +13,10 @@ export default function PrivacyPage() {
       <Header
         logoHref="/"
         rightContent={
-          <Link href="/" className="btn-secondary text-sm inline-flex items-center gap-1.5">
+          <Link
+            href="/"
+            className="btn-secondary text-sm inline-flex items-center gap-1.5"
+          >
             <Play className="w-4 h-4" />
             Play
           </Link>
@@ -24,6 +27,10 @@ export default function PrivacyPage() {
         <h1 className="font-display text-2xl font-extrabold text-text-primary mb-6">
           Privacy Policy
         </h1>
+
+        <p className="text-xs text-text-muted font-sans mb-6">
+          Last updated: 15 February 2026
+        </p>
 
         <div className="space-y-6 text-sm text-text-secondary font-sans leading-relaxed">
           <section>
@@ -41,9 +48,16 @@ export default function PrivacyPage() {
                 PostHog
               </a>{" "}
               for anonymous analytics. PostHog may collect your IP address,
-              approximate location, browser type, and pages visited. No accounts,
-              cookies, or personally identifiable information are required to use
-              this site.
+              approximate location, browser type, and pages visited. No
+              accounts, cookies, or personally identifiable information are
+              required to use this site.
+            </p>
+            <p>
+              In accordance with UK GDPR and the Privacy and Electronic
+              Communications Regulations (PECR), analytics are only activated
+              after you give consent via the banner shown on your first visit.
+              You can change your analytics preference at any time by clearing
+              your browser&apos;s localStorage.
             </p>
           </section>
 
@@ -52,15 +66,21 @@ export default function PrivacyPage() {
               Local storage
             </h2>
             <p>
-              We store a small amount of data in your browser&apos;s localStorage
-              to improve your experience:
+              We store a small amount of data in your browser&apos;s
+              localStorage to improve your experience:
             </p>
             <ul className="list-disc list-inside mt-2 space-y-1 text-text-muted">
               <li>
-                <span className="text-text-secondary">Theme preference</span> &mdash; light or dark mode
+                <span className="text-text-secondary">Theme preference</span>{" "}
+                &mdash; light or dark mode
               </li>
               <li>
-                <span className="text-text-secondary">Game history</span> &mdash; artists played, scores, and outcomes
+                <span className="text-text-secondary">Game history</span>{" "}
+                &mdash; artists played, scores, and outcomes
+              </li>
+              <li>
+                <span className="text-text-secondary">Analytics consent</span>{" "}
+                &mdash; whether you accepted or declined analytics
               </li>
             </ul>
             <p className="mt-2">
@@ -110,14 +130,8 @@ export default function PrivacyPage() {
               Contact
             </h2>
             <p>
-              If you have questions about this policy, reach out via the{" "}
-              <a
-                href="https://www.topsongs.io"
-                className="text-mustard dark:text-mint underline underline-offset-2"
-              >
-                Top Songs
-              </a>{" "}
-              website.
+              If you have questions about this policy, reach out via email at
+              dev@topsongs.io.
             </p>
           </section>
         </div>
