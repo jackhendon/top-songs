@@ -35,15 +35,7 @@ export default function ProfilePage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-bg-primary">
-      <Header
-        logoHref="/"
-        rightContent={
-          <Link href="/" className="btn-secondary text-sm inline-flex items-center gap-1.5">
-            <Play className="w-4 h-4" />
-            Play
-          </Link>
-        }
-      />
+      <Header logoHref="/" showNewArtist />
 
       <main className="flex-1 container mx-auto px-4 py-8 max-w-4xl">
         {!hydrated ? null : history.length === 0 ? (

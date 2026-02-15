@@ -1,7 +1,6 @@
 import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { Play } from "lucide-react";
 
 export const metadata = {
   title: "Privacy Policy - Top Songs",
@@ -10,18 +9,7 @@ export const metadata = {
 export default function PrivacyPage() {
   return (
     <div className="min-h-screen flex flex-col bg-bg-primary">
-      <Header
-        logoHref="/"
-        rightContent={
-          <Link
-            href="/"
-            className="btn-secondary text-sm inline-flex items-center gap-1.5"
-          >
-            <Play className="w-4 h-4" />
-            Play
-          </Link>
-        }
-      />
+      <Header logoHref="/" showNewArtist />
 
       <main className="flex-1 container mx-auto px-4 py-8 max-w-2xl">
         <h1 className="font-display text-2xl font-extrabold text-text-primary mb-6">

@@ -21,7 +21,13 @@ export default function Footer() {
           names, images, and trademarks belong to their respective owners. Not
           affiliated with Spotify or any listed artist.
         </p>
-        <p>
+        <p className="space-x-3">
+          <Link
+            href="/faq"
+            className="underline underline-offset-2 hover:text-text-secondary transition-colors"
+          >
+            FAQ
+          </Link>
           <Link
             href="/privacy"
             className="underline underline-offset-2 hover:text-text-secondary transition-colors"

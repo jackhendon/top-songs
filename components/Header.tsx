@@ -1,4 +1,4 @@
-import { Music, User, RotateCcw } from "lucide-react";
+import { Music, User, RotateCcw, CircleHelp } from "lucide-react";
 import Link from "next/link";
 import ThemeToggle from "./ThemeToggle";
 
@@ -6,14 +6,12 @@ interface HeaderProps {
   onReset?: () => void;
   showNewArtist?: boolean;
   logoHref?: string;
-  rightContent?: React.ReactNode;
 }
 
 export default function Header({
   onReset,
   showNewArtist,
   logoHref,
-  rightContent,
 }: HeaderProps) {
   const logoContent = (
     <>
@@ -52,8 +50,7 @@ export default function Header({
           )}
 
           <div className="flex items-center gap-1">
-            {rightContent}
-            {showNewArtist && (
+            {showNewArtist && (onReset ? (
               <button
                 onClick={onReset}
                 className="btn-secondary text-sm whitespace-nowrap cursor-pointer w-9 h-9 p-0 flex items-center justify-center sm:w-auto sm:h-auto sm:px-4 sm:py-2"
@@ -62,17 +59,31 @@ export default function Header({
                 <RotateCcw className="w-4 h-4 sm:hidden" />
                 <span className="hidden sm:inline">New Game</span>
               </button>
-            )}
-            <ThemeToggle />
-            {!rightContent && (
+            ) : (
               <Link
-                href="/profile"
-                className="w-9 h-9 flex items-center justify-center rounded-full text-text-muted hover:text-text-primary hover:bg-bg-tertiary transition-colors"
-                aria-label="Profile"
+                href="/"
+                className="btn-secondary text-sm whitespace-nowrap w-9 h-9 p-0 flex items-center justify-center sm:w-auto sm:h-auto sm:px-4 sm:py-2"
+                aria-label="New Game"
               >
-                <User className="w-5 h-5" />
+                <RotateCcw className="w-4 h-4 sm:hidden" />
+                <span className="hidden sm:inline">New Game</span>
               </Link>
-            )}
+            ))}
+            <ThemeToggle />
+            <Link
+              href="/faq"
+              className="w-9 h-9 flex items-center justify-center rounded-full text-text-muted hover:text-text-primary hover:bg-bg-tertiary transition-colors"
+              aria-label="FAQ & About"
+            >
+              <CircleHelp className="w-5 h-5" />
+            </Link>
+            <Link
+              href="/profile"
+              className="w-9 h-9 flex items-center justify-center rounded-full text-text-muted hover:text-text-primary hover:bg-bg-tertiary transition-colors"
+              aria-label="Profile"
+            >
+              <User className="w-5 h-5" />
+            </Link>
           </div>
         </div>
       </div>
