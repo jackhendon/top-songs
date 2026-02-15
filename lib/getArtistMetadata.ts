@@ -5,6 +5,8 @@ export interface ArtistMetadata {
   artistName: string;
   artistId: string;
   imageUrl?: string;
+  genres?: string[];
+  followers?: number;
 }
 
 async function fetchArtistMetadata(
@@ -20,6 +22,8 @@ async function fetchArtistMetadata(
       artistName: artist.name,
       artistId: artist.id,
       imageUrl: artist.imageUrl,
+      genres: artist.genres,
+      followers: artist.followers,
     };
   } catch {
     return null;

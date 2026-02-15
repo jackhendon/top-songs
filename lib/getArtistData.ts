@@ -50,7 +50,13 @@ export async function getSpotifyAccessToken(): Promise<string> {
 export async function searchSpotifyArtist(
   artistName: string,
   accessToken: string,
-): Promise<{ id: string; name: string; imageUrl?: string } | null> {
+): Promise<{
+  id: string;
+  name: string;
+  imageUrl?: string;
+  genres?: string[];
+  followers?: number;
+} | null> {
   const response = await fetch(
     `https://api.spotify.com/v1/search?q=${encodeURIComponent(artistName)}&type=artist&limit=1`,
     {
@@ -76,6 +82,8 @@ export async function searchSpotifyArtist(
     id: artist.id,
     name: artist.name,
     imageUrl: artist.images[0]?.url,
+    genres: artist.genres,
+    followers: artist.followers?.total,
   };
 }
 

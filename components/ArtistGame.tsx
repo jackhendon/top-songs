@@ -17,6 +17,7 @@ interface ArtistGameProps {
   artistId: string;
   artistImage?: string;
   slug: string;
+  children?: React.ReactNode;
 }
 
 export default function ArtistGame({
@@ -24,6 +25,7 @@ export default function ArtistGame({
   artistId,
   artistImage,
   slug,
+  children,
 }: ArtistGameProps) {
   const router = useRouter();
   const hasFetched = useRef(false);
@@ -186,6 +188,7 @@ export default function ArtistGame({
         )}
       </main>
 
+      {children}
       <Footer />
     </div>
   );
