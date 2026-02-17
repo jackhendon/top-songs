@@ -45,6 +45,12 @@ export interface GameState {
   resetGame: () => void;
 }
 
+export function getHintsUsed(hintLevels: Map<number, number>): number {
+  let total = 0;
+  hintLevels.forEach((level) => { total += level; });
+  return total;
+}
+
 export const useGameStore = create<GameState>((set, get) => ({
   // Initial state
   artistName: "",

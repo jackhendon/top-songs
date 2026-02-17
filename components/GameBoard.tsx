@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useGameStore } from "@/lib/gameStore";
+import { useGameStore, getHintsUsed } from "@/lib/gameStore";
 import { trackGameAbandoned, trackShare } from "@/lib/analytics";
 import {
   Music2,
@@ -13,6 +13,7 @@ import {
   Check,
   Clock,
   Hash,
+  Lightbulb,
 } from "lucide-react";
 import SlotCard from "./SlotCard";
 import OverflowList from "./OverflowList";
@@ -42,6 +43,7 @@ export default function GameBoard({ onReset, onPlayAgain }: GameBoardProps) {
   } = useGameStore();
 
   const score = guessedIndices.size;
+  const hintsUsed = getHintsUsed(hintLevels);
   const gameOver = isGameWon || isGaveUp;
 
   const [confirmingGiveUp, setConfirmingGiveUp] = useState(false);
@@ -86,7 +88,12 @@ export default function GameBoard({ onReset, onPlayAgain }: GameBoardProps) {
   };
 
   const handleShare = async () => {
-    const text = `I guessed ${score} of ${artistName}'s top 10 songs in ${totalGuesses} tries! 🎵\n\nThink you can beat me?\n\nPlay Top Songs at topsongs.io`;
+    const hintsPart =
+      hintsUsed > 0
+        ? ` with ${hintsUsed} ${hintsUsed === 1 ? "hint" : "hints"}`
+        : "";
+    const timePart = elapsed > 0 ? ` in ${formatTime(elapsed)}` : "";
+    const text = `I guessed ${score} of ${artistName}'s top 10 songs in ${totalGuesses} ${totalGuesses === 1 ? "try" : "tries"}${hintsPart}${timePart}! 🎵\n\nThink you can beat me?\n\nPlay Top Songs at topsongs.io`;
 
     if (window.matchMedia("(pointer: coarse)").matches && navigator.share) {
       try {
@@ -144,6 +151,14 @@ export default function GameBoard({ onReset, onPlayAgain }: GameBoardProps) {
             {totalGuesses} {totalGuesses === 1 ? "guess" : "guesses"}
           </span>
         </div>
+        {hintsUsed > 0 && (
+          <div className="flex items-center gap-1.5">
+            <Lightbulb className="w-3.5 h-3.5 text-text-muted" />
+            <span className="font-sans text-sm text-text-muted">
+              {hintsUsed} {hintsUsed === 1 ? "hint" : "hints"}
+            </span>
+          </div>
+        )}
         <div className="flex items-center gap-1.5">
           <Clock className="w-3.5 h-3.5 text-text-muted" />
           <span className="font-sans text-sm text-text-muted tabular-nums">
@@ -175,11 +190,13 @@ export default function GameBoard({ onReset, onPlayAgain }: GameBoardProps) {
         <div className="space-y-3">
           <div className="card p-5 text-center space-y-3 fade-in">
             <div className="flex justify-center">
-              <div className={`w-14 h-14 rounded-full border-3 flex items-center justify-center ${
-                isGameWon && !isGaveUp
-                  ? "bg-mustard/20 dark:bg-mint/20 border-mustard dark:border-mint"
-                  : "bg-bg-tertiary border-card-border"
-              }`}>
+              <div
+                className={`w-14 h-14 rounded-full border-3 flex items-center justify-center ${
+                  isGameWon && !isGaveUp
+                    ? "bg-mustard/20 dark:bg-mint/20 border-mustard dark:border-mint"
+                    : "bg-bg-tertiary border-card-border"
+                }`}
+              >
                 {isGameWon && !isGaveUp ? (
                   <Trophy className="w-7 h-7 text-mustard dark:text-mint" />
                 ) : (
@@ -198,7 +215,15 @@ export default function GameBoard({ onReset, onPlayAgain }: GameBoardProps) {
                     <span className="font-semibold text-mustard dark:text-mint">
                       {artistName}&apos;s
                     </span>{" "}
-                    top 10 songs in {totalGuesses} {totalGuesses === 1 ? "try" : "tries"}!
+                    top 10 songs in {totalGuesses}{" "}
+                    {totalGuesses === 1 ? "try" : "tries"}
+                    {hintsUsed > 0 && (
+                      <>
+                        {" "}
+                        with {hintsUsed} {hintsUsed === 1 ? "hint" : "hints"}
+                      </>
+                    )}
+                    {elapsed > 0 && <> in {formatTime(elapsed)}</>}!
                   </>
                 ) : (
                   <>
@@ -206,7 +231,15 @@ export default function GameBoard({ onReset, onPlayAgain }: GameBoardProps) {
                     <span className="font-semibold text-mustard dark:text-mint">
                       {artistName}&apos;s
                     </span>{" "}
-                    top 10 songs in {totalGuesses} {totalGuesses === 1 ? "guess" : "guesses"}.
+                    top 10 songs in {totalGuesses}{" "}
+                    {totalGuesses === 1 ? "guess" : "guesses"}
+                    {hintsUsed > 0 && (
+                      <>
+                        {" "}
+                        using {hintsUsed} {hintsUsed === 1 ? "hint" : "hints"}
+                      </>
+                    )}
+                    {elapsed > 0 && <> in {formatTime(elapsed)}</>}.
                   </>
                 )}
               </p>
