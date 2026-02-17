@@ -271,15 +271,10 @@ export default function GameBoard({ onReset, onPlayAgain }: GameBoardProps) {
                 )}
               </button>
             </div>
-            <a
-              href={kworbUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-xs text-text-faint hover:text-text-muted transition-colors font-sans"
-            >
-              View full stats on Kworb
-              <ExternalLink className="w-3 h-3" />
-            </a>
+            <p className="text-xs text-center text-text-muted font-sans">
+              Think you&apos;re the biggest {artistName} fan of your friends?
+              Share your results and find out!
+            </p>
           </div>
         </div>
       ) : (
@@ -304,6 +299,21 @@ export default function GameBoard({ onReset, onPlayAgain }: GameBoardProps) {
 
       {/* Overflow/Honorable Mentions */}
       <OverflowList songs={overflowSongs} />
+
+      {/* Kworb stats link */}
+      {gameOver && (
+        <div className="flex justify-center">
+          <a
+            href={kworbUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1 text-xs text-text-faint hover:text-text-muted transition-colors font-sans"
+          >
+            View full stats on Kworb
+            <ExternalLink className="w-3 h-3" />
+          </a>
+        </div>
+      )}
     </div>
   );
 }
