@@ -222,7 +222,12 @@ export const useGameStore = create<GameState>((set, get) => ({
       // Going from first letter → full reveal: add to revealedIndices (but not guessedIndices)
       const newRevealed = new Set(state.revealedIndices);
       newRevealed.add(index);
-      set({ hintLevels: newHintLevels, revealedIndices: newRevealed });
+      const isWon = newRevealed.size === 10;
+      set({
+        hintLevels: newHintLevels,
+        revealedIndices: newRevealed,
+        ...(isWon && { isGameWon: true }),
+      });
     } else {
       set({ hintLevels: newHintLevels });
     }

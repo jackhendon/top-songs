@@ -7,7 +7,7 @@ import { ArtistData } from "@/lib/types";
 import { trackArtistSearch, trackError } from "@/lib/analytics";
 import Header from "@/components/Header";
 import GameBoard from "@/components/GameBoard";
-import VictoryScreen from "@/components/VictoryScreen";
+
 import Link from "next/link";
 import { Music2 } from "lucide-react";
 import Footer from "@/components/Footer";
@@ -34,10 +34,7 @@ export default function ArtistGame({
 
   const {
     artistName: gameArtist,
-    revealedIndices,
-    overflowSongs,
     totalGuesses,
-    isGameWon,
     isGaveUp,
     resetGame,
   } = useGameStore();
@@ -176,16 +173,7 @@ export default function ArtistGame({
       <Header logoHref="/" showNewArtist onReset={handleReset} />
 
       <main className="flex-1 container mx-auto px-4 py-8 max-w-4xl">
-        {isGameWon && !isGaveUp ? (
-          <VictoryScreen
-            artistName={gameArtist}
-            totalGuesses={totalGuesses}
-            overflowCount={overflowSongs.length}
-            onPlayAgain={handlePlayAgain}
-          />
-        ) : (
-          <GameBoard onReset={handleReset} onPlayAgain={handlePlayAgain} />
-        )}
+        <GameBoard onReset={handleReset} onPlayAgain={handlePlayAgain} />
       </main>
 
       {children}

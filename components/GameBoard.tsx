@@ -170,43 +170,84 @@ export default function GameBoard({ onReset, onPlayAgain }: GameBoardProps) {
         />
       </div>
 
-      {/* Guess Input or Give Up state */}
-      {isGaveUp ? (
-        <div className="space-y-2 px-1">
-          <div className="flex items-center gap-3">
-            <button
-              onClick={onPlayAgain}
-              className="btn-primary inline-flex items-center gap-2 cursor-pointer"
-            >
-              <RotateCcw className="w-4 h-4" />
-              Play Again
-            </button>
-            <button
-              onClick={handleShare}
-              className="btn-secondary inline-flex items-center gap-2 cursor-pointer"
-            >
-              {copied ? (
-                <>
-                  <Check className="w-4 h-4" />
-                  Copied!
-                </>
-              ) : (
-                <>
-                  <Share2 className="w-4 h-4" />
-                  Share Result
-                </>
-              )}
-            </button>
+      {/* Guess Input / Victory / Give Up state */}
+      {gameOver ? (
+        <div className="space-y-3">
+          <div className="card p-5 text-center space-y-3 fade-in">
+            <div className="flex justify-center">
+              <div className={`w-14 h-14 rounded-full border-3 flex items-center justify-center ${
+                isGameWon && !isGaveUp
+                  ? "bg-mustard/20 dark:bg-mint/20 border-mustard dark:border-mint"
+                  : "bg-bg-tertiary border-card-border"
+              }`}>
+                {isGameWon && !isGaveUp ? (
+                  <Trophy className="w-7 h-7 text-mustard dark:text-mint" />
+                ) : (
+                  <Flag className="w-7 h-7 text-text-muted" />
+                )}
+              </div>
+            </div>
+            <div>
+              <h3 className="font-display text-2xl font-extrabold text-text-primary tracking-[-0.04em]">
+                {isGameWon && !isGaveUp ? "Congratulations!" : "Nice try!"}
+              </h3>
+              <p className="text-sm text-text-muted font-sans mt-1">
+                {isGameWon && !isGaveUp ? (
+                  <>
+                    You guessed all of{" "}
+                    <span className="font-semibold text-mustard dark:text-mint">
+                      {artistName}&apos;s
+                    </span>{" "}
+                    top 10 songs in {totalGuesses} {totalGuesses === 1 ? "try" : "tries"}!
+                  </>
+                ) : (
+                  <>
+                    You got {score} of{" "}
+                    <span className="font-semibold text-mustard dark:text-mint">
+                      {artistName}&apos;s
+                    </span>{" "}
+                    top 10 songs in {totalGuesses} {totalGuesses === 1 ? "guess" : "guesses"}.
+                  </>
+                )}
+              </p>
+            </div>
           </div>
-          <a
-            href={kworbUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 text-xs text-text-faint hover:text-text-muted transition-colors font-sans"
-          >
-            View full stats on Kworb
-            <ExternalLink className="w-3 h-3" />
-          </a>
+          <div className="space-y-2 flex flex-col items-center">
+            <div className="flex items-center gap-3">
+              <button
+                onClick={onPlayAgain}
+                className="btn-primary inline-flex items-center gap-1.5 sm:gap-2 cursor-pointer text-sm sm:text-base !px-4 !py-2 sm:!px-6 sm:!py-3 whitespace-nowrap"
+              >
+                <RotateCcw className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                Play Again
+              </button>
+              <button
+                onClick={handleShare}
+                className="btn-secondary inline-flex items-center gap-1.5 sm:gap-2 cursor-pointer text-sm sm:text-base !px-4 !py-2 sm:!px-6 sm:!py-3 whitespace-nowrap"
+              >
+                {copied ? (
+                  <>
+                    <Check className="w-4 h-4" />
+                    Copied!
+                  </>
+                ) : (
+                  <>
+                    <Share2 className="w-4 h-4" />
+                    Share Result
+                  </>
+                )}
+              </button>
+            </div>
+            <a
+              href={kworbUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 text-xs text-text-faint hover:text-text-muted transition-colors font-sans"
+            >
+              View full stats on Kworb
+              <ExternalLink className="w-3 h-3" />
+            </a>
+          </div>
         </div>
       ) : (
         <GuessInput />

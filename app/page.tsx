@@ -7,17 +7,13 @@ import Header from "@/components/Header";
 import ArtistSelector from "@/components/ArtistSelector";
 import GameBoard from "@/components/GameBoard";
 
-import VictoryScreen from "@/components/VictoryScreen";
+
 import Footer from "@/components/Footer";
 
 export default function HomePage() {
   const {
     artistName,
-    revealedIndices,
-    overflowSongs,
     totalGuesses,
-    isGameWon,
-    isGaveUp,
     resetGame,
   } = useGameStore();
   const [isStarted, setIsStarted] = useState(false);
@@ -68,13 +64,6 @@ export default function HomePage() {
       <main className="flex-1 container mx-auto px-4 py-8 max-w-4xl">
         {!isStarted ? (
           <ArtistSelector onArtistSelected={handleArtistSelected} />
-        ) : isGameWon && !isGaveUp ? (
-          <VictoryScreen
-            artistName={artistName}
-            totalGuesses={totalGuesses}
-            overflowCount={overflowSongs.length}
-            onPlayAgain={handlePlayAgain}
-          />
         ) : (
           <GameBoard onReset={handleReset} onPlayAgain={handlePlayAgain} />
         )}
