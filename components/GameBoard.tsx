@@ -88,12 +88,9 @@ export default function GameBoard({ onReset, onPlayAgain }: GameBoardProps) {
   };
 
   const handleShare = async () => {
-    const hintsPart =
-      hintsUsed > 0
-        ? ` with ${hintsUsed} ${hintsUsed === 1 ? "hint" : "hints"}`
-        : "";
-    const timePart = elapsed > 0 ? ` in ${formatTime(elapsed)}` : "";
-    const text = `I guessed ${score} of ${artistName}'s top 10 songs in ${totalGuesses} ${totalGuesses === 1 ? "try" : "tries"}${hintsPart}${timePart}! 🎵\n\nThink you can beat me?\n\nPlay Top Songs at topsongs.io`;
+    const row1 = Array.from({ length: 5 }, (_, i) => guessedIndices.has(i) ? "🟩" : "🟥").join("");
+    const row2 = Array.from({ length: 5 }, (_, i) => guessedIndices.has(i + 5) ? "🟩" : "🟥").join("");
+    const text = `TopSongs.io - ${artistName}\n${row1}\n${row2}\n🎉 Score: ${score}/10\n\nCan you beat me?\ntopsongs.io`;
 
     if (window.matchMedia("(pointer: coarse)").matches && navigator.share) {
       try {

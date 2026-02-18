@@ -4,8 +4,7 @@ interface ArtistSchemaProps {
   artistImage?: string | null;
 }
 
-const baseUrl =
-  process.env.NEXT_PUBLIC_BASE_URL || "https://www.topsongs.io";
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://www.topsongs.io";
 
 export default function ArtistSchema({
   artistName,
@@ -31,7 +30,7 @@ export default function ArtistSchema({
         name: `Are the streaming stats for ${artistName} accurate?`,
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes, all data is sourced directly from Spotify and updated daily to reflect the current most-streamed tracks.",
+          text: "Streaming data is based on available data from Kworb.net, an aggregator site that estimates Spotify streams.",
         },
       },
       {
