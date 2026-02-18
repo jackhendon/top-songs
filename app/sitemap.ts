@@ -1,11 +1,11 @@
 import { MetadataRoute } from "next";
-import { POPULAR_ARTISTS } from "@/lib/slugs";
+import { AUTOCOMPLETE_ARTISTS } from "@/lib/artistAutocomplete";
 
 const baseUrl =
   process.env.NEXT_PUBLIC_BASE_URL || "https://www.topsongs.io";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const artistEntries = Object.keys(POPULAR_ARTISTS).map((slug) => ({
+  const artistEntries = AUTOCOMPLETE_ARTISTS.map(({ slug }) => ({
     url: `${baseUrl}/artist/${slug}`,
     lastModified: new Date(),
     priority: 0.8 as const,

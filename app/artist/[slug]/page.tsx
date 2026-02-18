@@ -4,6 +4,7 @@ import Link from "next/link";
 import { POPULAR_ARTISTS, slugToArtistName } from "@/lib/slugs";
 import { getArtistMetadata } from "@/lib/getArtistMetadata";
 import ArtistGame from "@/components/ArtistGame";
+import ArtistSchema from "@/components/ArtistSchema";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -92,6 +93,12 @@ export default async function ArtistPage({ params }: PageProps) {
   const relatedArtists = getRelatedArtists(slug);
 
   return (
+    <>
+    <ArtistSchema
+      artistName={metadata.artistName}
+      artistSlug={slug}
+      artistImage={metadata.imageUrl}
+    />
     <ArtistGame
       artistName={metadata.artistName}
       artistId={metadata.artistId}
@@ -133,5 +140,6 @@ export default async function ArtistPage({ params }: PageProps) {
         </div>
       </section>
     </ArtistGame>
+    </>
   );
 }
