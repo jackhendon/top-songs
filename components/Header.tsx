@@ -20,10 +20,10 @@ export default function Header({
       </div>
       <div className="text-left">
         <h1 className="font-display text-2xl md:text-3xl font-extrabold text-text-primary tracking-[-0.04em]">
-          Top Songs
+          Top Songs<span className="sr-only">: The Spotify Music Trivia Game</span>
         </h1>
         <p className="text-xs text-text-muted hidden sm:block font-sans font-medium">
-          Guess the top 10 most-streamed tracks for your favourite artists
+          The ultimate music trivia game. Guess the top 10 Spotify streams for your favorite artists.
         </p>
       </div>
     </>

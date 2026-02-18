@@ -63,7 +63,17 @@ export default function HomePage() {
 
       <main className="flex-1 container mx-auto px-4 py-8 max-w-4xl">
         {!isStarted ? (
-          <ArtistSelector onArtistSelected={handleArtistSelected} />
+          <>
+            <ArtistSelector onArtistSelected={handleArtistSelected} />
+            <section className="mt-8 px-2">
+              <h2 className="font-display text-base font-bold text-text-secondary mb-2 tracking-[-0.02em]">
+                Why Play Top Songs?
+              </h2>
+              <p className="text-sm text-text-muted font-sans leading-relaxed">
+                TopSongs.io is a free browser-based music game that tests your knowledge of the streaming era. Unlike traditional music quizzes, we focus on real Spotify data. Test your memory against the charts with thousands of artists from Taylor Swift to indie legends.
+              </p>
+            </section>
+          </>
         ) : (
           <GameBoard onReset={handleReset} onPlayAgain={handlePlayAgain} />
         )}

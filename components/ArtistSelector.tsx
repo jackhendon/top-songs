@@ -98,7 +98,7 @@ export default function ArtistSelector({
           </li>
           <li className="flex gap-2">
             <span className="text-mustard dark:text-mint font-bold">2.</span>
-            <span>Type song titles to guess their top 10 tracks</span>
+            <span>Type song titles to solve the quiz and reveal the streaming stats.</span>
           </li>
           <li className="flex gap-2">
             <span className="text-mustard dark:text-mint font-bold">3.</span>

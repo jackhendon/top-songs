@@ -31,8 +31,8 @@ export async function generateMetadata({
     return { title: "Artist Not Found" };
   }
 
-  const title = `${metadata.artistName}'s Top Songs - Can You Guess the Top 10?`;
-  const description = `Can you guess ${metadata.artistName}'s top 10 most-streamed songs on Spotify? Test your knowledge of their biggest hits.`;
+  const title = `${metadata.artistName} Top Songs Quiz: Guess the 10 Most Streamed Hits`;
+  const description = `Play the ultimate ${metadata.artistName} trivia game. Prove you're a real fan by guessing their top 10 Spotify songs. Play free at topsongs.io.`;
 
   return {
     title,
@@ -102,15 +102,19 @@ export default async function ArtistPage({ params }: PageProps) {
         {/* About section */}
         <div className="space-y-3">
           <h2 className="text-lg font-display font-semibold text-text-primary">
-            About {metadata.artistName}
+            Play the {metadata.artistName} Top Songs Quiz
           </h2>
           <p className="text-sm text-text-secondary leading-relaxed">
-            Think you know {metadata.artistName}? Test your knowledge by
-            guessing their top 10 most-streamed songs on Spotify.
+            Welcome to the ultimate <strong>music trivia game</strong> for{" "}
+            {metadata.artistName} fans. Your challenge is to guess their{" "}
+            <strong>top 10 most-streamed songs on Spotify</strong> in as few
+            guesses as possible.
             {followers
-              ? ` With ${formatFollowers(followers)} Spotify followers, ${metadata.artistName} has a wide range of songs and albums.`
+              ? ` Join millions of listeners - ${metadata.artistName} currently has ${formatFollowers(followers)} Spotify followers.`
               : ""}{" "}
-            From chart-topping hits to fan favorites, see how many you can name.
+            From their biggest radio hits to deep cuts, test your knowledge of
+            their discography in this interactive <strong>guessing game</strong>
+            .
           </p>
         </div>
 

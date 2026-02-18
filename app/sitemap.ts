@@ -17,6 +17,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(),
       priority: 1.0,
     },
+    {
+      url: `${baseUrl}/directory`,
+      lastModified: new Date(),
+      priority: 0.9,
+    },
     ...artistEntries,
     {
       url: `${baseUrl}/profile`,

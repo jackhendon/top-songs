@@ -34,6 +34,12 @@ export default function Footer() {
           >
             Privacy
           </Link>
+          <Link
+            href="/directory"
+            className="underline underline-offset-2 hover:text-text-secondary transition-colors"
+          >
+            Artist Directory
+          </Link>
           <a
             href="https://buymeacoffee.com/topsongs"
             target="_blank"
