@@ -84,7 +84,7 @@ export default async function DirectoryPage({ searchParams }: PageProps) {
             {pageArtists.map((artist) => (
               <Link
                 key={artist.slug}
-                href={`/${artist.slug}`}
+                href={`/artist/${artist.slug}`}
                 className="artist-card text-sm"
               >
                 {artist.name}

@@ -6,7 +6,7 @@ const baseUrl =
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const artistEntries = Object.keys(POPULAR_ARTISTS).map((slug) => ({
-    url: `${baseUrl}/${slug}`,
+    url: `${baseUrl}/artist/${slug}`,
     lastModified: new Date(),
     priority: 0.8 as const,
   }));

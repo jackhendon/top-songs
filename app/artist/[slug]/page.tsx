@@ -125,7 +125,7 @@ export default async function ArtistPage({ params }: PageProps) {
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
             {relatedArtists.map(({ slug: s, name }) => (
-              <Link key={s} href={`/${s}`} className="artist-card text-sm">
+              <Link key={s} href={`/artist/${s}`} className="artist-card text-sm">
                 {name}
               </Link>
             ))}

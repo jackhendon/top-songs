@@ -31,7 +31,7 @@ export default function ArtistSelector({
     setError(null);
     const artistName = slugToArtistName(slug);
     trackArtistSearch(artistName, "autocomplete");
-    router.push(`/${slug}`);
+    router.push(`/artist/${slug}`);
   };
 
   const handleFreeformSearch = async (name: string) => {
@@ -52,7 +52,7 @@ export default function ArtistSelector({
       trackArtistSearch(data.artistName, "search");
 
       const slug = artistNameToSlug(data.artistName);
-      router.push(`/${slug}`);
+      router.push(`/artist/${slug}`);
     } catch (err) {
       const message = err instanceof Error ? err.message : "Unknown error";
       trackError("artist_search", message, { artist_name: name });
@@ -123,7 +123,7 @@ export default function ArtistSelector({
           {popularArtists.map((artist) => (
             <Link
               key={artist}
-              href={`/${artistNameToSlug(artist)}`}
+              href={`/artist/${artistNameToSlug(artist)}`}
               className="artist-card text-sm"
             >
               <Music2 className="w-3.5 h-3.5 text-mustard dark:text-mint opacity-60" />
