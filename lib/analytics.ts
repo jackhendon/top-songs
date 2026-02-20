@@ -22,6 +22,7 @@ export function setConsent(value: "yes" | "no") {
 
 export function initPostHog() {
   if (typeof window === "undefined" || initialized) return;
+  if (process.env.NODE_ENV === "development") return;
 
   const key = process.env.NEXT_PUBLIC_POSTHOG_KEY;
   const host = process.env.NEXT_PUBLIC_POSTHOG_HOST;
@@ -119,4 +120,33 @@ export function trackError(
     error_message: errorMessage,
     ...context,
   });
+}
+
+export function trackHintReveal(props: {
+  artistName: string;
+  slotIndex: number; // 1-based rank position
+  hintLevel: 1 | 2; // 1 = first letter, 2 = full answer
+  hintsUsed: number; // cumulative hints used in this game
+  guessesUsed: number;
+}) {
+  capture("hint_reveal", {
+    artist_name: props.artistName,
+    slot_index: props.slotIndex,
+    hint_level: props.hintLevel,
+    hint_type: props.hintLevel === 1 ? "first_letter" : "full_answer",
+    hints_used: props.hintsUsed,
+    guesses_used: props.guessesUsed,
+  });
+}
+
+export function trackDonationClick() {
+  capture("donation_click");
+}
+
+export function trackProfileView(props: { gamesPlayed: number }) {
+  capture("profile_view", { games_played: props.gamesPlayed });
+}
+
+export function trackHistoryCleared(props: { gamesCleared: number }) {
+  capture("history_cleared", { games_cleared: props.gamesCleared });
 }

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useHistoryStore } from "@/lib/historyStore";
+import { trackProfileView, trackHistoryCleared } from "@/lib/analytics";
 import Header from "@/components/Header";
 import GameHistoryCard from "@/components/GameHistoryCard";
 import { Play, Music2, Trash2 } from "lucide-react";
@@ -15,13 +16,15 @@ export default function ProfilePage() {
 
   useEffect(() => {
     setHydrated(true);
-  }, []);
+    trackProfileView({ gamesPlayed: history.length });
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleClear = () => {
     if (!confirmingClear) {
       setConfirmingClear(true);
       return;
     }
+    trackHistoryCleared({ gamesCleared: history.length });
     clearHistory();
     setConfirmingClear(false);
   };

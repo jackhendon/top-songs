@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { trackDonationClick } from "@/lib/analytics";
 
 export default function Footer() {
   return (
@@ -45,6 +48,7 @@ export default function Footer() {
             target="_blank"
             rel="noopener noreferrer"
             className="underline underline-offset-2 hover:text-text-secondary transition-colors"
+            onClick={trackDonationClick}
           >
             Support the dev
           </a>

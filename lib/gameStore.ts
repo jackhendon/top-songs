@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { Song } from "./types";
 import { matchesSong } from "./songMatcher";
-import { trackGameStart, trackGuess, trackGameWon, trackGameAbandoned } from "./analytics";
+import { trackGameStart, trackGuess, trackGameWon, trackGameAbandoned, trackHintReveal } from "./analytics";
 import { useHistoryStore } from "./historyStore";
 
 export interface GameState {
@@ -221,6 +221,17 @@ export const useGameStore = create<GameState>((set, get) => ({
 
     const newHintLevels = new Map(state.hintLevels);
     newHintLevels.set(index, currentLevel + 1);
+
+    let hintsUsed = 0;
+    newHintLevels.forEach((level) => { hintsUsed += level; });
+
+    trackHintReveal({
+      artistName: state.artistName,
+      slotIndex: index + 1,
+      hintLevel: (currentLevel + 1) as 1 | 2,
+      hintsUsed,
+      guessesUsed: state.totalGuesses,
+    });
 
     if (currentLevel === 1) {
       // Going from first letter → full reveal: add to revealedIndices (but not guessedIndices)
