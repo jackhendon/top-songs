@@ -10,6 +10,15 @@ import { compareTwoStrings } from "string-similarity";
 export function normalizeSongTitle(title: string): string {
   let normalized = title.toLowerCase();
 
+  // Remove version/remaster suffixes after " - "
+  // e.g., "Here Comes The Sun - Remastered 2009" → "here comes the sun"
+  normalized = normalized.replace(
+    /\s*-\s*(?:remaster(?:ed)?|live(?:\s+.+)?|acoustic|demo|instrumental|mono|stereo|radio\s+edit|single(?:\s+version)?|album\s+version|extended(?:\s+mix)?|original(?:\s+mix)?|deluxe(?:\s+edition)?|anniversary(?:\s+edition)?|platinum(?:\s+edition)?)(?:\s+\d{4})?\s*$/,
+    "",
+  );
+  // Remove standalone year suffix after " - " (e.g., "- 2009 Remaster", "- 2023")
+  normalized = normalized.replace(/\s*-\s*\d{4}(?:\s+\w+)?\s*$/, "");
+
   // Remove content in parentheses (including the parentheses)
   normalized = normalized.replace(/\([^)]*\)/g, "");
 

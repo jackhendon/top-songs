@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { Song } from "./types";
-import { findBestMatch } from "./songMatcher";
+import { matchesSong } from "./songMatcher";
 import { trackGameStart, trackGuess, trackGameWon, trackGameAbandoned } from "./analytics";
 import { useHistoryStore } from "./historyStore";
 
@@ -103,11 +103,12 @@ export const useGameStore = create<GameState>((set, get) => ({
     // Increment total guesses counter
     set({ totalGuesses: state.totalGuesses + 1 });
 
-    // Find best match among all songs
-    const allSongTitles = state.allSongs.map((s) => s.title);
-    const match = findBestMatch(guess, allSongTitles, 0.75);
+    // Find all songs that match the guess (handles multiple versions/remasters of the same song)
+    const matchingSongs = state.allSongs.filter((song) =>
+      matchesSong(guess, song.title, 0.75),
+    );
 
-    if (!match) {
+    if (matchingSongs.length === 0) {
       trackGuess({
         artistName: state.artistName,
         guessText: guess,
@@ -115,23 +116,25 @@ export const useGameStore = create<GameState>((set, get) => ({
         isOverflow: false,
         totalGuesses: state.totalGuesses + 1,
       });
-      return { result: "incorrect" }; // No match found
-    }
-
-    // Check if this song was already guessed
-    if (state.guessedTitles.has(match.song)) {
-      return { result: "duplicate" };
-    }
-
-    // Find the matched song in our data
-    const matchedSong = state.allSongs.find((s) => s.title === match.song);
-
-    if (!matchedSong) {
       return { result: "incorrect" };
     }
 
-    // Check if it's in the top 10
-    const topTenIndex = state.topTen.findIndex((s) => s.title === match.song);
+    // Check if any version of this song was already guessed
+    if (matchingSongs.some((song) => state.guessedTitles.has(song.title))) {
+      return { result: "duplicate" };
+    }
+
+    // Mark ALL matching versions as guessed so variants don't count as separate guesses
+    const newGuessed = new Set(state.guessedTitles);
+    matchingSongs.forEach((song) => newGuessed.add(song.title));
+
+    // Among all matching versions, pick the best-ranked one (lowest rank number)
+    const bestSong = matchingSongs.reduce((best, song) =>
+      song.rank < best.rank ? song : best,
+    );
+
+    // Check if the best-ranked version is in the top 10
+    const topTenIndex = state.topTen.findIndex((s) => s.title === bestSong.title);
 
     if (topTenIndex !== -1) {
       // It's in the top 10!
@@ -140,9 +143,6 @@ export const useGameStore = create<GameState>((set, get) => ({
 
       const newGuessedIndices = new Set(state.guessedIndices);
       newGuessedIndices.add(topTenIndex);
-
-      const newGuessed = new Set(state.guessedTitles);
-      newGuessed.add(match.song);
 
       // Check if game is won
       const isWon = newRevealed.size === 10;
@@ -192,9 +192,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       return { result: "correct-top10", rank: topTenIndex + 1 };
     } else {
       // It's a correct song, but not in top 10 (overflow)
-      const newOverflow = [...state.overflowSongs, matchedSong];
-      const newGuessed = new Set(state.guessedTitles);
-      newGuessed.add(match.song);
+      const newOverflow = [...state.overflowSongs, bestSong];
 
       set({
         overflowSongs: newOverflow,
@@ -209,7 +207,7 @@ export const useGameStore = create<GameState>((set, get) => ({
         totalGuesses: state.totalGuesses + 1,
       });
 
-      return { result: "correct-overflow", rank: matchedSong.rank };
+      return { result: "correct-overflow", rank: bestSong.rank };
     }
   },
 
