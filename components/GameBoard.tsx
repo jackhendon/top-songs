@@ -278,8 +278,8 @@ export default function GameBoard({ onReset, onPlayAgain }: GameBoardProps) {
         <GuessInput />
       )}
 
-      {/* Top 10 Grid - 2 columns on desktop */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+      {/* Top 10 Grid - 2 columns on desktop, column-first ordering */}
+      <div className="grid grid-cols-1 md:grid-cols-2 md:grid-rows-5 md:[grid-auto-flow:column] gap-2">
         {topTen.map((song, index) => (
           <SlotCard
             key={index}
