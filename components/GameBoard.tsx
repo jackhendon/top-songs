@@ -241,6 +241,31 @@ export default function GameBoard({ onReset, onPlayAgain }: GameBoardProps) {
                 )}
               </p>
             </div>
+
+            {/* Results grid */}
+            <div className="flex flex-col gap-1.5 pt-1">
+              {[0, 5].map((offset) => (
+                <div key={offset} className="flex gap-1.5 justify-center">
+                  {Array.from({ length: 5 }, (_, i) => {
+                    const idx = offset + i;
+                    const guessed = guessedIndices.has(idx);
+                    return (
+                      <div
+                        key={idx}
+                        title={`#${idx + 1}`}
+                        className={`w-10 h-10 rounded flex items-center justify-center text-xs font-bold font-sans transition-colors ${
+                          guessed
+                            ? "bg-sage-dark text-white"
+                            : "bg-bg-tertiary text-text-faint border border-card-border"
+                        }`}
+                      >
+                        {idx + 1}
+                      </div>
+                    );
+                  })}
+                </div>
+              ))}
+            </div>
           </div>
           <div className="space-y-2 flex flex-col items-center">
             <div className="flex items-center gap-3">
