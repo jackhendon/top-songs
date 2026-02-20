@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Music2 } from "lucide-react";
-import { ArtistData } from "@/lib/types";
 import {
   POPULAR_ARTISTS,
   artistNameToSlug,
@@ -13,13 +12,7 @@ import {
 import { trackArtistSearch, trackError } from "@/lib/analytics";
 import ArtistAutocomplete from "./ArtistAutocomplete";
 
-interface ArtistSelectorProps {
-  onArtistSelected: (artistData: ArtistData) => void;
-}
-
-export default function ArtistSelector({
-  onArtistSelected,
-}: ArtistSelectorProps) {
+export default function ArtistSelector() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

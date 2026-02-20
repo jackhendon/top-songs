@@ -51,6 +51,30 @@ export function getHintsUsed(hintLevels: Map<number, number>): number {
   return total;
 }
 
+function getElapsedSeconds(startedAt: number | null): number {
+  return startedAt ? Math.round((Date.now() - startedAt) / 1000) : 0;
+}
+
+function saveToHistory(
+  state: Pick<GameState, "artistName" | "artistId" | "artistImage" | "gameStartedAt" | "overflowSongs">,
+  opts: { totalGuesses: number; slotsRevealed: number; outcome: "won" | "gave_up" },
+) {
+  const timeSeconds = getElapsedSeconds(state.gameStartedAt);
+  useHistoryStore.getState().addGame({
+    id: crypto.randomUUID(),
+    artistName: state.artistName,
+    artistId: state.artistId,
+    artistImage: state.artistImage,
+    datePlayed: Date.now(),
+    totalGuesses: opts.totalGuesses,
+    slotsRevealed: opts.slotsRevealed,
+    overflowCount: state.overflowSongs.length,
+    outcome: opts.outcome,
+    timeSeconds,
+  });
+  return timeSeconds;
+}
+
 export const useGameStore = create<GameState>((set, get) => ({
   // Initial state
   artistName: "",
@@ -165,27 +189,17 @@ export const useGameStore = create<GameState>((set, get) => ({
       });
 
       if (isWon) {
-        const timeSeconds = state.gameStartedAt
-          ? Math.round((Date.now() - state.gameStartedAt) / 1000)
-          : 0;
+        const timeSeconds = saveToHistory(state, {
+          totalGuesses: newTotalGuesses,
+          slotsRevealed: 10,
+          outcome: "won",
+        });
         trackGameWon({
           artistName: state.artistName,
           artistId: state.artistId,
           totalGuesses: newTotalGuesses,
           timeSeconds,
           overflowCount: state.overflowSongs.length,
-        });
-        useHistoryStore.getState().addGame({
-          id: crypto.randomUUID(),
-          artistName: state.artistName,
-          artistId: state.artistId,
-          artistImage: state.artistImage,
-          datePlayed: Date.now(),
-          totalGuesses: newTotalGuesses,
-          slotsRevealed: 10,
-          overflowCount: state.overflowSongs.length,
-          outcome: "won",
-          timeSeconds,
         });
       }
 
@@ -222,8 +236,7 @@ export const useGameStore = create<GameState>((set, get) => ({
     const newHintLevels = new Map(state.hintLevels);
     newHintLevels.set(index, currentLevel + 1);
 
-    let hintsUsed = 0;
-    newHintLevels.forEach((level) => { hintsUsed += level; });
+    const hintsUsed = getHintsUsed(newHintLevels);
 
     trackHintReveal({
       artistName: state.artistName,
@@ -256,20 +269,10 @@ export const useGameStore = create<GameState>((set, get) => ({
       guessesUsed: state.totalGuesses,
       slotsRevealed: state.revealedIndices.size,
     });
-    const timeSeconds = state.gameStartedAt
-      ? Math.round((Date.now() - state.gameStartedAt) / 1000)
-      : 0;
-    useHistoryStore.getState().addGame({
-      id: crypto.randomUUID(),
-      artistName: state.artistName,
-      artistId: state.artistId,
-      artistImage: state.artistImage,
-      datePlayed: Date.now(),
+    saveToHistory(state, {
       totalGuesses: state.totalGuesses,
       slotsRevealed: state.guessedIndices.size,
-      overflowCount: state.overflowSongs.length,
       outcome: "gave_up",
-      timeSeconds,
     });
     set({
       revealedIndices: new Set([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]),

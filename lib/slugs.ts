@@ -53,13 +53,12 @@ export const POPULAR_ARTISTS: Record<string, string> = {
   "lil-uzi-vert": "Lil Uzi Vert",
 };
 
-const slugToName = POPULAR_ARTISTS;
 const nameToSlug = Object.fromEntries(
   Object.entries(POPULAR_ARTISTS).map(([slug, name]) => [name, slug]),
 );
 
 export function slugToArtistName(slug: string): string {
-  return slugToName[slug] ?? slug.replace(/-/g, " ");
+  return POPULAR_ARTISTS[slug] ?? slug.replace(/-/g, " ");
 }
 
 export function artistNameToSlug(name: string): string {

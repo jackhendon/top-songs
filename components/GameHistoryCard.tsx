@@ -1,21 +1,8 @@
 "use client";
 
 import { GameHistoryEntry } from "@/lib/historyStore";
+import { formatTime, formatDate, pluralize } from "@/lib/format";
 import { Music2, Trophy, Flag } from "lucide-react";
-
-function formatTime(seconds: number): string {
-  const m = Math.floor(seconds / 60);
-  const s = seconds % 60;
-  return `${m}:${s.toString().padStart(2, "0")}`;
-}
-
-function formatDate(timestamp: number): string {
-  return new Date(timestamp).toLocaleDateString(undefined, {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
-}
 
 export default function GameHistoryCard({ entry }: { entry: GameHistoryEntry }) {
   const isWon = entry.outcome === "won";
@@ -60,7 +47,7 @@ export default function GameHistoryCard({ entry }: { entry: GameHistoryEntry }) 
           <div className="flex items-center gap-2 text-xs text-text-muted font-sans">
             <span>{entry.slotsRevealed}/10</span>
             <span>&middot;</span>
-            <span>{entry.totalGuesses} {entry.totalGuesses === 1 ? "guess" : "guesses"}</span>
+            <span>{entry.totalGuesses} {pluralize(entry.totalGuesses, "guess", "guesses")}</span>
             <span>&middot;</span>
             <span>{formatTime(entry.timeSeconds)}</span>
           </div>

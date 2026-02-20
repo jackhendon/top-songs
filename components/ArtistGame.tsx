@@ -32,14 +32,7 @@ export default function ArtistGame({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const {
-    artistName: gameArtist,
-    totalGuesses,
-    isGaveUp,
-    resetGame,
-  } = useGameStore();
-
-  const isGameActive = gameArtist === artistName && totalGuesses >= 0 && !loading;
+  const { resetGame } = useGameStore();
 
   const fetchAndStart = async () => {
     try {
@@ -173,7 +166,7 @@ export default function ArtistGame({
       <Header logoHref="/" showNewArtist onReset={handleReset} />
 
       <main className="flex-1 container mx-auto px-4 py-8 max-w-4xl">
-        <GameBoard onReset={handleReset} onPlayAgain={handlePlayAgain} />
+        <GameBoard onPlayAgain={handlePlayAgain} />
       </main>
 
       {children}

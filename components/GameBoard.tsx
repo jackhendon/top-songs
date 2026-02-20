@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useGameStore, getHintsUsed } from "@/lib/gameStore";
 import { trackGameAbandoned, trackShare } from "@/lib/analytics";
+import { formatTime, pluralize } from "@/lib/format";
 import {
   Music2,
   Trophy,
@@ -20,11 +21,10 @@ import OverflowList from "./OverflowList";
 import GuessInput from "./GuessInput";
 
 interface GameBoardProps {
-  onReset: () => void;
   onPlayAgain: () => void;
 }
 
-export default function GameBoard({ onReset, onPlayAgain }: GameBoardProps) {
+export default function GameBoard({ onPlayAgain }: GameBoardProps) {
   const {
     artistName,
     artistId,
@@ -48,22 +48,17 @@ export default function GameBoard({ onReset, onPlayAgain }: GameBoardProps) {
 
   const [confirmingGiveUp, setConfirmingGiveUp] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [elapsed, setElapsed] = useState(0);
+  const [elapsed, setElapsed] = useState(() =>
+    gameStartedAt && !gameOver ? Math.floor((Date.now() - gameStartedAt) / 1000) : 0,
+  );
 
   useEffect(() => {
     if (!gameStartedAt || gameOver) return;
-    setElapsed(Math.floor((Date.now() - gameStartedAt) / 1000));
     const id = setInterval(() => {
       setElapsed(Math.floor((Date.now() - gameStartedAt) / 1000));
     }, 1000);
     return () => clearInterval(id);
   }, [gameStartedAt, gameOver]);
-
-  const formatTime = (seconds: number) => {
-    const m = Math.floor(seconds / 60);
-    const s = seconds % 60;
-    return `${m}:${s.toString().padStart(2, "0")}`;
-  };
 
   useEffect(() => {
     return () => {
@@ -145,14 +140,14 @@ export default function GameBoard({ onReset, onPlayAgain }: GameBoardProps) {
         <div className="flex items-center gap-1.5">
           <Hash className="w-3.5 h-3.5 text-text-muted" />
           <span className="font-sans text-sm text-text-muted">
-            {totalGuesses} {totalGuesses === 1 ? "guess" : "guesses"}
+            {totalGuesses} {pluralize(totalGuesses, "guess", "guesses")}
           </span>
         </div>
         {hintsUsed > 0 && (
           <div className="flex items-center gap-1.5">
             <Lightbulb className="w-3.5 h-3.5 text-text-muted" />
             <span className="font-sans text-sm text-text-muted">
-              {hintsUsed} {hintsUsed === 1 ? "hint" : "hints"}
+              {hintsUsed} {pluralize(hintsUsed, "hint")}
             </span>
           </div>
         )}
@@ -213,11 +208,11 @@ export default function GameBoard({ onReset, onPlayAgain }: GameBoardProps) {
                       {artistName}&apos;s
                     </span>{" "}
                     top 10 songs in {totalGuesses}{" "}
-                    {totalGuesses === 1 ? "try" : "tries"}
+                    {pluralize(totalGuesses, "try", "tries")}
                     {hintsUsed > 0 && (
                       <>
                         {" "}
-                        with {hintsUsed} {hintsUsed === 1 ? "hint" : "hints"}
+                        with {hintsUsed} {pluralize(hintsUsed, "hint")}
                       </>
                     )}
                     {elapsed > 0 && <> in {formatTime(elapsed)}</>}!
@@ -229,11 +224,11 @@ export default function GameBoard({ onReset, onPlayAgain }: GameBoardProps) {
                       {artistName}&apos;s
                     </span>{" "}
                     top 10 songs in {totalGuesses}{" "}
-                    {totalGuesses === 1 ? "guess" : "guesses"}
+                    {pluralize(totalGuesses, "guess", "guesses")}
                     {hintsUsed > 0 && (
                       <>
                         {" "}
-                        using {hintsUsed} {hintsUsed === 1 ? "hint" : "hints"}
+                        using {hintsUsed} {pluralize(hintsUsed, "hint")}
                       </>
                     )}
                     {elapsed > 0 && <> in {formatTime(elapsed)}</>}.

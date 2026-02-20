@@ -1,5 +1,6 @@
 import { Star } from "lucide-react";
 import { Song } from "@/lib/types";
+import { pluralize } from "@/lib/format";
 
 interface OverflowListProps {
   songs: Song[];
@@ -16,7 +17,7 @@ export default function OverflowList({ songs }: OverflowListProps) {
           Honorable Mentions
         </h3>
         <span className="text-sm text-text-muted font-sans">
-          ({songs.length} {songs.length === 1 ? "song" : "songs"})
+          ({songs.length} {pluralize(songs.length, "song")})
         </span>
       </div>
 
