@@ -145,7 +145,8 @@ export default function FAQPage() {
                 </p>
                 <p className="mt-2">
                   That said, if you enjoy the game and feel like buying me a
-                  beer, I certainly won&apos;t say no!
+                  coffee or helping to keep the servers turned on, I certainly
+                  won&apos;t say no!
                 </p>
                 <a
                   href="https://buymeacoffee.com/topsongs"
@@ -154,7 +155,7 @@ export default function FAQPage() {
                   className="btn-primary inline-flex items-center gap-2 mt-3"
                 >
                   <Beer className="w-4 h-4" />
-                  Donate beer money
+                  Buy me a coffee
                 </a>
               </div>
             </div>

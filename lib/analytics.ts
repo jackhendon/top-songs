@@ -114,5 +114,9 @@ export function trackError(
   errorMessage: string,
   context?: Record<string, unknown>,
 ) {
-  capture("error", { error_type: errorType, error_message: errorMessage, ...context });
+  capture("error", {
+    error_type: errorType,
+    error_message: errorMessage,
+    ...context,
+  });
 }
