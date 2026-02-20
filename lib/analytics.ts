@@ -32,6 +32,7 @@ export function initPostHog() {
     api_host: host,
     capture_pageview: true,
     capture_pageleave: true,
+    autocapture: false,
     persistence: "memory",
     debug: process.env.NODE_ENV === "development",
   });
