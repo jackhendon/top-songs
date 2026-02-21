@@ -1,7 +1,8 @@
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import Link from "next/link";
-import { POPULAR_ARTISTS, slugToArtistName } from "@/lib/slugs";
+import { ARTIST_CATALOG, PREBUILT_SLUGS, slugToArtistName } from "@/lib/slugs";
+import { ARTIST_TAGS, scoreArtistSimilarity } from "@/lib/artistTags";
 import { getArtistMetadata } from "@/lib/getArtistMetadata";
 import ArtistGame from "@/components/ArtistGame";
 import ArtistSchema from "@/components/ArtistSchema";
@@ -10,9 +11,10 @@ interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
-// Generate static pages for popular artists at build time
+// Pre-render pages for the top 75 artists at build time.
+// All other catalog artists are served via ISR on first request.
 export function generateStaticParams() {
-  return Object.keys(POPULAR_ARTISTS).map((slug) => ({ slug }));
+  return PREBUILT_SLUGS.map((slug) => ({ slug }));
 }
 
 // Allow dynamic params for artists not in POPULAR_ARTISTS
@@ -66,18 +68,29 @@ function getRelatedArtists(
   currentSlug: string,
   count: number = 6,
 ): { slug: string; name: string }[] {
-  const slugs = Object.keys(POPULAR_ARTISTS).filter((s) => s !== currentSlug);
-  // Deterministic shuffle based on the current slug so it's stable per page
+  const currentTags = ARTIST_TAGS[currentSlug];
+  const slugs = Object.keys(ARTIST_CATALOG).filter((s) => s !== currentSlug);
+
+  // Deterministic tiebreaker based on the current slug
   const seed = currentSlug
     .split("")
     .reduce((acc, c) => acc + c.charCodeAt(0), 0);
-  const shuffled = slugs
-    .map((s, i) => ({ s, sort: Math.sin(seed + i) }))
-    .sort((a, b) => a.sort - b.sort)
-    .map((x) => x.s);
-  return shuffled
+
+  return slugs
+    .map((s, i) => {
+      const candidateTags = ARTIST_TAGS[s];
+      const similarity =
+        currentTags && candidateTags
+          ? scoreArtistSimilarity(currentTags, candidateTags)
+          : 0;
+      return { s, similarity, tiebreaker: Math.sin(seed + i) };
+    })
+    .sort(
+      (a, b) =>
+        b.similarity - a.similarity || a.tiebreaker - b.tiebreaker,
+    )
     .slice(0, count)
-    .map((s) => ({ slug: s, name: POPULAR_ARTISTS[s] }));
+    .map(({ s }) => ({ slug: s, name: ARTIST_CATALOG[s] }));
 }
 
 export default async function ArtistPage({ params }: PageProps) {

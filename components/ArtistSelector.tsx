@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Music2 } from "lucide-react";
 import {
-  POPULAR_ARTISTS,
+  ARTIST_CATALOG,
   artistNameToSlug,
   slugToArtistName,
 } from "@/lib/slugs";
@@ -25,7 +25,7 @@ export default function ArtistSelector({ dailyArtist }: { dailyArtist: DailyArti
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const popularArtists = Object.entries(POPULAR_ARTISTS)
+  const popularArtists = Object.entries(ARTIST_CATALOG)
     .filter(([slug]) => slug !== dailyArtist.slug)
     .slice(0, 8)
     .map(([, name]) => name);
