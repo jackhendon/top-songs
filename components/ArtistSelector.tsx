@@ -11,13 +11,24 @@ import {
 } from "@/lib/slugs";
 import { trackArtistSearch, trackError } from "@/lib/analytics";
 import ArtistAutocomplete from "./ArtistAutocomplete";
+import ArtistOfTheDay from "./ArtistOfTheDay";
 
-export default function ArtistSelector() {
+interface DailyArtist {
+  slug: string;
+  name: string;
+  imageUrl?: string;
+  bio: string;
+}
+
+export default function ArtistSelector({ dailyArtist }: { dailyArtist: DailyArtist }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const popularArtists = Object.values(POPULAR_ARTISTS).slice(0, 8);
+  const popularArtists = Object.entries(POPULAR_ARTISTS)
+    .filter(([slug]) => slug !== dailyArtist.slug)
+    .slice(0, 8)
+    .map(([, name]) => name);
 
   const handleArtistSelect = (slug: string) => {
     setLoading(true);
@@ -87,28 +98,26 @@ export default function ArtistSelector() {
         <ul className="space-y-2 text-text-muted font-sans">
           <li className="flex gap-2">
             <span className="text-mustard dark:text-mint font-bold">1.</span>
-            <span>Select a musician or band to begin</span>
+            <span>Pick an artist, then guess their top 10 most-streamed songs.</span>
           </li>
           <li className="flex gap-2">
             <span className="text-mustard dark:text-mint font-bold">2.</span>
-            <span>Type song titles to solve the quiz and reveal the streaming stats.</span>
+            <span>Each correct guess reveals its chart position and stream count.</span>
           </li>
           <li className="flex gap-2">
             <span className="text-mustard dark:text-mint font-bold">3.</span>
-            <span>Correct guesses reveal their ranking position</span>
-          </li>
-          <li className="flex gap-2">
-            <span className="text-mustard dark:text-mint font-bold">4.</span>
-            <span>
-              Songs outside the top 10 appear in &ldquo;Honorable
-              Mentions&rdquo;
-            </span>
+            <span>Songs outside the top 10 land in Honorable Mentions.</span>
           </li>
         </ul>
       </div>
 
-      {/* Popular Artists */}
+      {/* Artist of the Day */}
       <div className="mt-6">
+        <ArtistOfTheDay {...dailyArtist} />
+      </div>
+
+      {/* Popular Artists */}
+      <div className="mt-2">
         <p className="text-sm text-text-muted mb-3 font-sans font-medium">
           Popular Artists
         </p>
