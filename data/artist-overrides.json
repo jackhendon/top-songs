@@ -1,0 +1,3 @@
+{
+  "_comment": "slug -> Spotify artist id. Used when Spotify's search cannot be trusted to find the right artist — usually very short stage names, where a bigger artist with a similar name outranks the real one. Pinning an id here makes the snapshot script fetch that artist directly and marks the record verified. Re-run: node scripts/build-artist-snapshot.mjs --only <slug>. The slugs listed in docs/unverified-artist-matches.md are the open cases."
+}
