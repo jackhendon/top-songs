@@ -205,7 +205,7 @@ export const ARTIST_CATALOG: Record<string, string> = {
 };
 
 
-// Kept for backwards compatibility — prefer ARTIST_CATALOG in new code
+// Kept for backwards compatibility, prefer ARTIST_CATALOG in new code
 export const POPULAR_ARTISTS = ARTIST_CATALOG;
 
 const nameToSlug = Object.fromEntries(
@@ -215,7 +215,7 @@ const nameToSlug = Object.fromEntries(
 // The full directory keyed by URL slug. ARTIST_CATALOG covers ~200 artists;
 // this covers the remaining ~2,800 so we never have to guess a name back out
 // of its slug. Guessing loses accents and ampersands, which sends the wrong
-// query to Spotify — "ba" resolved to Bad Bunny instead of bôa, "jo" to Elton
+// query to Spotify, "ba" resolved to Bad Bunny instead of bôa, "jo" to Elton
 // John instead of Jão.
 const directoryNameBySlug: Record<string, string> = Object.fromEntries(
   AUTOCOMPLETE_ARTISTS.filter((a) => a.slug).map((a) => [a.slug, a.name]),

@@ -15,7 +15,7 @@ node scripts/build-related-artists.mjs
 
 The record comes back marked verified and the page becomes indexable.
 
-## Wrong artist — needs a pinned id
+## Wrong artist, needs a pinned id
 
 | Page | Expected | Spotify returned |
 |---|---|---|
@@ -29,7 +29,7 @@ The record comes back marked verified and the page becomes indexable.
 All six are short stage names losing to a more popular near-match. Search
 ranking cannot fix this; only a pinned id can.
 
-## Probably correct — same artist, different name form
+## Probably correct, same artist, different name form
 
 | Page | Expected | Spotify returned | Note |
 |---|---|---|---|
@@ -44,9 +44,9 @@ changing what the page shows.
 Kworb has no page for these Spotify ids, so there are no tracks and no stream
 counts to render. Noindexed for the same reason.
 
-- `/artist/rin` — RIN
-- `/artist/toledo` — Toledo
-- `/artist/cruz-cafun` — Cruz Cafuné. Note the only exact name match on Spotify
+- `/artist/rin`, RIN
+- `/artist/toledo`, Toledo
+- `/artist/cruz-cafun`, Cruz Cafuné. Note the only exact name match on Spotify
   has 296 followers, which is likely an impostor or an abandoned profile; the
   real artist may be listed under a different name. Previously this page served
   Cruzzi's song list, which was wrong but looked fine.

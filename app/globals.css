@@ -30,7 +30,7 @@
     --raw-error: #dc2626;
     --raw-error-dark: #b91c1c;
 
-    /* Mint (light mode mirrors mustard — dark mode overrides below) */
+    /* Mint (light mode mirrors mustard, dark mode overrides below) */
     --raw-mint: #e29547;
     --raw-mint-hover: #d4862f;
     --raw-mint-secondary: #e29547;
@@ -123,7 +123,7 @@
   --color-card-border: var(--raw-card-border);
   --color-card-border-hover: var(--raw-card-border-hover);
 
-  /* Typography — CSS vars set by next/font/google in layout.tsx */
+  /* Typography, CSS vars set by next/font/google in layout.tsx */
   --font-display: var(--font-plus-jakarta), system-ui, sans-serif;
   --font-sans: var(--font-inter), system-ui, sans-serif;
 

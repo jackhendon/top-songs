@@ -2,8 +2,8 @@
 /**
  * Asserts the game's answers are never visible on page load.
  *
- * Rule: track titles may be in the HTML source — they have to be, that is what
- * makes the page rankable — but must not be readable without the visitor
+ * Rule: track titles may be in the HTML source, they have to be, that is what
+ * makes the page rankable, but must not be readable without the visitor
  * opening something. This checks the actual rendered HTML of a running server
  * rather than trusting the components, because the leak that prompted this was
  * exactly the kind a code read misses: the stats prose and the FAQ answers both
@@ -85,11 +85,18 @@ for (const record of sample) {
   }
 
   checked++;
-  const visible = visibleText(html);
   const source = decode(html);
 
+  // The artist's own name has to appear on the page, and sometimes a track
+  // title is a substring of it: "The Greatest Showman Ensemble" contains the
+  // track "The Greatest Show". Removing the name first means a title found
+  // afterwards is genuinely exposed rather than incidental.
+  const names = [record.name, record.spotifyName].filter(Boolean);
+  let visible = visibleText(html);
+  for (const name of names) visible = visible.split(name).join(" ");
+
   const exposed = record.topTen.filter((t) => {
-    // Ignore very short titles — a one-word title like "Whatever" can appear in
+    // Ignore very short titles, a one-word title like "Whatever" can appear in
     // ordinary prose by coincidence, and flagging that is noise, not a leak.
     if (t.title.length < 8) return false;
     return visible.includes(t.title);
@@ -107,7 +114,7 @@ for (const record of sample) {
 
   if (missingFromSource.length) {
     console.log(
-      `  THIN     /artist/${record.slug} — ${missingFromSource.length} title(s) absent from source entirely`,
+      `  THIN     /artist/${record.slug}: ${missingFromSource.length} title(s) absent from source entirely`,
     );
   }
 }

@@ -70,16 +70,16 @@ export default function PrivacyPage() {
             </p>
             <ul className="list-disc list-inside mt-2 space-y-1 text-text-muted">
               <li>
-                <span className="text-text-secondary">Theme preference</span>{" "}
-                &mdash; light or dark mode
+                <span className="text-text-secondary">Theme preference:</span>{" "}
+                light or dark mode
               </li>
               <li>
-                <span className="text-text-secondary">Game history</span>{" "}
-                &mdash; artists played, scores, and outcomes
+                <span className="text-text-secondary">Game history:</span>{" "}
+                artists played, scores, and outcomes
               </li>
               <li>
-                <span className="text-text-secondary">Analytics opt-out</span>{" "}
-                &mdash; set only if you choose to opt out above
+                <span className="text-text-secondary">Analytics opt-out:</span>{" "}
+                set only if you choose to opt out above
               </li>
             </ul>
             <p className="mt-2">

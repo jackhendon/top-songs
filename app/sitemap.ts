@@ -16,7 +16,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   // Only artists we hold streaming data for. The rest are noindexed, so
   // listing them would be asking Google to crawl pages we have told it to
-  // ignore — and those are the pages already counted as soft 404s.
+  // ignore, and those are the pages already counted as soft 404s.
   const artistEntries = DIRECTORY_ARTISTS.filter(({ slug }) =>
     hasStats(getArtistSnapshot(slug)),
   ).map(({ slug }) => ({

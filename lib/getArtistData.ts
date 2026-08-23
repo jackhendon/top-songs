@@ -48,7 +48,7 @@ export async function getSpotifyAccessToken(): Promise<string> {
 // --- Spotify artist search ---
 
 // Spotify's search is fuzzy and ranks by popularity, so a short name loses to
-// a bigger artist with a similar one — "Jão" returned João Gilberto, "bôa"
+// a bigger artist with a similar one, "Jão" returned João Gilberto, "bôa"
 // returned Boards of Canada. Comparing on a folded form lets us prefer a real
 // name match over a more popular near-miss.
 function foldName(name: string): string {

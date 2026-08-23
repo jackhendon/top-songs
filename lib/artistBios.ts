@@ -6,7 +6,7 @@ export const ARTIST_BIOS: Record<string, string> = {
   "the-weeknd":
     "The architect of dark R&B who defined a decade of pop with brooding, cinematic hits.",
   "bad-bunny":
-    "The king of Latin trap who made reggaeton a global phenomenon — how well do you know his catalogue?",
+    "The king of Latin trap who made reggaeton a global phenomenon. How well do you know his catalogue?",
   drake:
     "Hip-hop's most consistent chart-dominator, blending rap and R&B across a decade of smashes.",
   "ed-sheeran":
@@ -18,12 +18,12 @@ export const ARTIST_BIOS: Record<string, string> = {
   "billie-eilish":
     "The whisper-pop prodigy who rewrote what a teen pop star could sound like.",
   "justin-bieber":
-    "From YouTube covers to global superstardom — the Canadian teen who defined a generation of pop fandom.",
+    "From YouTube covers to global superstardom, the Canadian teen who defined a generation of pop fandom.",
   eminem: "Detroit's fastest rapper and one of the best-selling artists of all time.",
   rihanna:
     "Barbados-born pop force who pivoted between genres and built a cultural empire.",
   "kanye-west":
-    "Polarising and genre-defining — his albums have left a permanent mark on hip-hop.",
+    "Polarising and genre-defining, his albums have left a permanent mark on hip-hop.",
   "bruno-mars":
     "A Honolulu-born showman who channels classic soul, funk, and pop into effortless hits.",
   "dua-lipa":
@@ -32,7 +32,7 @@ export const ARTIST_BIOS: Record<string, string> = {
     "From Disney Channel to Grammy winner in one gut-punch of a debut album.",
   "doja-cat": "A shapeshifting rapper-singer who went viral, then went global.",
   "travis-scott":
-    "Houston's biggest export — cinematic rap and festival spectacles that set the standard.",
+    "Houston's biggest export: cinematic rap and festival spectacles that set the standard.",
   sia: "The faceless icon whose soaring vocals have powered anthems for artists and herself alike.",
   adele:
     "Britain's greatest voice of heartbreak, whose ballads outsell almost everyone on Earth.",
@@ -98,7 +98,7 @@ export const ARTIST_BIOS: Record<string, string> = {
   "chris-brown":
     "R&B's most technically gifted performer, with a catalogue of dance-floor smashes spanning two decades.",
   "nicki-minaj":
-    "The first female rapper to dominate pop radio — fearless, versatile, and impossible to ignore.",
+    "The first female rapper to dominate pop radio: fearless, versatile, and impossible to ignore.",
   "david-guetta":
     "The French DJ who helped launch the EDM explosion and has never stopped topping the charts.",
   "lana-del-rey":
@@ -108,7 +108,7 @@ export const ARTIST_BIOS: Record<string, string> = {
   "anuel-aa":
     "Puerto Rico's biggest trap export, turning street stories into Latin music's most-streamed anthems.",
   "21-savage":
-    "Atlanta's minimalist hitmaker — cold delivery, chilling stories, and relentlessly in demand.",
+    "Atlanta's minimalist hitmaker: cold delivery, chilling stories, and relentlessly in demand.",
   "lady-gaga":
     "Pop art's most theatrical performer, who keeps reinventing herself without ever losing the hooks.",
   "lil-baby":
@@ -130,7 +130,7 @@ export const ARTIST_BIOS: Record<string, string> = {
   shakira:
     "The Colombian global icon who proved you can reinvent yourself every decade and only get bigger.",
   "morgan-wallen":
-    "Country music's streaming king — his rough-hewn voice and massive hooks have broken record after record.",
+    "Country music's streaming king, whose rough-hewn voice and massive hooks have broken record after record.",
   farruko:
     "Puerto Rican reggaeton titan whose career spans underground hits to stadium-filling anthems.",
   queen:
@@ -148,11 +148,11 @@ export const ARTIST_BIOS: Record<string, string> = {
   "tyler-the-creator":
     "The OFWGKTA founder who grew from provocateur to one of the most critically celebrated artists in hip-hop.",
   "ty-dolla-sign":
-    "R&B's most versatile collaborator — equally at home on a trap anthem as a soulful ballad.",
+    "R&B's most versatile collaborator, equally at home on a trap anthem as a soulful ballad.",
   "nicky-jam":
     "Reggaeton pioneer whose journey from street corners to global stardom is one of music's great comeback stories.",
   "the-beatles":
-    "The Fab Four from Liverpool — the most culturally significant band in the history of recorded music.",
+    "The Fab Four from Liverpool, the most culturally significant band in the history of recorded music.",
   "wiz-khalifa":
     "Pittsburgh's laid-back rap king whose ode to good times turned him into a permanent party playlist fixture.",
   "playboi-carti":
@@ -164,9 +164,9 @@ export const ARTIST_BIOS: Record<string, string> = {
   "fuerza-regida":
     "The Sinaloan banda-trap hybrids bringing regional Mexican music to a whole new generation.",
   "frank-ocean":
-    "R&B's most revered recluse — when he releases music, the world stops to listen.",
+    "R&B's most revered recluse. When he releases music, the world stops to listen.",
   "jay-z":
-    "Brooklyn's billionaire rap mogul — one of the genre's greatest lyricists and one of music's savviest businesspeople.",
+    "Brooklyn's billionaire rap mogul, one of the genre's greatest lyricists and one of music's savviest businesspeople.",
   "asap-rocky":
     "Harlem's style icon, blending cloud-rap aesthetics with high-fashion sensibility and effortless cool.",
   "the-chainsmokers":
@@ -176,7 +176,7 @@ export const ARTIST_BIOS: Record<string, string> = {
   "cardi-b":
     "The Bronx rap queen who went from reality TV to Grammy winner in one of pop culture's most thrilling ascents.",
   "michael-jackson":
-    "The King of Pop — still one of the best-selling and most-streamed artists of all time, decades on.",
+    "The King of Pop, still one of the best-selling and most-streamed artists of all time, decades on.",
   "red-hot-chili-peppers":
     "LA's alt-rock icons, fusing funk, punk, and stadium rock for over four decades.",
   arcangel:
@@ -206,7 +206,7 @@ export const ARTIST_BIOS: Record<string, string> = {
   "youngboy-never-broke-again":
     "Baton Rouge's most relentlessly prolific rapper, with one of the most loyal fanbases in hip-hop.",
   "elton-john":
-    "The Rocket Man himself — piano-pop's greatest showman, with a catalogue that has never gone out of style.",
+    "The Rocket Man himself, piano-pop's greatest showman, with a catalogue that has never gone out of style.",
   "trippie-redd":
     "Ohio's emo-rap pioneer, blending melodic hooks with a raw vulnerability that defined a generation.",
   "the-neighbourhood":
@@ -241,7 +241,7 @@ export const ARTIST_BIOS: Record<string, string> = {
   "kodak-black":
     "South Florida's resilient rapper, whose melodic delivery and personal struggles have defined his music.",
   "don-omar":
-    "El Rey himself — the Puerto Rican reggaeton king who helped define the genre's golden era.",
+    "El Rey himself, the Puerto Rican reggaeton king who helped define the genre's golden era.",
   "bebe-rexha":
     "New York's powerhouse vocalist, whose stadium-sized voice has powered hits both solo and alongside major acts.",
   "sean-paul":
@@ -363,7 +363,7 @@ export const ARTIST_BIOS: Record<string, string> = {
   "bryson-tiller":
     "Louisville's R&B slow-burner, who blended trap drums with heartfelt vocals to create a sound all his own.",
   "2pac":
-    "Compton's West Coast legend — a rapper, actor, and revolutionary whose influence shows no sign of fading decades on.",
+    "Compton's West Coast legend: a rapper, actor, and revolutionary whose influence shows no sign of fading decades on.",
   "ar-rahman":
     "India's Oscar-winning composer, whose Slumdog Millionaire score introduced his genius to a truly global audience.",
   "lenny-tavarez":
@@ -372,13 +372,13 @@ export const ARTIST_BIOS: Record<string, string> = {
     "The Dutch DJ prodigy who became one of the world's most-booked acts before he could legally drink in the US.",
   jul: "Marseille's prolific rap phenomenon, whose melodic trap style has made him France's most-streamed artist.",
   "mariah-carey":
-    "The undisputed Queen of Christmas — a five-octave range and an ear for melody that nobody has ever quite matched.",
+    "The undisputed Queen of Christmas, with a five-octave range and an ear for melody that nobody has ever quite matched.",
   gorillaz:
     "Damon Albarn's virtual band experiment, a shape-shifting musical project that keeps defying genre and expectation.",
   logic:
     "Maryland's rapid-fire rapper and passionate gamer, whose mental health advocacy resonated as much as his bars.",
   "megan-thee-stallion":
-    "Houston's Hot Girl Coach — a ferocious MC whose confidence, flow, and viral moments dominate modern rap.",
+    "Houston's Hot Girl Coach, a ferocious MC whose confidence, flow, and viral moments dominate modern rap.",
   "christian-nodal":
     "Mexico's young ranchero revivalist, blending mariachi tradition with modern pop production to massive success.",
 };

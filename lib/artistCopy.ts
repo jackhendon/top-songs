@@ -7,7 +7,7 @@ import { ARTIST_BIOS } from "./artistBios";
  * The risk with 2,995 generated pages is that they read as one page repeated,
  * which is what Google treats as a doorway set. Two things guard against that
  * here. First, the sentences are built from figures that genuinely differ per
- * artist — stream totals, catalogue depth, how far the biggest hit sits ahead
+ * artist, stream totals, catalogue depth, how far the biggest hit sits ahead
  * of the tenth. Second, which sentence gets used is chosen by branching on the
  * shape of that data, so an artist with one runaway hit is described
  * differently from one with ten even ones, and a 500-track catalogue
@@ -51,6 +51,14 @@ function hash(slug: string): number {
 
 function pick<T>(options: T[], slug: string, salt = 0): T {
   return options[(hash(slug) + salt) % options.length];
+}
+
+/**
+ * "The Beatles's" is wrong; it is "The Beatles'". Roughly one artist name in
+ * eight ends in s, so this is not an edge case.
+ */
+export function possessive(name: string): string {
+  return /s$/i.test(name) ? `${name}'` : `${name}'s`;
 }
 
 function listGenres(genres: string[], limit = 3): string {
@@ -175,7 +183,7 @@ export function aboutParagraph(facts: ArtistFacts): string {
  * Stats prose for the visible part of the page.
  *
  * Deliberately names no tracks. This is the game's answer key, so every title
- * belongs behind the collapsed <details> block — the numbers, ratios and shape
+ * belongs behind the collapsed <details> block, the numbers, ratios and shape
  * of the distribution are what make the paragraph unique per artist, and they
  * give plenty away about how hard the round will be without giving away a
  * single answer.
@@ -198,10 +206,10 @@ export function statsParagraph(facts: ArtistFacts): string {
   sentences.push(
     pick(
       [
-        `${name}'s ten most-streamed tracks have been played ${formatStreams(totalTopTen)} times between them on Spotify.`,
+        `${possessive(name)} ten most-streamed tracks have been played ${formatStreams(totalTopTen)} times between them on Spotify.`,
         `Together, the ten biggest ${name} tracks account for ${formatStreams(totalTopTen)} Spotify streams.`,
-        `Add up ${name}'s top ten and you get ${formatStreams(totalTopTen)} plays on Spotify.`,
-        `${formatStreams(totalTopTen)} Spotify streams sit across ${name}'s ten biggest tracks.`,
+        `Add up ${possessive(name)} top ten and you get ${formatStreams(totalTopTen)} plays on Spotify.`,
+        `${formatStreams(totalTopTen)} Spotify streams sit across ${possessive(name)} ten biggest tracks.`,
       ],
       slug,
     ),
@@ -226,7 +234,7 @@ export function statsParagraph(facts: ArtistFacts): string {
   const gapPhrasings: string[] =
     dominance >= 20
       ? [
-          `The gap at the top is enormous — around ${Math.round(dominance)} times between first and tenth — and the leading track takes ${Math.round(leadShare * 100)}% of the top ten by itself. Expect one obvious answer and nine much harder ones.`,
+          `The gap at the top is enormous: around ${Math.round(dominance)} times between first and tenth, and the leading track takes ${Math.round(leadShare * 100)}% of the top ten by itself. Expect one obvious answer and nine much harder ones.`,
           `This is a catalogue with a single runaway track, outstreaming tenth place by roughly ${Math.round(dominance)} to one.`,
           `One track dominates completely, taking ${Math.round(leadShare * 100)}% of the top ten's plays on its own.`,
         ]
@@ -238,7 +246,7 @@ export function statsParagraph(facts: ArtistFacts): string {
           ]
         : dominance >= 5
           ? [
-              `There is a real gap between first and tenth here — roughly ${Math.round(dominance)}x.`,
+              `There is a real gap between first and tenth here, roughly ${Math.round(dominance)}x.`,
               `The leader takes ${Math.round(leadShare * 100)}% of the top ten's streams, so the top of the list is easier to call than the bottom.`,
               `First outstreams tenth by about ${Math.round(dominance)} to one.`,
             ]
@@ -249,7 +257,7 @@ export function statsParagraph(facts: ArtistFacts): string {
                 `A ${dominance.toFixed(1)}x spread from first to tenth makes the ordering harder than the names.`,
               ]
             : [
-                `The top ten is unusually flat — just ${dominance.toFixed(1)}x separates first from tenth, so there is no obvious track to guess first.`,
+                `The top ten is unusually flat. Just ${dominance.toFixed(1)}x separates first from tenth, so there is no obvious track to guess first.`,
                 `These ten are tightly packed, with only ${dominance.toFixed(1)}x between the biggest and the tenth.`,
                 `Nothing dominates: the spread across the ten is only ${dominance.toFixed(1)}x, so any of them could be the one you miss.`,
               ];
@@ -258,12 +266,23 @@ export function statsParagraph(facts: ArtistFacts): string {
 
   // Nearly half of all artists have no billion-stream track, so that case gets
   // its own phrasings keyed to actual scale rather than one flat sentence.
-  if (billionPlayCount >= 5) {
+  if (billionPlayCount === 10) {
+    sentences.push(
+      pick(
+        [
+          `All ten have passed a billion streams.`,
+          `Every one of the ten has cleared a billion streams, which only a handful of artists manage.`,
+        ],
+        slug,
+        3,
+      ),
+    );
+  } else if (billionPlayCount >= 5) {
     sentences.push(
       pick(
         [
           `${billionPlayCount} of the ten have passed a billion streams each.`,
-          `A billion streams is the norm rather than the exception here — ${billionPlayCount} of the ten have cleared it.`,
+          `A billion streams is the norm rather than the exception here, and ${billionPlayCount} of them have cleared it.`,
         ],
         slug,
         3,
@@ -297,7 +316,7 @@ export function statsParagraph(facts: ArtistFacts): string {
   }
 
   sentences.push(
-    `Tenth place comes in at ${formatStreams(smallest.totalStreams)} streams, out of ${catalogueSize.toLocaleString("en-GB")} ${catalogueSize === 1 ? "track" : "tracks"} tracked in total — that is the line you need to find to complete the list.`,
+    `Tenth place comes in at ${formatStreams(smallest.totalStreams)} streams, out of ${catalogueSize.toLocaleString("en-GB")} ${catalogueSize === 1 ? "track" : "tracks"} tracked in total. That is the line you need to find to complete the list.`,
   );
 
   return sentences.join(" ");
@@ -322,12 +341,12 @@ export function buildFaq(facts: ArtistFacts): FaqEntry[] {
 
   const entries: FaqEntry[] = [
     {
-      question: `What is ${name}'s most streamed song on Spotify?`,
-      answer: `"${biggest.title}" is ${name}'s most-streamed song on Spotify, with ${formatStreams(biggest.totalStreams)} streams.`,
+      question: `What is ${possessive(name)} most streamed song on Spotify?`,
+      answer: `"${biggest.title}" is ${possessive(name)} most-streamed song on Spotify, with ${formatStreams(biggest.totalStreams)} streams.`,
       spoiler: true,
     },
     {
-      question: `What are ${name}'s top 10 songs on Spotify?`,
+      question: `What are ${possessive(name)} top 10 songs on Spotify?`,
       answer: `Ranked by total Spotify streams, they are ${topTen
         .map((t, i) => `${i + 1}. ${t.title}`)
         .join(", ")}.`,
@@ -335,7 +354,7 @@ export function buildFaq(facts: ArtistFacts): FaqEntry[] {
     },
     {
       question: `How many streams does ${name} have on Spotify?`,
-      answer: `${name}'s ten most-streamed tracks have ${formatStreams(totalTopTen)} plays between them. Spotify tracks ${catalogueSize.toLocaleString("en-GB")} ${catalogueSize === 1 ? "song" : "songs"} in total, so the full career figure is higher.`,
+      answer: `${possessive(name)} ten most-streamed tracks have ${formatStreams(totalTopTen)} plays between them. Spotify tracks ${catalogueSize.toLocaleString("en-GB")} ${catalogueSize === 1 ? "song" : "songs"} in total, so the full career figure is higher.`,
     },
   ];
 

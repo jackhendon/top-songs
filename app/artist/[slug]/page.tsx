@@ -10,6 +10,7 @@ import {
   buildFaq,
   deriveFacts,
   formatStreams,
+  possessive,
   statsParagraph,
 } from "@/lib/artistCopy";
 import ArtistGame from "@/components/ArtistGame";
@@ -21,7 +22,7 @@ interface PageProps {
 
 // Everything we hold data for is generated at build time. This is free now that
 // the page reads data/artist-snapshot.json instead of calling Spotify and Kworb
-// per render — the whole catalogue builds without a single network request.
+// per render, the whole catalogue builds without a single network request.
 export function generateStaticParams() {
   return INDEXABLE_SLUGS.map((slug) => ({ slug }));
 }
@@ -46,17 +47,17 @@ export async function generateMetadata({
       // Carries a real per-artist fact so the snippet differs page to page,
       // but names no track: a title here would spoil the game in the search
       // result, before anyone even clicks through.
-      description: `Can you name ${name}'s 10 most-streamed songs on Spotify? The biggest has ${formatStreams(biggest.totalStreams)} plays. Full ranked list and stats, plus the free Top Songs quiz.`,
+      description: `Can you name ${possessive(name)} 10 most-streamed songs on Spotify? The biggest has ${formatStreams(biggest.totalStreams)} plays. Full ranked list and stats, plus the free Top Songs quiz.`,
       alternates: { canonical: `/artist/${slug}` },
       openGraph: {
         title: `${name} Top Songs Quiz`,
-        description: `Can you name ${name}'s 10 most-streamed songs on Spotify?`,
+        description: `Can you name ${possessive(name)} 10 most-streamed songs on Spotify?`,
         images: record.imageUrl ? [{ url: record.imageUrl }] : [],
       },
       twitter: {
         card: "summary_large_image",
         title: `${name} Top Songs Quiz`,
-        description: `Can you name ${name}'s 10 most-streamed songs on Spotify?`,
+        description: `Can you name ${possessive(name)} 10 most-streamed songs on Spotify?`,
         images: record.imageUrl ? [record.imageUrl] : [],
       },
     };
@@ -104,7 +105,7 @@ export default async function ArtistPage({ params }: PageProps) {
             {metadata.artistName} Top Songs Quiz
           </h1>
           <p className="text-sm text-text-secondary leading-relaxed">
-            Guess {metadata.artistName}&apos;s ten most-streamed songs on
+            Guess {possessive(metadata.artistName)} ten most-streamed songs on
             Spotify. Streaming figures for this artist are still being compiled,
             so the notes and stats shown on other artist pages are not available
             here yet.
@@ -150,7 +151,7 @@ export default async function ArtistPage({ params }: PageProps) {
               {name} Top Songs Quiz
             </h1>
             <p className="text-sm text-text-secondary leading-relaxed">
-              Guess {name}&apos;s ten most-streamed songs on Spotify in as few
+              Guess {possessive(name)} ten most-streamed songs on Spotify in as few
               guesses as you can. Every answer is ranked by real play count, not
               by chart position or opinion.
             </p>
@@ -184,7 +185,7 @@ export default async function ArtistPage({ params }: PageProps) {
               <div className="mt-4 overflow-x-auto">
                 <table className="w-full text-sm text-left">
                   <caption className="sr-only">
-                    {name}&apos;s ten most-streamed songs on Spotify, by total
+                    {possessive(name)} ten most-streamed songs on Spotify, by total
                     play count
                   </caption>
                   <thead>

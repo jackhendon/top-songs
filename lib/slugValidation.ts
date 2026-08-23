@@ -9,7 +9,7 @@ import type { ArtistAutocompleteItem } from "./artistAutocomplete";
  *
  * This module splits the list on that distinction. Anything unroutable is kept
  * out of the sitemap and the directory so we never publish a link that cannot
- * resolve. Anything merely misspelt still ships — renaming those URLs means
+ * resolve. Anything merely misspelt still ships, renaming those URLs means
  * redirecting pages Google has already indexed, which is a deliberate job
  * rather than a side effect.
  */
@@ -58,12 +58,12 @@ export function assertAllSlugsRoutable(): void {
 
   throw new Error(
     `${UNROUTABLE_ARTISTS.length} artist(s) in data/artists.json have no routable slug: ${names}. ` +
-      `Assign a slug by hand — folding the name produced nothing usable.`,
+      `Assign a slug by hand: folding the name produced nothing usable.`,
   );
 }
 
 /**
- * Artists whose slug is routable but wrong — accents dropped, ampersands
+ * Artists whose slug is routable but wrong, accents dropped, ampersands
  * collapsed to a double hyphen, trailing hyphens. These are the rename
  * candidates, each of which needs a 301 from the old URL.
  */

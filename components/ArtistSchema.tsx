@@ -1,4 +1,4 @@
-import type { FaqEntry } from "@/lib/artistCopy";
+import { possessive, type FaqEntry } from "@/lib/artistCopy";
 
 interface ArtistSchemaProps {
   artistName: string;
@@ -7,7 +7,7 @@ interface ArtistSchemaProps {
   genres?: string[];
   /**
    * The same FAQ entries rendered on the page. Google requires FAQPage answers
-   * to be visible to the visitor — the previous version described questions
+   * to be visible to the visitor, the previous version described questions
    * that appeared nowhere in the markup, which makes the markup ineligible at
    * best and a manual-action risk at worst.
    */
@@ -55,7 +55,7 @@ export default function ArtistSchema({
     genre: "Music trivia",
     gamePlatform: "Web browser",
     numberOfPlayers: { "@type": "QuantitativeValue", value: 1 },
-    description: `Guess ${artistName}'s ten most-streamed songs on Spotify, ranked by total play count.`,
+    description: `Guess ${possessive(artistName)} ten most-streamed songs on Spotify, ranked by total play count.`,
     isAccessibleForFree: true,
   };
   if (artistImage) gameSchema.image = artistImage;

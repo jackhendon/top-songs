@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { possessive } from "@/lib/artistCopy";
 import { useGameStore, getHintsUsed } from "@/lib/gameStore";
 import { trackGameAbandoned, trackShare } from "@/lib/analytics";
 import { formatTime, pluralize } from "@/lib/format";
@@ -205,7 +206,7 @@ export default function GameBoard({ onPlayAgain }: GameBoardProps) {
                   <>
                     You guessed all of{" "}
                     <span className="font-semibold text-mustard dark:text-mint">
-                      {artistName}&apos;s
+                      {possessive(artistName)}
                     </span>{" "}
                     top 10 songs in {totalGuesses}{" "}
                     {pluralize(totalGuesses, "try", "tries")}
@@ -221,7 +222,7 @@ export default function GameBoard({ onPlayAgain }: GameBoardProps) {
                   <>
                     You got {score} of{" "}
                     <span className="font-semibold text-mustard dark:text-mint">
-                      {artistName}&apos;s
+                      {possessive(artistName)}
                     </span>{" "}
                     top 10 songs in {totalGuesses}{" "}
                     {pluralize(totalGuesses, "guess", "guesses")}

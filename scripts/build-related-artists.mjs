@@ -41,7 +41,7 @@ const snapshot = JSON.parse(fs.readFileSync(SNAPSHOT_PATH, "utf8"));
 
 // Hand-curated genres for ~200 artists. Worth merging rather than dropping:
 // Spotify returns no genres at all for 71 of them, and they are among the
-// biggest pages on the site — Taylor Swift, The Weeknd, Coldplay, Billie
+// biggest pages on the site, Taylor Swift, The Weeknd, Coldplay, Billie
 // Eilish. Without this they would be matched on follower count alone.
 const curatedTags = fs.existsSync(TAGS_PATH)
   ? JSON.parse(fs.readFileSync(TAGS_PATH, "utf8"))

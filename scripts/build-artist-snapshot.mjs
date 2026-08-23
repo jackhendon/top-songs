@@ -3,7 +3,7 @@
  * Builds data/artist-snapshot.json: one record per artist holding everything
  * the artist page needs to render server-side.
  *
- * Artist pages used to fetch this per request — a Spotify search on every
+ * Artist pages used to fetch this per request, a Spotify search on every
  * render and, if the top 10 were to be server-rendered, a Kworb scrape too.
  * At ~2s per artist that is unusable at build time for 2,995 pages, and it
  * would mean pointing 3,000 scrapes at a hobbyist site with no API every time
@@ -250,7 +250,7 @@ async function fetchSongs(spotifyId) {
 
 async function buildRecord(artist, overrides) {
   // A hand-pinned Spotify id wins over search. Search cannot disambiguate a
-  // one-letter stage name — "V" ranks Vybz Kartel first — and there is no
+  // one-letter stage name, "V" ranks Vybz Kartel first, and there is no
   // heuristic that fixes that, only a human decision recorded once.
   const pinned = overrides[artist.slug];
   const resolved = pinned
@@ -350,14 +350,14 @@ async function main() {
         snapshot[artist.slug] = record;
         if (record.error) {
           failed++;
-          console.log(`  [${++done}/${queue.length}] ${artist.name} — ${record.error}`);
+          console.log(`  [${++done}/${queue.length}] ${artist.name}: ${record.error}`);
         } else {
           done++;
           if (done % 50 === 0 || queue.length <= 25) {
             const rate = done / ((Date.now() - started) / 1000);
             const left = Math.round((queue.length - done) / Math.max(rate, 0.01));
             console.log(
-              `  [${done}/${queue.length}] ${artist.name} — ${record.topTen.length} tracks, ${record.catalogueSize} in catalogue (~${Math.round(left / 60)}m left)`,
+              `  [${done}/${queue.length}] ${artist.name}, ${record.topTen.length} tracks, ${record.catalogueSize} in catalogue (~${Math.round(left / 60)}m left)`,
             );
           }
         }
@@ -369,7 +369,7 @@ async function main() {
           name: artist.name,
           error: String(err.message || err),
         };
-        console.warn(`  [${done}/${queue.length}] ${artist.name} — FAILED: ${err.message}`);
+        console.warn(`  [${done}/${queue.length}] ${artist.name}: FAILED ${err.message}`);
       }
 
       if (done % FLUSH_EVERY === 0) flush();

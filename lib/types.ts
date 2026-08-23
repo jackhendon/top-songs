@@ -25,7 +25,7 @@ export interface SnapshotTrack {
  * scripts/build-artist-snapshot.mjs so artist pages can render their content
  * without a Spotify call or a Kworb scrape per request.
  *
- * `error` is set when the artist could not be resolved — no Spotify match, or
+ * `error` is set when the artist could not be resolved, no Spotify match, or
  * no Kworb page. Those pages have no stats to show and are noindexed rather
  * than served as near-empty.
  */

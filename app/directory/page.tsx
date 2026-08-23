@@ -20,8 +20,8 @@ export async function generateMetadata({
 
   const title =
     page > 1
-      ? `Artist Directory – Page ${page} | Top Songs`
-      : `Artist Directory – Browse ${TOTAL.toLocaleString()} Artists | Top Songs`;
+      ? `Artist Directory, Page ${page} | Top Songs`
+      : `Artist Directory: Browse ${TOTAL.toLocaleString()} Artists | Top Songs`;
 
   // Search results are reachable only through the client-side search box, so
   // they should never be the canonical version of this page.

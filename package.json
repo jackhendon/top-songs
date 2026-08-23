@@ -6,7 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "snapshot": "node scripts/build-artist-snapshot.mjs",
+    "related": "node scripts/build-related-artists.mjs",
+    "check:spoilers": "node scripts/check-no-spoilers.mjs",
+    "check:style": "node scripts/check-no-em-dashes.mjs"
   },
   "dependencies": {
     "cheerio": "^1.2.0",

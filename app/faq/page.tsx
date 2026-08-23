@@ -30,8 +30,8 @@ export default function FAQPage() {
               Pick any artist and try to guess their 10 most-streamed songs on
               Spotify. Type a song title into the search box and, if it&apos;s
               in the top 10, it slots into the correct rank. There&apos;s no
-              limit on guesses, but the game tracks how many you use &mdash; so
-              the fewer it takes, the better your score.
+              limit on guesses, but the game tracks how many you use, so the fewer
+              it takes, the better your score.
             </p>
           </section>
 
@@ -109,7 +109,7 @@ export default function FAQPage() {
             </h2>
             <p>
               Hi! I&apos;m a developer based in London. The idea for Top Songs
-              started organically &mdash; my friends and I would sit in pubs
+              started organically. My friends and I would sit in pubs
               arguing over which tracks had the most streams, checking our
               answers on{" "}
               <a
@@ -141,8 +141,7 @@ export default function FAQPage() {
                 </h2>
                 <p>
                   Top Songs is free and always will be. There&apos;s absolutely
-                  no obligation to pay anything &mdash; I built this for fun,
-                  not profit.
+                  no obligation to pay anything. I built this for fun, not profit.
                 </p>
                 <p className="mt-2">
                   That said, if you enjoy the game and feel like buying me a
