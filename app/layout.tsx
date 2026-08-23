@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, Inter } from "next/font/google";
 import PostHogInit from "@/components/PostHogInit";
-import ConsentBanner from "@/components/ConsentBanner";
 import "./globals.css";
 
 const plusJakarta = Plus_Jakarta_Sans({
@@ -42,7 +41,6 @@ export default function RootLayout({
       </head>
       <body>
         <PostHogInit />
-        <ConsentBanner />
         {children}
       </body>
     </html>

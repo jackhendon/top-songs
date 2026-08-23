@@ -1,40 +1,76 @@
 import posthog from "posthog-js";
 
-const CONSENT_KEY = "analytics-consent";
+const OPT_OUT_KEY = "analytics-opt-out";
 
 let initialized = false;
 
-export function getConsent(): "yes" | "no" | null {
-  if (typeof window === "undefined") return null;
-  const value = localStorage.getItem(CONSENT_KEY);
-  if (value === "yes" || value === "no") return value;
-  return null;
+/**
+ * Analytics runs by default and stores nothing that outlives the browser tab.
+ * Anyone who would rather not be counted can opt out from the privacy page,
+ * and that single preference is the only thing we persist.
+ */
+export function hasOptedOut(): boolean {
+  if (typeof window === "undefined") return false;
+  try {
+    return localStorage.getItem(OPT_OUT_KEY) === "true";
+  } catch {
+    return false;
+  }
 }
 
-export function hasConsented(): boolean {
-  return getConsent() === "yes";
-}
-
-export function setConsent(value: "yes" | "no") {
+export function setOptedOut(optedOut: boolean) {
   if (typeof window === "undefined") return;
-  localStorage.setItem(CONSENT_KEY, value);
+  try {
+    if (optedOut) {
+      localStorage.setItem(OPT_OUT_KEY, "true");
+    } else {
+      localStorage.removeItem(OPT_OUT_KEY);
+    }
+  } catch {
+    // Storage unavailable (private mode, blocked). Fall through to the
+    // in-memory switch below so the choice still applies to this page.
+  }
+
+  if (!initialized) {
+    if (!optedOut) initPostHog();
+    return;
+  }
+
+  if (optedOut) {
+    posthog.opt_out_capturing();
+  } else {
+    posthog.opt_in_capturing();
+  }
 }
 
 export function initPostHog() {
   if (typeof window === "undefined" || initialized) return;
   if (process.env.NODE_ENV === "development") return;
+  if (hasOptedOut()) return;
 
   const key = process.env.NEXT_PUBLIC_POSTHOG_KEY;
-  const host = process.env.NEXT_PUBLIC_POSTHOG_HOST;
 
-  if (!key || !host) return;
+  if (!key) return;
 
   posthog.init(key, {
-    api_host: host,
-    capture_pageview: true,
+    // First-party path, rewritten to PostHog in next.config.ts. Requests to a
+    // third-party analytics domain are on every standard blocklist; requests
+    // to our own origin are not.
+    api_host: "/ingest",
+    ui_host: process.env.NEXT_PUBLIC_POSTHOG_HOST,
+
+    // The app navigates client-side, so pageviews have to follow history
+    // changes. Plain `true` only fires once, on init, which made page views
+    // indistinguishable from sessions.
+    capture_pageview: "history_change",
     capture_pageleave: true,
+
+    // Per-tab, cleared when the tab closes. No cookies and nothing that
+    // outlives the visit, but stable enough within a visit that page views per
+    // session and entry pages are real numbers rather than restating pageloads.
+    persistence: "sessionStorage",
+
     autocapture: false,
-    persistence: "memory",
     debug: (process.env.NODE_ENV as string) === "development",
   });
 

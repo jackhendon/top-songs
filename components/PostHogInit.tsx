@@ -1,13 +1,12 @@
 "use client";
 
 import { useEffect } from "react";
-import { initPostHog, hasConsented } from "@/lib/analytics";
+import { initPostHog } from "@/lib/analytics";
 
 export default function PostHogInit() {
   useEffect(() => {
-    if (hasConsented()) {
-      initPostHog();
-    }
+    // initPostHog is a no-op if the visitor has opted out.
+    initPostHog();
   }, []);
 
   return null;

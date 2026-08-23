@@ -1,4 +1,5 @@
 import Link from "next/link";
+import AnalyticsPreference from "@/components/AnalyticsPreference";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
@@ -19,7 +20,7 @@ export default function PrivacyPage() {
         </h1>
 
         <p className="text-xs text-text-muted font-sans mb-6">
-          Last updated: 15 February 2026
+          Last updated: 23 August 2026
         </p>
 
         <div className="space-y-6 text-sm text-text-secondary font-sans leading-relaxed">
@@ -43,12 +44,20 @@ export default function PrivacyPage() {
               required to use this site.
             </p>
             <p>
-              In accordance with UK GDPR and the Privacy and Electronic
-              Communications Regulations (PECR), analytics are only activated
-              after you give consent via the banner shown on your first visit.
-              You can change your analytics preference at any time by clearing
-              your browser&apos;s localStorage.
+              Analytics run in a cookieless mode. Nothing is written to your
+              device that survives the browser tab you are using: PostHog keeps
+              its session identifier in <code>sessionStorage</code>, which your
+              browser discards when the tab closes. We do not set cookies, we
+              do not build a profile that follows you between visits, and we do
+              not share anything with advertisers.
             </p>
+            <p>
+              Because no persistent identifier is stored, we rely on legitimate
+              interest under UK GDPR rather than consent, as permitted for
+              measurement that does not track individuals. You can opt out at
+              any time and the choice is remembered:
+            </p>
+            <AnalyticsPreference />
           </section>
 
           <section>
@@ -69,8 +78,8 @@ export default function PrivacyPage() {
                 &mdash; artists played, scores, and outcomes
               </li>
               <li>
-                <span className="text-text-secondary">Analytics consent</span>{" "}
-                &mdash; whether you accepted or declined analytics
+                <span className="text-text-secondary">Analytics opt-out</span>{" "}
+                &mdash; set only if you choose to opt out above
               </li>
             </ul>
             <p className="mt-2">
@@ -111,7 +120,9 @@ export default function PrivacyPage() {
             </h2>
             <p>
               This site does not set any cookies. Analytics are handled via
-              PostHog&apos;s cookieless mode.
+              PostHog&apos;s cookieless mode, and analytics requests are routed
+              through topsongs.io rather than directly to PostHog, so no
+              third-party domain sees your visit.
             </p>
           </section>
 
