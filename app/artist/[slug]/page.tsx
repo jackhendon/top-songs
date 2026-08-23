@@ -30,7 +30,13 @@ export function generateStaticParams() {
 // Slugs outside the snapshot still resolve, falling back to a live lookup.
 export const dynamicParams = true;
 
-export const revalidate = 86400;
+// The page is a pure function of data/artist-snapshot.json, so regenerating it
+// reproduces byte-identical output. With a 24h window, crawlers walking the
+// sitemap were triggering a full-catalogue regeneration every day: 74k ISR
+// writes and ~59k function invocations a month, for no change in content.
+// Refreshing the data means re-running the snapshot and deploying, which is
+// already how it works.
+export const revalidate = false;
 
 export async function generateMetadata({
   params,
