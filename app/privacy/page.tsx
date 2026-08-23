@@ -40,8 +40,14 @@ export default function PrivacyPage() {
               </a>{" "}
               for anonymous analytics. PostHog may collect your IP address,
               approximate location, browser type, and pages visited. No
-              accounts, cookies, or personally identifiable information are
-              required to use this site.
+              accounts or cookies are required to use this site.
+            </p>
+            <p>
+              We also record how the game is played, so we can see which
+              artists are popular and whether rounds are too hard: which artist
+              you picked, how many guesses and hints you used, how long a round
+              took, whether you finished or gave up, and how long each guess
+              was. We do not send the text you type into the guess box.
             </p>
             <p>
               Analytics run in a cookieless mode. Nothing is written to your
@@ -120,9 +126,12 @@ export default function PrivacyPage() {
             </h2>
             <p>
               This site does not set any cookies. Analytics are handled via
-              PostHog&apos;s cookieless mode, and analytics requests are routed
-              through topsongs.io rather than directly to PostHog, so no
-              third-party domain sees your visit.
+              PostHog&apos;s cookieless mode. Analytics requests are sent to a
+              path on topsongs.io and forwarded to PostHog from our server, so
+              your browser never contacts a third-party analytics domain
+              directly. PostHog still receives the event, including your IP
+              address; the routing stops ad blockers dropping the request, it
+              does not stop PostHog from being a recipient.
             </p>
           </section>
 

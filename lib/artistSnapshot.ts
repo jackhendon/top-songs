@@ -35,12 +35,21 @@ export function hasStats(
   );
 }
 
-export const SNAPSHOT_SLUGS = Object.keys(SNAPSHOT);
+const SNAPSHOT_SLUGS = Object.keys(SNAPSHOT);
 
 export const INDEXABLE_SLUGS = SNAPSHOT_SLUGS.filter((slug) =>
   hasStats(SNAPSHOT[slug]),
 );
 
-export function allSnapshots(): ArtistSnapshot[] {
-  return Object.values(SNAPSHOT);
+const KNOWN_SLUGS = new Set(SNAPSHOT_SLUGS);
+
+/**
+ * Whether this slug is one we hold at all. Used to reject unknown slugs before
+ * any network call: the catch-all redirect in next.config.ts sends every
+ * unmatched path to /artist/:slug, so without this an enumerated URL costs a
+ * function invocation plus a live Spotify lookup, and with revalidate = false
+ * the result is then cached until the next deploy.
+ */
+export function isKnownArtistSlug(slug: string): boolean {
+  return KNOWN_SLUGS.has(slug);
 }

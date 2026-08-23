@@ -33,6 +33,10 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className={`${plusJakarta.variable} ${inter.variable}`}>
       <head>
+        {/* Artist artwork is hotlinked from Spotify's CDN and React preloads it
+            at high priority, so open the connection alongside the stylesheet
+            rather than after it. */}
+        <link rel="preconnect" href="https://i.scdn.co" crossOrigin="" />
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme:dark)').matches)){document.documentElement.classList.add('dark')}}catch(e){}})()`,

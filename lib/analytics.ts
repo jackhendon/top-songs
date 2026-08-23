@@ -71,6 +71,13 @@ export function initPostHog() {
     persistence: "sessionStorage",
 
     autocapture: false,
+
+    // Replay is otherwise switchable on from the PostHog dashboard with no
+    // code change and no deploy. It would capture DOM interaction and typed
+    // input, far beyond what the privacy policy describes, so the guarantee
+    // lives here in the repo rather than in a project setting.
+    disable_session_recording: true,
+
     debug: (process.env.NODE_ENV as string) === "development",
   });
 
@@ -103,7 +110,12 @@ export function trackGuess(props: {
 }) {
   capture("guess", {
     artist_name: props.artistName,
-    guess_text: props.guessText,
+    // The raw text is deliberately not sent. This event only fires with a
+    // guessText when the guess matched no song, so the only values it could
+    // carry are arbitrary keyboard input, never a track title. That is
+    // unbounded user-typed content going to a third-party processor for no
+    // analytical gain: the length distribution answers the same questions.
+    guess_length: props.guessText.length,
     correct: props.correct,
     is_overflow: props.isOverflow,
     position: props.position,

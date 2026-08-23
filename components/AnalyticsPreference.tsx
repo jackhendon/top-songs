@@ -21,9 +21,11 @@ export default function AnalyticsPreference() {
   return (
     <div className="card p-4 mt-3 flex flex-col sm:flex-row sm:items-center gap-3">
       <p className="flex-1 text-sm text-text-secondary font-sans">
-        {ready && optedOut
-          ? "You are opted out. No analytics events are being sent from this browser."
-          : "Anonymous analytics are on. Nothing that identifies you is collected, and nothing is stored beyond this browser tab."}
+        {!ready
+          ? "Checking your analytics preference..."
+          : optedOut
+            ? "You are opted out. No analytics events are being sent from this browser."
+            : "Anonymous analytics are on. No account, no cookies, and nothing stored beyond this browser tab. PostHog receives your IP address as part of each event."}
       </p>
       <button
         onClick={toggle}

@@ -109,6 +109,27 @@ export async function searchSpotifyArtist(
   };
 }
 
+/** Fetches an artist directly by id, skipping the ambiguity of search. */
+export async function getSpotifyArtistById(
+  spotifyId: string,
+  accessToken: string,
+): Promise<{ id: string; name: string; imageUrl?: string } | null> {
+  const response = await fetch(
+    `https://api.spotify.com/v1/artists/${encodeURIComponent(spotifyId)}`,
+    { headers: { Authorization: `Bearer ${accessToken}` } },
+  );
+
+  if (response.status === 404) return null;
+  if (!response.ok) throw new Error("Spotify artist lookup failed");
+
+  const artist = await response.json();
+  return {
+    id: artist.id,
+    name: artist.name,
+    imageUrl: artist.images?.[0]?.url,
+  };
+}
+
 // --- Stream count parsing ---
 
 function parseStreamCount(text: string): number {
@@ -126,12 +147,21 @@ function parseStreamCount(text: string): number {
 
 // --- Core data fetching (uncached) ---
 
-async function fetchArtistData(artistName: string): Promise<ArtistData> {
+async function fetchArtistData(
+  artistName: string,
+  spotifyId?: string,
+): Promise<ArtistData> {
   // Step 1: Get Spotify access token
   const accessToken = await getSpotifyAccessToken();
 
-  // Step 2: Search for artist on Spotify
-  const spotifyArtist = await searchSpotifyArtist(artistName, accessToken);
+  // Step 2: Resolve the artist. When the caller already knows the id, use it:
+  // the page holds one from the snapshot, and searching again by name can land
+  // on a different artist for short stage names, which would make the game and
+  // the page disagree about whose songs are being guessed. It also honours any
+  // hand-pinned override, which search cannot see.
+  const spotifyArtist = spotifyId
+    ? await getSpotifyArtistById(spotifyId, accessToken)
+    : await searchSpotifyArtist(artistName, accessToken);
 
   if (!spotifyArtist) {
     throw new Error(`Artist not found on Spotify: ${artistName}`);

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { Music2 } from "lucide-react";
+import { spotifyImage } from "@/lib/format";
 
 interface ArtistOfTheDayProps {
   slug: string;
@@ -20,8 +21,10 @@ export default function ArtistOfTheDay({ slug, name, imageUrl, bio }: ArtistOfTh
         <div className="flex items-center gap-4">
           {imageUrl ? (
             <img
-              src={imageUrl}
+              src={spotifyImage(imageUrl)}
               alt={name}
+              width={64}
+              height={64}
               className="w-16 h-16 rounded-full object-cover shrink-0"
               style={{ border: "2px solid var(--raw-card-border)" }}
             />

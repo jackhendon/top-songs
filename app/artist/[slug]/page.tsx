@@ -2,7 +2,12 @@ import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import Link from "next/link";
 import { slugToArtistName } from "@/lib/slugs";
-import { INDEXABLE_SLUGS, getArtistSnapshot, hasStats } from "@/lib/artistSnapshot";
+import {
+  INDEXABLE_SLUGS,
+  getArtistSnapshot,
+  hasStats,
+  isKnownArtistSlug,
+} from "@/lib/artistSnapshot";
 import { getRelatedArtists } from "@/lib/relatedArtists";
 import { getArtistMetadata } from "@/lib/getArtistMetadata";
 import {
@@ -42,6 +47,8 @@ export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
   const { slug } = await params;
+  if (!isKnownArtistSlug(slug)) return { title: "Artist Not Found" };
+
   const record = getArtistSnapshot(slug);
 
   if (hasStats(record)) {
@@ -91,6 +98,12 @@ export async function generateMetadata({
 
 export default async function ArtistPage({ params }: PageProps) {
   const { slug } = await params;
+
+  // Anything outside the snapshot is not an artist we know about. Answering
+  // before touching the network keeps crawler noise off the Spotify quota and
+  // out of the permanent ISR cache.
+  if (!isKnownArtistSlug(slug)) notFound();
+
   const record = getArtistSnapshot(slug);
 
   // --- artists we have no streaming data for: game only, noindexed above ---
@@ -127,8 +140,9 @@ export default async function ArtistPage({ params }: PageProps) {
     );
   }
 
-  const facts = deriveFacts(record);
-  if (!facts) notFound();
+  // hasStats already guarantees a non-empty topTen, which is the only case in
+  // which deriveFacts returns null.
+  const facts = deriveFacts(record)!;
 
   const name = facts.name;
   const about = aboutParagraph(facts);

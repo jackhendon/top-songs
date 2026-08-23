@@ -48,8 +48,11 @@ const curatedTags = fs.existsSync(TAGS_PATH)
   : {};
 
 // Only artists we would actually link to: they need a page worth visiting.
+// Must match hasStats() in lib/artistSnapshot.ts. Linking to a page we have
+// noindexed sends crawl budget at something we told Google to ignore, and an
+// unverified artist may not even be the artist the label claims.
 const artists = Object.values(snapshot)
-  .filter((a) => !a.error && a.topTen?.length && a.slug)
+  .filter((a) => !a.error && a.exactMatch !== false && a.topTen?.length && a.slug)
   .map((a) => {
     const curated = curatedTags[a.slug];
     return {
@@ -107,16 +110,35 @@ for (const a of artists) {
   related[a.slug] = ranked.slice(0, LINKS_PER_ARTIST).map((r) => r.slug);
 }
 
-// Make links reciprocal where there is room. A page that is linked to but
-// links nowhere back is a crawl dead end.
-let reciprocated = 0;
-for (const [slug, targets] of Object.entries(related)) {
-  for (const target of targets) {
-    const back = related[target];
-    if (back && !back.includes(slug) && back.length < LINKS_PER_ARTIST + 4) {
-      back.push(slug);
-      reciprocated++;
-    }
+// Give every artist at least one inbound link.
+//
+// The previous version appended back-links past index 12, but the page renders
+// only the first 12, so all 7,939 of them were discarded and the stated goal
+// was never met. Lists are now capped at exactly LINKS_PER_ARTIST, and an
+// orphan is placed by displacing its best match's weakest link, so what is
+// stored is what is rendered.
+const inboundCount = new Map(artists.map((a) => [a.slug, 0]));
+for (const targets of Object.values(related)) {
+  for (const t of targets) inboundCount.set(t, (inboundCount.get(t) ?? 0) + 1);
+}
+
+let placed = 0;
+for (const a of artists) {
+  if ((inboundCount.get(a.slug) ?? 0) > 0) continue;
+
+  // Walk this artist's own ranked matches and displace the weakest link of the
+  // first one that can spare it without becoming an orphan itself.
+  for (const partner of related[a.slug]) {
+    const list = related[partner];
+    if (!list?.length) continue;
+    const dropped = list[list.length - 1];
+    if ((inboundCount.get(dropped) ?? 0) <= 1) continue;
+
+    list[list.length - 1] = a.slug;
+    inboundCount.set(dropped, inboundCount.get(dropped) - 1);
+    inboundCount.set(a.slug, (inboundCount.get(a.slug) ?? 0) + 1);
+    placed++;
+    break;
   }
 }
 
@@ -126,12 +148,21 @@ fs.writeFileSync(OUT_PATH, JSON.stringify(related, null, 0) + "\n");
 // the directory, which is the situation we are trying to get out of.
 const inbound = new Set();
 for (const targets of Object.values(related)) {
-  for (const t of targets) inbound.add(t);
+  for (const t of targets.slice(0, LINKS_PER_ARTIST)) inbound.add(t);
+}
+
+const overLength = Object.values(related).filter(
+  (l) => l.length > LINKS_PER_ARTIST,
+).length;
+if (overLength) {
+  throw new Error(
+    `${overLength} lists exceed ${LINKS_PER_ARTIST} entries; the page renders only the first ${LINKS_PER_ARTIST}, so the rest would be silently dropped.`,
+  );
 }
 
 console.log(`  artists with no genre tags: ${noGenreCount} (scored on popularity and depth)`);
 console.log(`  rescued by curated tags:    ${rescued}`);
-console.log(`  reciprocal links added:     ${reciprocated}`);
+console.log(`  orphans given an inbound link: ${placed}`);
 console.log(`  artists with inbound links: ${inbound.size} / ${artists.length}`);
 console.log(`  orphans (directory only):   ${artists.length - inbound.size}`);
 console.log(`  file size:                  ${(fs.statSync(OUT_PATH).size / 1e6).toFixed(2)} MB`);

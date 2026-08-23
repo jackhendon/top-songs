@@ -229,6 +229,15 @@ export function slugToArtistName(slug: string): string {
   );
 }
 
+/**
+ * Do not add normalize("NFD") here to "fix" the dropped accents.
+ *
+ * The slugs in data/artists.json were generated with exactly this
+ * accent-dropping behaviour, so this function reproducing it is what makes
+ * name-to-URL routing work. Adding NFD would change the output for 219 artists
+ * and break every one of their links. expectedArtistSlug in slugValidation.ts
+ * documents what the slugs should have been, for the eventual migration.
+ */
 export function artistNameToSlug(name: string): string {
   return (
     nameToSlug[name] ??

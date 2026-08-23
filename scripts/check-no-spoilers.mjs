@@ -68,6 +68,7 @@ console.log(`Checking ${sample.length} artist pages at ${baseUrl}\n`);
 
 let leaks = 0;
 let checked = 0;
+let unreachable = 0;
 
 for (const record of sample) {
   const url = `${baseUrl}/artist/${record.slug}`;
@@ -76,11 +77,13 @@ for (const record of sample) {
     const res = await fetch(url);
     if (!res.ok) {
       console.warn(`  ! ${url} -> HTTP ${res.status}`);
+      unreachable++;
       continue;
     }
     html = await res.text();
   } catch (err) {
     console.warn(`  ! ${url} -> ${err.message}`);
+    unreachable++;
     continue;
   }
 
@@ -120,9 +123,25 @@ for (const record of sample) {
 }
 
 console.log(
-  `\n${checked} pages checked, ${leaks} leaking answers on load`,
+  `\n${checked} pages checked, ${leaks} leaking answers on load, ${unreachable} unreachable`,
 );
 
+// A check that inspected nothing must not report success. Pointing this at the
+// wrong port, or at a build where every page 500s, previously printed PASS and
+// exited 0, which is the expensive failure mode for the guard protecting the
+// game's answer key.
+if (checked === 0) {
+  console.error(
+    "\nFAIL: no pages were checked. Is the server running at the given URL?",
+  );
+  process.exit(1);
+}
+if (unreachable > 0) {
+  console.error(
+    `\nFAIL: ${unreachable} page(s) could not be fetched, so their answers are unverified.`,
+  );
+  process.exit(1);
+}
 if (leaks > 0) {
   console.error(
     "\nFAIL: track titles are readable without opening a <details>.",

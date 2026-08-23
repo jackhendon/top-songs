@@ -5,6 +5,14 @@ import type { NextConfig } from "next";
 // are derived rather than needing their own environment variables.
 const posthogHost =
   process.env.NEXT_PUBLIC_POSTHOG_HOST || "https://eu.i.posthog.com";
+
+// /ingest proxies straight to this host, so a typo would quietly turn the site
+// into a proxy for somewhere else. Fail the build instead.
+if (!/^https:\/\/[a-z0-9-]+\.i\.posthog\.com$/.test(posthogHost)) {
+  throw new Error(
+    `NEXT_PUBLIC_POSTHOG_HOST must look like https://<region>.i.posthog.com, got ${JSON.stringify(posthogHost)}`,
+  );
+}
 const posthogAssetHost = posthogHost.replace(
   /^(https:\/\/[a-z0-9-]+)\.i\.posthog\.com$/,
   "$1-assets.i.posthog.com",

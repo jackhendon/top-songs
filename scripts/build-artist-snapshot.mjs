@@ -74,7 +74,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 function foldName(name) {
   return name
     .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
+    .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase()
     .replace(/[^a-z0-9]/g, "");
 }
@@ -306,9 +306,14 @@ async function main() {
   loadEnv();
 
   const artists = JSON.parse(fs.readFileSync(ARTISTS_PATH, "utf8"));
-  const overrides = fs.existsSync(OVERRIDES_PATH)
-    ? JSON.parse(fs.readFileSync(OVERRIDES_PATH, "utf8"))
-    : {};
+  const overrides = Object.fromEntries(
+    Object.entries(
+      fs.existsSync(OVERRIDES_PATH)
+        ? JSON.parse(fs.readFileSync(OVERRIDES_PATH, "utf8"))
+        : {},
+    // Keys beginning with _ are documentation, not artists.
+    ).filter(([key]) => !key.startsWith("_")),
+  );
   if (Object.keys(overrides).length) {
     console.log(`${Object.keys(overrides).length} hand-pinned Spotify ids in use`);
   }

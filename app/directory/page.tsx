@@ -8,6 +8,13 @@ import DirectorySearch from "./DirectorySearch";
 const PAGE_SIZE = 100;
 const TOTAL = DIRECTORY_ARTISTS.length;
 
+// The unfiltered ordering never changes, and /directory is a dynamic route, so
+// sorting 2,995 entries inside the handler repeated the same work on every
+// request.
+const ALPHABETICAL = [...DIRECTORY_ARTISTS].sort((a, b) =>
+  a.name.localeCompare(b.name),
+);
+
 interface PageProps {
   searchParams: Promise<{ q?: string; page?: string }>;
 }
@@ -56,7 +63,7 @@ export default async function DirectoryPage({ searchParams }: PageProps) {
         if (aStarts !== bStarts) return aStarts ? -1 : 1;
         return a.name.localeCompare(b.name);
       })
-    : [...DIRECTORY_ARTISTS].sort((a, b) => a.name.localeCompare(b.name));
+    : ALPHABETICAL;
 
   const total = filtered.length;
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));

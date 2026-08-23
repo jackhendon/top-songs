@@ -29,6 +29,7 @@ export async function GET(request: NextRequest) {
 
   const searchParams = request.nextUrl.searchParams;
   const artistName = searchParams.get("name");
+  const spotifyId = searchParams.get("id");
 
   if (!artistName || artistName.length > 200) {
     return NextResponse.json(
@@ -37,8 +38,14 @@ export async function GET(request: NextRequest) {
     );
   }
 
+  // Spotify ids are 22-character base62. Validate rather than pass a
+  // caller-supplied value straight into an upstream URL path.
+  if (spotifyId && !/^[A-Za-z0-9]{22}$/.test(spotifyId)) {
+    return NextResponse.json({ error: "Invalid artist id" }, { status: 400 });
+  }
+
   try {
-    const data = await getArtistData(artistName);
+    const data = await getArtistData(artistName, spotifyId ?? undefined);
     return NextResponse.json(data);
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);

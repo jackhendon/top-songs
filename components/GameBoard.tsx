@@ -1,10 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { possessive } from "@/lib/artistCopy";
 import { useGameStore, getHintsUsed } from "@/lib/gameStore";
 import { trackGameAbandoned, trackShare } from "@/lib/analytics";
-import { formatTime, pluralize } from "@/lib/format";
+import { formatTime, possessive, pluralize, spotifyImage } from "@/lib/format";
 import {
   Music2,
   Trophy,
@@ -104,6 +103,8 @@ export default function GameBoard({ onPlayAgain }: GameBoardProps) {
   };
 
   const kworbUrl = `https://kworb.net/spotify/artist/${artistId}_songs.html`;
+  // 40px slot, so ask Spotify for its 160px file rather than the 640px default.
+  const artistImageUrl = spotifyImage(artistImage);
 
   return (
     <div className="space-y-3">
@@ -111,8 +112,10 @@ export default function GameBoard({ onPlayAgain }: GameBoardProps) {
       <div className="flex items-center gap-3 px-1">
         {artistImage && (
           <img
-            src={artistImage}
+            src={artistImageUrl}
             alt={artistName}
+            width={40}
+            height={40}
             className="w-10 h-10 rounded-full object-cover shrink-0"
             style={{ border: "2px solid var(--raw-card-border)" }}
           />

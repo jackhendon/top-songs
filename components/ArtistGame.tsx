@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useGameStore } from "@/lib/gameStore";
 import { ArtistData } from "@/lib/types";
 import { trackArtistSearch, trackError } from "@/lib/analytics";
+import { spotifyImage } from "@/lib/format";
 import Header from "@/components/Header";
 import GameBoard from "@/components/GameBoard";
 
@@ -34,14 +35,20 @@ export default function ArtistGame({
 
   const { resetGame } = useGameStore();
 
+  // 40px slot, so ask Spotify for its 160px file rather than the 640px default.
+  const artistImageUrl = spotifyImage(artistImage);
+
   const fetchAndStart = async () => {
     try {
       setLoading(true);
       setError(null);
 
-      const response = await fetch(
-        `/api/artist?name=${encodeURIComponent(artistName)}`,
-      );
+      // artistId comes from the snapshot, so the game resolves the same artist
+      // the page rendered rather than re-running an ambiguous name search.
+      const query = artistId
+        ? `name=${encodeURIComponent(artistName)}&id=${encodeURIComponent(artistId)}`
+        : `name=${encodeURIComponent(artistName)}`;
+      const response = await fetch(`/api/artist?${query}`);
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -114,8 +121,10 @@ export default function ArtistGame({
             <div className="flex items-center gap-3 px-1">
               {artistImage ? (
                 <img
-                  src={artistImage}
+                  src={artistImageUrl}
                   alt={artistName}
+                  width={40}
+                  height={40}
                   className="w-10 h-10 rounded-full object-cover shrink-0"
                   style={{ border: '2px solid var(--raw-card-border)' }}
                 />

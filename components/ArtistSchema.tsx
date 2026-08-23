@@ -16,6 +16,29 @@ interface ArtistSchemaProps {
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://www.topsongs.io";
 
+/**
+ * Serialises JSON-LD for injection into a <script> element.
+ *
+ * JSON.stringify does not escape "</script", "<!--", or the line separators
+ * U+2028/U+2029, so a value containing them terminates the element early and
+ * anything after it is parsed as markup. The values here are artist names and
+ * track titles scraped from Kworb and Spotify, which we do not control: three
+ * real titles already carry a raw "<" ("H <3 T E L", "Minnie <3",
+ * "I <3 My Choppa"), so this pipeline demonstrably preserves angle brackets
+ * end to end. A title containing "</script>" would execute.
+ *
+ * Escaping to \u00XX keeps the JSON semantically identical while making it
+ * impossible to close the element.
+ */
+function toJsonLd(value: unknown): string {
+  return JSON.stringify(value)
+    .replace(/</g, "\\u003c")
+    .replace(/>/g, "\\u003e")
+    .replace(/&/g, "\\u0026")
+    .replace(/\u2028/g, "\\u2028")
+    .replace(/\u2029/g, "\\u2029");
+}
+
 export default function ArtistSchema({
   artistName,
   artistSlug,
@@ -64,15 +87,15 @@ export default function ArtistSchema({
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        dangerouslySetInnerHTML={{ __html: toJsonLd(faqSchema) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(musicGroupSchema) }}
+        dangerouslySetInnerHTML={{ __html: toJsonLd(musicGroupSchema) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(gameSchema) }}
+        dangerouslySetInnerHTML={{ __html: toJsonLd(gameSchema) }}
       />
     </>
   );
