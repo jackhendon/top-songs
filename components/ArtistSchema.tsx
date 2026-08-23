@@ -1,7 +1,17 @@
+import type { FaqEntry } from "@/lib/artistCopy";
+
 interface ArtistSchemaProps {
   artistName: string;
   artistSlug: string;
   artistImage?: string | null;
+  genres?: string[];
+  /**
+   * The same FAQ entries rendered on the page. Google requires FAQPage answers
+   * to be visible to the visitor — the previous version described questions
+   * that appeared nowhere in the markup, which makes the markup ineligible at
+   * best and a manual-action risk at worst.
+   */
+  faq: FaqEntry[];
 }
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://www.topsongs.io";
@@ -10,58 +20,45 @@ export default function ArtistSchema({
   artistName,
   artistSlug,
   artistImage,
+  genres,
+  faq,
 }: ArtistSchemaProps) {
   const pageUrl = `${baseUrl}/artist/${artistSlug}`;
 
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    mainEntity: [
-      {
-        "@type": "Question",
-        name: `How do I play the ${artistName} Top Songs game?`,
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "Type the names of songs you think are in the top 10. Your goal is to reveal the full list in as few guesses as possible. Correct guesses reveal the song's rank and streaming count.",
-        },
+    mainEntity: faq.map((entry) => ({
+      "@type": "Question",
+      name: entry.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: entry.answer,
       },
-      {
-        "@type": "Question",
-        name: `Are the streaming stats for ${artistName} accurate?`,
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "Streaming data is based on available data from Kworb.net, an aggregator site that estimates Spotify streams.",
-        },
-      },
-      {
-        "@type": "Question",
-        name: `Is this ${artistName} quiz free?`,
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "Yes, TopSongs.io is completely free to play in your browser.",
-        },
-      },
-    ],
+    })),
   };
 
-  const appSchema: Record<string, unknown> = {
+  const musicGroupSchema: Record<string, unknown> = {
     "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    name: `${artistName} Top Songs Quiz`,
-    applicationCategory: "Game",
-    operatingSystem: "Web Browser",
-    description: `Test your knowledge of ${artistName}'s discography. Guess the top 10 hits based on Spotify popularity.`,
+    "@type": "MusicGroup",
+    name: artistName,
     url: pageUrl,
-    offers: {
-      "@type": "Offer",
-      price: "0",
-      priceCurrency: "USD",
-    },
   };
+  if (artistImage) musicGroupSchema.image = artistImage;
+  if (genres?.length) musicGroupSchema.genre = genres;
 
-  if (artistImage) {
-    appSchema.image = artistImage;
-  }
+  const gameSchema: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "Game",
+    name: `${artistName} Top Songs Quiz`,
+    url: pageUrl,
+    genre: "Music trivia",
+    gamePlatform: "Web browser",
+    numberOfPlayers: { "@type": "QuantitativeValue", value: 1 },
+    description: `Guess ${artistName}'s ten most-streamed songs on Spotify, ranked by total play count.`,
+    isAccessibleForFree: true,
+  };
+  if (artistImage) gameSchema.image = artistImage;
 
   return (
     <>
@@ -71,7 +68,11 @@ export default function ArtistSchema({
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(appSchema) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(musicGroupSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(gameSchema) }}
       />
     </>
   );

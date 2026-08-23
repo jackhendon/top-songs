@@ -43,6 +43,26 @@ export const UNROUTABLE_ARTISTS: ArtistAutocompleteItem[] =
   AUTOCOMPLETE_ARTISTS.filter((a) => !isUsableArtistSlug(a.slug));
 
 /**
+ * Fails the build if any artist would produce a URL that cannot resolve.
+ *
+ * This is cheap to enforce now and expensive to notice otherwise: the "¥$"
+ * entry folded to an empty slug, which put https://www.topsongs.io/artist/ in
+ * the sitemap and a link to nowhere in the directory, and nothing complained.
+ */
+export function assertAllSlugsRoutable(): void {
+  if (UNROUTABLE_ARTISTS.length === 0) return;
+
+  const names = UNROUTABLE_ARTISTS.map(
+    (a) => `${JSON.stringify(a.name)} -> ${JSON.stringify(a.slug)}`,
+  ).join(", ");
+
+  throw new Error(
+    `${UNROUTABLE_ARTISTS.length} artist(s) in data/artists.json have no routable slug: ${names}. ` +
+      `Assign a slug by hand — folding the name produced nothing usable.`,
+  );
+}
+
+/**
  * Artists whose slug is routable but wrong — accents dropped, ampersands
  * collapsed to a double hyphen, trailing hyphens. These are the rename
  * candidates, each of which needs a 301 from the old URL.

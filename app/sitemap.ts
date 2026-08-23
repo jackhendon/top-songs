@@ -1,5 +1,6 @@
 import { MetadataRoute } from "next";
-import { DIRECTORY_ARTISTS } from "@/lib/slugValidation";
+import { DIRECTORY_ARTISTS, assertAllSlugsRoutable } from "@/lib/slugValidation";
+import { getArtistSnapshot, hasStats } from "@/lib/artistSnapshot";
 
 const baseUrl =
   process.env.NEXT_PUBLIC_BASE_URL || "https://www.topsongs.io";
@@ -7,9 +8,18 @@ const baseUrl =
 const DIRECTORY_PAGE_SIZE = 100;
 
 export default function sitemap(): MetadataRoute.Sitemap {
+  // Runs during the build that generates the sitemap, so a bad slug fails the
+  // deploy rather than shipping a dead URL to Google.
+  assertAllSlugsRoutable();
+
   const lastModified = new Date();
 
-  const artistEntries = DIRECTORY_ARTISTS.map(({ slug }) => ({
+  // Only artists we hold streaming data for. The rest are noindexed, so
+  // listing them would be asking Google to crawl pages we have told it to
+  // ignore — and those are the pages already counted as soft 404s.
+  const artistEntries = DIRECTORY_ARTISTS.filter(({ slug }) =>
+    hasStats(getArtistSnapshot(slug)),
+  ).map(({ slug }) => ({
     url: `${baseUrl}/artist/${slug}`,
     lastModified,
     priority: 0.8 as const,

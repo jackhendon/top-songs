@@ -1,6 +1,6 @@
-// Full artist catalog ordered by all-time Spotify stream rank (kworb.net)
-// Pages are generated on-demand via ISR for any slug; only PREBUILT_SLUGS
-// are pre-rendered at build time.
+// Curated artist catalog ordered by all-time Spotify stream rank (kworb.net).
+// Holds correctly-spelt names and slugs for the artists we care most about;
+// the full ~3,000-artist directory lives in data/artists.json.
 import { AUTOCOMPLETE_ARTISTS } from "./artistAutocompleteData";
 
 export const ARTIST_CATALOG: Record<string, string> = {
@@ -204,85 +204,6 @@ export const ARTIST_CATALOG: Record<string, string> = {
   "christian-nodal": "Christian Nodal",
 };
 
-// Slugs to pre-render at build time — top 75 by all-time streaming rank.
-// All other catalog artists are still accessible via ISR on first visit.
-export const PREBUILT_SLUGS: string[] = [
-  "drake",
-  "taylor-swift",
-  "bad-bunny",
-  "the-weeknd",
-  "justin-bieber",
-  "ariana-grande",
-  "travis-scott",
-  "ed-sheeran",
-  "eminem",
-  "kanye-west",
-  "rihanna",
-  "billie-eilish",
-  "kendrick-lamar",
-  "post-malone",
-  "j-balvin",
-  "future",
-  "bruno-mars",
-  "bts",
-  "ozuna",
-  "juice-wrld",
-  "coldplay",
-  "chris-brown",
-  "nicki-minaj",
-  "dua-lipa",
-  "david-guetta",
-  "lana-del-rey",
-  "daddy-yankee",
-  "xxxtentacion",
-  "imagine-dragons",
-  "lil-wayne",
-  "rauw-alejandro",
-  "anuel-aa",
-  "21-savage",
-  "sza",
-  "karol-g",
-  "lady-gaga",
-  "khalid",
-  "lil-baby",
-  "maroon-5",
-  "arijit-singh",
-  "beyonce",
-  "maluma",
-  "feid",
-  "calvin-harris",
-  "myke-towers",
-  "lil-uzi-vert",
-  "j-cole",
-  "linkin-park",
-  "sia",
-  "young-thug",
-  "doja-cat",
-  "peso-pluma",
-  "shakira",
-  "morgan-wallen",
-  "shawn-mendes",
-  "farruko",
-  "sam-smith",
-  "queen",
-  "one-direction",
-  "metro-boomin",
-  "adele",
-  "harry-styles",
-  "gunna",
-  "arctic-monkeys",
-  "katy-perry",
-  "pritam",
-  "tyler-the-creator",
-  "selena-gomez",
-  "ty-dolla-sign",
-  "olivia-rodrigo",
-  "nicky-jam",
-  "the-beatles",
-  "halsey",
-  "wiz-khalifa",
-  "playboi-carti",
-];
 
 // Kept for backwards compatibility — prefer ARTIST_CATALOG in new code
 export const POPULAR_ARTISTS = ARTIST_CATALOG;
