@@ -40,6 +40,9 @@ export async function generateMetadata({
   return {
     title,
     description,
+    alternates: {
+      canonical: `/artist/${slug}`,
+    },
     openGraph: {
       title,
       description,
@@ -121,9 +124,9 @@ export default async function ArtistPage({ params }: PageProps) {
       <section className="max-w-2xl mx-auto px-4 pb-10 space-y-8">
         {/* About section */}
         <div className="space-y-3">
-          <h2 className="text-lg font-display font-semibold text-text-primary">
-            Play the {metadata.artistName} Top Songs Quiz
-          </h2>
+          <h1 className="text-xl font-display font-extrabold text-text-primary tracking-[-0.02em]">
+            {metadata.artistName} Top Songs Quiz
+          </h1>
           <p className="text-sm text-text-secondary leading-relaxed">
             Welcome to the ultimate <strong>music trivia game</strong> for{" "}
             {metadata.artistName} fans. Your challenge is to guess their{" "}

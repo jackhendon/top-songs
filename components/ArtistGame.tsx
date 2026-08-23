@@ -88,7 +88,7 @@ export default function ArtistGame({
   if (error) {
     return (
       <div className="min-h-screen flex flex-col bg-bg-primary">
-        <Header logoHref="/" showNewArtist onReset={handleReset} />
+        <Header logoHref="/" showNewArtist onReset={handleReset} asHeading={false} />
         <main className="flex-1 container mx-auto px-4 py-8 max-w-4xl">
           <div className="card p-6 sm:p-8 text-center space-y-4">
             <p className="text-error-dark font-medium font-sans">{error}</p>
@@ -97,6 +97,7 @@ export default function ArtistGame({
             </Link>
           </div>
         </main>
+        {children}
         <Footer />
       </div>
     );
@@ -106,7 +107,7 @@ export default function ArtistGame({
   if (loading) {
     return (
       <div className="min-h-screen flex flex-col bg-bg-primary">
-        <Header logoHref="/" />
+        <Header logoHref="/" asHeading={false} />
         <main className="flex-1 container mx-auto px-4 py-8 max-w-4xl">
           <div className="space-y-3">
             {/* Artist header skeleton with real data from server */}
@@ -128,9 +129,9 @@ export default function ArtistGame({
                     Now Playing
                   </span>
                 </div>
-                <h2 className="font-display text-lg font-bold text-text-primary truncate">
+                <p className="font-display text-lg font-bold text-text-primary truncate">
                   {artistName}
-                </h2>
+                </p>
               </div>
               <div className="text-right shrink-0">
                 <div className="h-5 w-12 bg-bg-tertiary rounded animate-pulse" />
@@ -155,6 +156,7 @@ export default function ArtistGame({
             </div>
           </div>
         </main>
+        {children}
         <Footer />
       </div>
     );
@@ -163,7 +165,7 @@ export default function ArtistGame({
   // Game loaded
   return (
     <div className="min-h-screen flex flex-col bg-bg-primary">
-      <Header logoHref="/" showNewArtist onReset={handleReset} />
+      <Header logoHref="/" showNewArtist onReset={handleReset} asHeading={false} />
 
       <main className="flex-1 container mx-auto px-4 py-8 max-w-4xl">
         <GameBoard onPlayAgain={handlePlayAgain} />

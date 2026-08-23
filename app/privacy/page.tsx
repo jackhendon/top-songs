@@ -4,12 +4,14 @@ import Footer from "@/components/Footer";
 
 export const metadata = {
   title: "Privacy Policy - Top Songs",
+  alternates: { canonical: "/privacy" },
+  robots: { index: false, follow: true },
 };
 
 export default function PrivacyPage() {
   return (
     <div className="min-h-screen flex flex-col bg-bg-primary">
-      <Header logoHref="/" showNewArtist />
+      <Header logoHref="/" showNewArtist asHeading={false} />
 
       <main className="flex-1 container mx-auto px-4 py-8 max-w-2xl">
         <h1 className="font-display text-2xl font-extrabold text-text-primary mb-6">

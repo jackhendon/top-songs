@@ -1,6 +1,8 @@
 // Full artist catalog ordered by all-time Spotify stream rank (kworb.net)
 // Pages are generated on-demand via ISR for any slug; only PREBUILT_SLUGS
 // are pre-rendered at build time.
+import { AUTOCOMPLETE_ARTISTS } from "./artistAutocompleteData";
+
 export const ARTIST_CATALOG: Record<string, string> = {
   drake: "Drake",
   "taylor-swift": "Taylor Swift",
@@ -289,8 +291,21 @@ const nameToSlug = Object.fromEntries(
   Object.entries(ARTIST_CATALOG).map(([slug, name]) => [name, slug]),
 );
 
+// The full directory keyed by URL slug. ARTIST_CATALOG covers ~200 artists;
+// this covers the remaining ~2,800 so we never have to guess a name back out
+// of its slug. Guessing loses accents and ampersands, which sends the wrong
+// query to Spotify — "ba" resolved to Bad Bunny instead of bôa, "jo" to Elton
+// John instead of Jão.
+const directoryNameBySlug: Record<string, string> = Object.fromEntries(
+  AUTOCOMPLETE_ARTISTS.filter((a) => a.slug).map((a) => [a.slug, a.name]),
+);
+
 export function slugToArtistName(slug: string): string {
-  return ARTIST_CATALOG[slug] ?? slug.replace(/-/g, " ");
+  return (
+    ARTIST_CATALOG[slug] ??
+    directoryNameBySlug[slug] ??
+    slug.replace(/-/g, " ")
+  );
 }
 
 export function artistNameToSlug(name: string): string {

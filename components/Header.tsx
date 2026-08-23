@@ -6,22 +6,31 @@ interface HeaderProps {
   onReset?: () => void;
   showNewArtist?: boolean;
   logoHref?: string;
+  /**
+   * Whether the wordmark is this page's <h1>. Pages that have their own
+   * heading pass false so we don't ship two h1s. Defaults to true for the
+   * home page, where the wordmark is the heading.
+   */
+  asHeading?: boolean;
 }
 
 export default function Header({
   onReset,
   showNewArtist,
   logoHref,
+  asHeading = true,
 }: HeaderProps) {
+  const Wordmark = asHeading ? "h1" : "span";
+
   const logoContent = (
     <>
       <div className="w-10 h-10 bg-mustard rounded-card flex items-center justify-center border-2 border-mustard-hover">
         <Music className="w-6 h-6 text-white" />
       </div>
       <div className="text-left">
-        <h1 className="font-display text-2xl md:text-3xl font-extrabold text-text-primary tracking-[-0.04em]">
+        <Wordmark className="block font-display text-2xl md:text-3xl font-extrabold text-text-primary tracking-[-0.04em]">
           Top Songs<span className="sr-only">: The Spotify Music Trivia Game</span>
-        </h1>
+        </Wordmark>
         <p className="text-xs text-text-muted hidden sm:block font-sans font-medium">
           The ultimate music trivia game. Guess the top 10 Spotify streams for your favorite artists.
         </p>

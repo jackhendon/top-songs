@@ -123,9 +123,9 @@ export default function GameBoard({ onPlayAgain }: GameBoardProps) {
               Now Playing
             </span>
           </div>
-          <h2 className="font-display text-lg font-bold text-text-primary truncate">
+          <p className="font-display text-lg font-bold text-text-primary truncate">
             {artistName}
-          </h2>
+          </p>
         </div>
       </div>
 

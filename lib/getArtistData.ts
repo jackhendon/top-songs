@@ -47,6 +47,18 @@ export async function getSpotifyAccessToken(): Promise<string> {
 
 // --- Spotify artist search ---
 
+// Spotify's search is fuzzy and ranks by popularity, so a short name loses to
+// a bigger artist with a similar one — "Jão" returned João Gilberto, "bôa"
+// returned Boards of Canada. Comparing on a folded form lets us prefer a real
+// name match over a more popular near-miss.
+function foldName(name: string): string {
+  return name
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, "");
+}
+
 export async function searchSpotifyArtist(
   artistName: string,
   accessToken: string,
@@ -58,7 +70,7 @@ export async function searchSpotifyArtist(
   followers?: number;
 } | null> {
   const response = await fetch(
-    `https://api.spotify.com/v1/search?q=${encodeURIComponent(artistName)}&type=artist&limit=1`,
+    `https://api.spotify.com/v1/search?q=${encodeURIComponent(artistName)}&type=artist&limit=10`,
     {
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -76,7 +88,17 @@ export async function searchSpotifyArtist(
     return null;
   }
 
-  const artist = data.artists.items[0];
+  const target = foldName(artistName);
+  const exactMatches = data.artists.items
+    .filter((a: { name: string }) => foldName(a.name) === target)
+    .sort(
+      (
+        a: { followers?: { total?: number } },
+        b: { followers?: { total?: number } },
+      ) => (b.followers?.total ?? 0) - (a.followers?.total ?? 0),
+    );
+
+  const artist = exactMatches[0] ?? data.artists.items[0];
 
   return {
     id: artist.id,

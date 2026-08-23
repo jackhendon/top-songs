@@ -7,12 +7,13 @@ export const metadata = {
   title: "FAQ & About - Top Songs",
   description:
     "Learn how Top Songs works, where streaming data comes from, and meet the developer behind the game.",
+  alternates: { canonical: "/faq" },
 };
 
 export default function FAQPage() {
   return (
     <div className="min-h-screen flex flex-col bg-bg-primary">
-      <Header logoHref="/" showNewArtist />
+      <Header logoHref="/" showNewArtist asHeading={false} />
 
       <main className="flex-1 container mx-auto px-4 py-8 max-w-2xl">
         <h1 className="font-display text-2xl font-extrabold text-text-primary mb-6">

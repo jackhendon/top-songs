@@ -2,20 +2,42 @@ import Link from "next/link";
 import { Metadata } from "next";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { AUTOCOMPLETE_ARTISTS } from "@/lib/artistAutocomplete";
+import { DIRECTORY_ARTISTS } from "@/lib/slugValidation";
 import DirectorySearch from "./DirectorySearch";
 
 const PAGE_SIZE = 100;
-const TOTAL = AUTOCOMPLETE_ARTISTS.length;
-
-export const metadata: Metadata = {
-  title: "Artist Directory – Browse 2,995 Artists | Top Songs",
-  description:
-    "Browse the complete directory of artists on Top Songs. Play the free Spotify music trivia quiz for Taylor Swift, Drake, Beyoncé, and thousands more.",
-};
+const TOTAL = DIRECTORY_ARTISTS.length;
 
 interface PageProps {
   searchParams: Promise<{ q?: string; page?: string }>;
+}
+
+export async function generateMetadata({
+  searchParams,
+}: PageProps): Promise<Metadata> {
+  const { q = "", page: pageStr = "1" } = await searchParams;
+  const page = Math.max(1, parseInt(pageStr, 10) || 1);
+
+  const title =
+    page > 1
+      ? `Artist Directory – Page ${page} | Top Songs`
+      : `Artist Directory – Browse ${TOTAL.toLocaleString()} Artists | Top Songs`;
+
+  // Search results are reachable only through the client-side search box, so
+  // they should never be the canonical version of this page.
+  const canonical = q
+    ? "/directory"
+    : page > 1
+      ? `/directory?page=${page}`
+      : "/directory";
+
+  return {
+    title,
+    description:
+      "Browse the complete directory of artists on Top Songs. Play the free Spotify music trivia quiz for Taylor Swift, Drake, Beyoncé, and thousands more.",
+    alternates: { canonical },
+    robots: q ? { index: false, follow: true } : undefined,
+  };
 }
 
 export default async function DirectoryPage({ searchParams }: PageProps) {
@@ -25,7 +47,7 @@ export default async function DirectoryPage({ searchParams }: PageProps) {
   const currentPage = Math.max(1, parseInt(pageStr, 10) || 1);
 
   const filtered = query
-    ? AUTOCOMPLETE_ARTISTS.filter((a) =>
+    ? DIRECTORY_ARTISTS.filter((a) =>
         a.name.toLowerCase().includes(query),
       ).sort((a, b) => {
         // Prefix matches float to the top, then alphabetical within each tier
@@ -34,7 +56,7 @@ export default async function DirectoryPage({ searchParams }: PageProps) {
         if (aStarts !== bStarts) return aStarts ? -1 : 1;
         return a.name.localeCompare(b.name);
       })
-    : [...AUTOCOMPLETE_ARTISTS].sort((a, b) => a.name.localeCompare(b.name));
+    : [...DIRECTORY_ARTISTS].sort((a, b) => a.name.localeCompare(b.name));
 
   const total = filtered.length;
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
@@ -51,7 +73,7 @@ export default async function DirectoryPage({ searchParams }: PageProps) {
 
   return (
     <div className="min-h-screen flex flex-col bg-bg-primary">
-      <Header logoHref="/" showNewArtist />
+      <Header logoHref="/" showNewArtist asHeading={false} />
 
       <main className="flex-1 container mx-auto px-4 py-8 max-w-4xl">
         {/* Page header */}

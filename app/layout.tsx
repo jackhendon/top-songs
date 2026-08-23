@@ -23,6 +23,7 @@ export const metadata: Metadata = {
   title: "Top Songs - Guess the Hits",
   description:
     "Can you guess an artist's top 10 most-streamed songs on Spotify?",
+  alternates: { canonical: "/" },
 };
 
 export default function RootLayout({
