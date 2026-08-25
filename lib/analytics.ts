@@ -1,8 +1,71 @@
 import posthog from "posthog-js";
 
 const OPT_OUT_KEY = "analytics-opt-out";
+const VISITOR_KEY = "top-songs-visitor";
+const VISIT_COUNTED_KEY = "top-songs-visit-counted";
 
 let initialized = false;
+
+interface VisitorRecord {
+  /** ISO date, day granularity. Not a timestamp: no need to know the minute. */
+  first: string;
+  last: string;
+  visits: number;
+}
+
+/**
+ * Counts returning visitors without identifying anyone.
+ *
+ * Analytics runs cookieless with sessionStorage persistence, so PostHog treats
+ * every visit as a brand new person and cannot answer "does anyone come back".
+ * That is the single most important thing we do not know about this site.
+ *
+ * Rather than reinstate a persistent identifier (which would drag the consent
+ * question back with it), keep a local tally and send it as event properties.
+ * The result is aggregate: we learn that 40% of sessions are from someone who
+ * has been before, without being able to follow any individual across visits.
+ * There is deliberately no generated id here, only two dates and a counter.
+ *
+ * This does mean no true cohort retention, since day-1/day-7 curves by
+ * acquisition date need a stable identity. Aggregate first; escalate only if
+ * the numbers say returners are worth chasing.
+ */
+function recordVisit(): VisitorRecord | null {
+  if (typeof window === "undefined") return null;
+
+  const today = new Date().toISOString().slice(0, 10);
+
+  try {
+    const raw = localStorage.getItem(VISITOR_KEY);
+    const existing: VisitorRecord | null = raw ? JSON.parse(raw) : null;
+
+    // Count one visit per tab, not per page load, or client-side navigation
+    // would inflate it.
+    const alreadyCounted =
+      sessionStorage.getItem(VISIT_COUNTED_KEY) === "true";
+
+    const record: VisitorRecord = existing
+      ? {
+          first: existing.first ?? today,
+          last: today,
+          visits: existing.visits + (alreadyCounted ? 0 : 1),
+        }
+      : { first: today, last: today, visits: 1 };
+
+    localStorage.setItem(VISITOR_KEY, JSON.stringify(record));
+    sessionStorage.setItem(VISIT_COUNTED_KEY, "true");
+    return record;
+  } catch {
+    // Private mode, blocked storage, or corrupt JSON. Returning-visitor data
+    // is a nice-to-have; never let it break analytics or the page.
+    return null;
+  }
+}
+
+function daysBetween(from: string, to: string): number {
+  const ms = Date.parse(to) - Date.parse(from);
+  return Number.isFinite(ms) ? Math.max(0, Math.round(ms / 86_400_000)) : 0;
+}
 
 /**
  * Analytics runs by default and stores nothing that outlives the browser tab.
@@ -82,6 +145,16 @@ export function initPostHog() {
   });
 
   initialized = true;
+
+  // Attach to every event in this session so any insight can split on it.
+  const visitor = recordVisit();
+  if (visitor) {
+    posthog.register({
+      is_returning: visitor.visits > 1,
+      visit_count: visitor.visits,
+      days_since_first_visit: daysBetween(visitor.first, visitor.last),
+    });
+  }
 }
 
 function capture(event: string, properties?: Record<string, unknown>) {

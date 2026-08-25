@@ -87,6 +87,13 @@ export default function PrivacyPage() {
                 <span className="text-text-secondary">Analytics opt-out:</span>{" "}
                 set only if you choose to opt out above
               </li>
+              <li>
+                <span className="text-text-secondary">Visit count:</span> how
+                many times you have visited and the dates of your first and most
+                recent visit, so we can tell how many people come back. It is a
+                count and two dates, not an identifier, and it is never used to
+                recognise you individually
+              </li>
             </ul>
             <p className="mt-2">
               This data never leaves your device. You can clear it at any time
