@@ -164,6 +164,7 @@ export default async function ArtistPage({ params }: PageProps) {
         artistId={record.spotifyId ?? ""}
         artistImage={record.imageUrl ?? undefined}
         slug={slug}
+        relatedArtists={related}
       >
         <section className="max-w-2xl mx-auto px-4 pb-10 space-y-8">
           <div className="space-y-3">

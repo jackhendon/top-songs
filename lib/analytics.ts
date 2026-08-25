@@ -187,6 +187,25 @@ export function trackHintReveal(props: {
   });
 }
 
+/**
+ * A click from the end-of-game screen through to another artist.
+ *
+ * This is the whole point of that block: 83% of players who finish one round
+ * leave, but anyone who reaches a second artist almost always keeps going.
+ * Without this event there is no way to tell whether the block moved that.
+ */
+export function trackNextArtist(props: {
+  fromArtist: string;
+  toSlug: string;
+  outcome: "won" | "gave_up";
+}) {
+  capture("next_artist_click", {
+    from_artist: props.fromArtist,
+    to_slug: props.toSlug,
+    outcome: props.outcome,
+  });
+}
+
 export function trackDonationClick() {
   capture("donation_click");
 }

@@ -18,6 +18,12 @@ interface ArtistGameProps {
   artistId: string;
   artistImage?: string;
   slug: string;
+  /**
+   * Passed down from the server rather than looked up here: the related-artist
+   * map is keyed off the 3MB snapshot, which must never reach the browser.
+   * Twelve {slug, name} pairs is all that crosses the boundary.
+   */
+  relatedArtists?: { slug: string; name: string }[];
   children?: React.ReactNode;
 }
 
@@ -26,6 +32,7 @@ export default function ArtistGame({
   artistId,
   artistImage,
   slug,
+  relatedArtists,
   children,
 }: ArtistGameProps) {
   const router = useRouter();
@@ -177,7 +184,10 @@ export default function ArtistGame({
       <Header logoHref="/" showNewArtist onReset={handleReset} asHeading={false} />
 
       <main className="flex-1 container mx-auto px-4 py-8 max-w-4xl">
-        <GameBoard onPlayAgain={handlePlayAgain} />
+        <GameBoard
+          onPlayAgain={handlePlayAgain}
+          relatedArtists={relatedArtists}
+        />
       </main>
 
       {children}

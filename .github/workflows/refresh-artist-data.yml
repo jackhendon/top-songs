@@ -1,0 +1,92 @@
+name: Refresh artist data
+
+# Stream counts only change on deploy now: /artist/[slug] has revalidate = false
+# and renders from the committed snapshot, so without this the figures on 2,984
+# pages stay frozen at whenever the snapshot was last built.
+#
+# Runs weekly rather than nightly on purpose. Kworb has no API and no published
+# rate limit, and a full crawl is ~3,000 requests; weekly is neighbourly, and
+# stream counts do not move enough in a day to be worth more.
+
+on:
+  schedule:
+    # 04:00 UTC on Sundays: low traffic, and a full run takes ~15 minutes.
+    - cron: "0 4 * * 0"
+  # So it can be run by hand after changing the artist list.
+  workflow_dispatch:
+
+# Needed to push the refreshed data back, which is what triggers the deploy.
+permissions:
+  contents: write
+
+concurrency:
+  # Never let two crawls run at once: they would fight over the same file.
+  group: refresh-artist-data
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    # The crawl is deliberately slow (concurrency 3, 350ms apart). Give it room
+    # without letting a hung run burn an hour.
+    timeout-minutes: 45
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Keep a copy of the current snapshot to compare against
+        run: cp data/artist-snapshot.json /tmp/artist-snapshot-before.json
+
+      - name: Crawl Spotify and Kworb
+        env:
+          SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
+          SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
+        # --force so every artist is re-fetched. Without it the script resumes
+        # and skips everything already held, which would refresh nothing.
+        run: node scripts/build-artist-snapshot.mjs --force
+
+      - name: Refuse to ship a failed crawl
+        # The crawl records per-artist failures rather than throwing, so a
+        # Spotify rate-limit or a Kworb outage still "succeeds" and would
+        # otherwise deploy 2,984 pages stripped of their stats and noindexed.
+        run: |
+          node scripts/check-snapshot-health.mjs \
+            /tmp/artist-snapshot-before.json \
+            data/artist-snapshot.json
+
+      - name: Recompute related artists
+        # Similarity is scored from the snapshot's genres and follower counts,
+        # so it has to follow the crawl rather than run independently.
+        run: node scripts/build-related-artists.mjs
+
+      - name: Check the site still builds with the new data
+        env:
+          NEXT_PUBLIC_POSTHOG_KEY: ${{ secrets.NEXT_PUBLIC_POSTHOG_KEY }}
+          NEXT_PUBLIC_POSTHOG_HOST: ${{ secrets.NEXT_PUBLIC_POSTHOG_HOST }}
+        # Catches a bad slug before the deploy rather than after: the sitemap
+        # asserts every artist is routable and fails the build otherwise.
+        run: npm run build
+
+      - name: Commit and push
+        run: |
+          if git diff --quiet -- data/; then
+            echo "No data changed. Nothing to commit."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/
+          git commit -m "Refresh artist data
+
+          Automated weekly crawl of Spotify and Kworb. Stream counts on
+          /artist/[slug] only change on deploy, because the page renders from
+          this committed snapshot rather than fetching per request."
+          git push

@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { useGameStore, getHintsUsed } from "@/lib/gameStore";
-import { trackGameAbandoned, trackShare } from "@/lib/analytics";
+import { trackGameAbandoned, trackNextArtist, trackShare } from "@/lib/analytics";
 import { formatTime, possessive, pluralize, spotifyImage } from "@/lib/format";
 import {
   Music2,
@@ -22,9 +23,14 @@ import GuessInput from "./GuessInput";
 
 interface GameBoardProps {
   onPlayAgain: () => void;
+  /** Suggestions for the end-of-game screen. Server-provided; see ArtistGame. */
+  relatedArtists?: { slug: string; name: string }[];
 }
 
-export default function GameBoard({ onPlayAgain }: GameBoardProps) {
+export default function GameBoard({
+  onPlayAgain,
+  relatedArtists,
+}: GameBoardProps) {
   const {
     artistName,
     artistId,
@@ -296,6 +302,37 @@ export default function GameBoard({ onPlayAgain }: GameBoardProps) {
               Think you&apos;re the biggest {artistName} fan of your friends?
               Share your results and find out!
             </p>
+
+            {/* Onward route. Finishing a round and stopping is where players
+                are lost: only 17% of those who finish one game go on to a
+                second artist, but almost everyone who reaches a second keeps
+                playing. Before this, the only exits were replaying the same
+                artist or going back to the homepage. */}
+            {relatedArtists && relatedArtists.length > 0 && (
+              <div className="w-full pt-4 mt-2 border-t border-card-border space-y-2">
+                <p className="text-sm font-sans font-semibold text-text-primary text-center">
+                  Try another artist
+                </p>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                  {relatedArtists.slice(0, 6).map(({ slug, name }) => (
+                    <Link
+                      key={slug}
+                      href={`/artist/${slug}`}
+                      onClick={() =>
+                        trackNextArtist({
+                          fromArtist: artistName,
+                          toSlug: slug,
+                          outcome: isGameWon && !isGaveUp ? "won" : "gave_up",
+                        })
+                      }
+                      className="artist-card text-sm text-center"
+                    >
+                      {name}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       ) : (
