@@ -213,8 +213,15 @@ async function fetchArtistData(
       const cellText = $cell.text().trim();
 
       const link = $cell.find("a");
-      if (link.length > 0 && !title) {
-        title = link.text().trim();
+      if (link.length > 0) {
+        if (!title) title = link.text().trim();
+      // Skip the cell holding the track title. Kworb puts the title in a link
+      // and the figures in plain cells, so parsing every cell means a numeric
+      // title becomes a candidate stream count. Because the row takes the
+      // largest number it finds, Slipknot's track "742617000027" was being
+      // read as 742 billion streams, and Yann Tiersen's "16 1 12 5 19 20 9 14 5"
+      // as 16,112 billion. The real record is around 4.5 billion.
+        return;
       }
 
       const parsed = parseStreamCount(cellText);

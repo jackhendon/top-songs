@@ -231,7 +231,16 @@ async function fetchSongs(spotifyId) {
     cells.each((__, cell) => {
       const $cell = $(cell);
       const link = $cell.find("a");
-      if (link.length && !title) title = link.text().trim();
+      if (link.length) {
+        if (!title) title = link.text().trim();
+      // Skip the cell holding the track title. Kworb puts the title in a link
+      // and the figures in plain cells, so parsing every cell means a numeric
+      // title becomes a candidate stream count. Because the row takes the
+      // largest number it finds, Slipknot's track "742617000027" was being
+      // read as 742 billion streams, and Yann Tiersen's "16 1 12 5 19 20 9 14 5"
+      // as 16,112 billion. The real record is around 4.5 billion.
+        return;
+      }
       const parsed = parseStreamCount($cell.text().trim());
       if (parsed > 0) streams.push(parsed);
     });
@@ -318,11 +327,16 @@ async function main() {
     console.log(`${Object.keys(overrides).length} hand-pinned Spotify ids in use`);
   }
 
+  // Always load what we already hold. --force controls which artists get
+  // re-fetched, never whether existing records survive: discarding them here
+  // meant `--force --only kygo` rewrote the file with a single artist and threw
+  // away the other 2,994.
   /** @type {Record<string, object>} */
-  let snapshot = {};
-  if (fs.existsSync(SNAPSHOT_PATH) && !FORCE) {
-    snapshot = JSON.parse(fs.readFileSync(SNAPSHOT_PATH, "utf8"));
-    console.log(`Resuming: ${Object.keys(snapshot).length} artists already held`);
+  let snapshot = fs.existsSync(SNAPSHOT_PATH)
+    ? JSON.parse(fs.readFileSync(SNAPSHOT_PATH, "utf8"))
+    : {};
+  if (Object.keys(snapshot).length) {
+    console.log(`Holding ${Object.keys(snapshot).length} artists; ${FORCE ? "re-fetching all" : "resuming"}`);
   }
 
   let queue = artists.filter((a) => a.slug);
