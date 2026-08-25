@@ -14,15 +14,22 @@ import { getArtistSnapshot, INDEXABLE_SLUGS } from "./artistSnapshot";
  * real data before this was written:
  *
  * 1. Pairs must be decidable but not obvious. Across all 29,814 tracks only 55%
- *    of random pairs land in a useful ratio band; restricted to tracks above
- *    300M streams it is 74%, because the tail is full of near-ties between
- *    tracks nobody could rank.
- * 2. Tracks must be recognisable, or "reasoning" degrades into a coin flip.
- *    The same 300M floor does that job: it is the difference between comparing
- *    two songs you have heard of and two you have not.
+ *    of random pairs land in a useful ratio band; the tail is full of near-ties
+ *    between tracks nobody could rank. Filtering lifts that to 80%.
+ * 2. Tracks must be recognisable, or "reasoning" degrades into a coin flip. A
+ *    stream floor alone does NOT achieve this: 300M streams still admits large
+ *    numbers of regionally huge tracks, and a first pass produced pairs like
+ *    "Morad - Sigue" against "Tainy - Adicto", undecidable for most players.
+ *    Requiring a well-followed artist as well is what fixes it.
+ *
+ * Honest limit: no single pool solves this globally. A catalogue this
+ * international means any threshold favours whoever the player already listens
+ * to. These constants are tuned for breadth, not fairness, and they are the
+ * first thing to revisit if the format underperforms.
  */
 
-const MIN_STREAMS = 300_000_000;
+const MIN_STREAMS = 500_000_000;
+const MIN_ARTIST_FOLLOWERS = 20_000_000;
 
 /** Ratio band that makes a pair a real question rather than a gimme or a toss-up. */
 const MIN_RATIO = 1.2;
@@ -46,6 +53,8 @@ export function getPool(): HLTrack[] {
   for (const slug of INDEXABLE_SLUGS) {
     const record = getArtistSnapshot(slug);
     if (!record?.topTen) continue;
+
+    if ((record.followers ?? 0) < MIN_ARTIST_FOLLOWERS) continue;
 
     for (const track of record.topTen) {
       if (track.totalStreams < MIN_STREAMS) continue;

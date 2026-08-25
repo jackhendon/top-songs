@@ -51,10 +51,15 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
-        // Redirect old /:slug artist URLs to /artist/:slug
-        // Excludes known static routes: directory, faq, privacy, profile, api, artist, _next, favicon, robots, sitemap, ingest
+        // Redirect old /:slug artist URLs to /artist/:slug.
+        //
+        // Every real top-level route has to be listed here or it gets swallowed:
+        // this rule runs before rewrites and before the filesystem, so a missing
+        // entry turns a working page into a 308 to /artist/<page>, which then
+        // 404s because the slug is not an artist. Add to this list when adding a
+        // top-level route.
         source:
-          "/:slug((?!directory|faq|privacy|profile|api|artist|ingest|_next|favicon|robots|sitemap).+)",
+          "/:slug((?!directory|faq|privacy|profile|api|artist|daily|higher-lower|ingest|_next|favicon|robots|sitemap).+)",
         destination: "/artist/:slug",
         permanent: true,
       },

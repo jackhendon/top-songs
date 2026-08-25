@@ -231,6 +231,31 @@ export function trackShare(
   capture("share", { artist_name: artistName, platform });
 }
 
+/**
+ * Higher/lower events are kept separate from the artist quiz rather than reusing
+ * game_start and game_won. The two modes measure different things: the quiz is
+ * pass/fail on recall, this is a streak. Merging them would make both harder to
+ * read, and game_start already has the problem of firing on page load.
+ */
+export function trackHigherLowerStart(props: {
+  mode: "daily" | "unlimited";
+  puzzleNumber?: number;
+}) {
+  capture("hl_start", { mode: props.mode, puzzle_number: props.puzzleNumber });
+}
+
+export function trackHigherLowerEnd(props: {
+  mode: "daily" | "unlimited";
+  streak: number;
+  puzzleNumber?: number;
+}) {
+  capture("hl_end", {
+    mode: props.mode,
+    streak: props.streak,
+    puzzle_number: props.puzzleNumber,
+  });
+}
+
 export function trackError(
   errorType: string,
   errorMessage: string,
