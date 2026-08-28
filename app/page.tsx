@@ -34,10 +34,7 @@ export default async function HomePage() {
             most-streamed songs across nearly 3,000 artists, play higher or
             lower on stream counts, or take the daily challenge, where everyone
             gets the same chain and a single attempt. The figures come from
-            Kworb.net, which estimates totals from Spotify chart performance,
-            and are refreshed every week. They are approximations rather than
-            official counts, but they are consistent, which is what makes them
-            worth guessing at.
+            Kworb.net and are refreshed every week.
           </p>
         </section>
       </main>

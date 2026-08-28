@@ -93,9 +93,9 @@ export default function HigherLowerPage() {
             </h2>
             <p className="text-sm text-text-secondary font-sans leading-relaxed">
               The pool is {poolSize.toLocaleString("en-GB")} tracks, every one
-              estimated at 500 million Spotify plays or more, drawn from artists
-              with 20 million or more followers. Between them they account for
-              something over 1.4 trillion estimated plays.
+              past 500 million Spotify streams, drawn from artists with 20
+              million or more followers. Between them they account for over 1.4
+              trillion plays.
             </p>
             <p className="text-sm text-text-secondary font-sans leading-relaxed">
               Consecutive tracks are always between 1.2 and 3 times apart. Wider

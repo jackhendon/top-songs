@@ -105,13 +105,10 @@ export default function DailyPage() {
               Where the numbers come from
             </h2>
             <p className="text-sm text-text-secondary font-sans leading-relaxed">
-              The figures come from Kworb.net, which estimates each track&apos;s
-              all-time total from how long it spent in Spotify&apos;s daily top
-              200. Spotify does not publish exact per-track counts, so these are
-              approximations, not official numbers. They are refreshed weekly
-              and nothing is adjusted here to make a round closer or fairer.
-              When a pair feels wrong, it is usually because streaming does not
-              reward the songs you would expect: chart position, radio play and
+              Stream figures come from Kworb.net and are refreshed weekly.
+              Nothing is adjusted here to make a round closer or fairer. When a
+              pair feels wrong, it is usually because streaming does not reward
+              the songs you would expect: chart position, radio play and
               cultural memory all pull in different directions.
             </p>
           </div>

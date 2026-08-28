@@ -242,9 +242,7 @@ export default async function ArtistPage({ params }: PageProps) {
                   </tbody>
                 </table>
                 <p className="mt-3 text-xs text-text-faint font-sans">
-                  Figures are Kworb.net estimates derived from Spotify chart
-                  performance, not official play counts, and are refreshed
-                  weekly.
+                  Stream figures from Kworb.net, refreshed weekly.
                 </p>
               </div>
             </details>
