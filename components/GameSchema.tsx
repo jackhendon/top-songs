@@ -1,7 +1,4 @@
-interface FaqEntry {
-  question: string;
-  answer: string;
-}
+import { faqPageSchema, toJsonLd, type FaqEntry } from "@/lib/jsonLd";
 
 interface GameSchemaProps {
   name: string;
@@ -11,21 +8,6 @@ interface GameSchemaProps {
 }
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://www.topsongs.io";
-
-/**
- * Escapes for injection into a <script> element. JSON.stringify does not escape
- * "</script", so a value containing it would close the element early. Nothing
- * here is user-supplied today, but the artist pages had exactly this bug with
- * scraped track titles and it is not worth having two different standards.
- */
-function toJsonLd(value: unknown): string {
-  return JSON.stringify(value)
-    .replace(/</g, "\\u003c")
-    .replace(/>/g, "\\u003e")
-    .replace(/&/g, "\\u0026")
-    .replace(/\u2028/g, "\\u2028")
-    .replace(/\u2029/g, "\\u2029");
-}
 
 export default function GameSchema({
   name,
@@ -47,18 +29,7 @@ export default function GameSchema({
     isAccessibleForFree: true,
   };
 
-  // Only the questions actually rendered on the page. Google requires FAQPage
-  // answers to be visible, and the artist pages previously shipped markup for
-  // questions that appeared nowhere.
-  const faqPage = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: faq.map((entry) => ({
-      "@type": "Question",
-      name: entry.question,
-      acceptedAnswer: { "@type": "Answer", text: entry.answer },
-    })),
-  };
+  const faqPage = faqPageSchema(faq);
 
   return (
     <>

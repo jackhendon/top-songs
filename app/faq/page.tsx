@@ -2,17 +2,48 @@ import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Beer } from "lucide-react";
+import { faqPageSchema, toJsonLd } from "@/lib/jsonLd";
 
 export const metadata = {
   title: "FAQ & About - Top Songs",
   description:
-    "Learn how Top Songs works, where streaming data comes from, and meet the developer behind the game.",
+    "How the three Top Songs games work, where the Spotify streaming figures come from, and who built it.",
   alternates: { canonical: "/faq" },
 };
+
+// Only the questions rendered below, since FAQPage requires visible answers.
+const FAQ_SCHEMA = [
+  {
+    question: "What games are there on Top Songs?",
+    answer:
+      "Three, all built on the same Spotify streaming figures. Guess the top 10 asks you to name an artist's ten most-streamed songs from a directory of nearly 3,000 artists. Higher or Lower shows you two songs and asks which has more plays. The Daily Challenge is fifteen songs, one attempt, and the same chain for everyone that day, resetting at midnight UTC.",
+  },
+  {
+    question: "Where do the streaming numbers come from?",
+    answer:
+      "All streaming figures are sourced from Kworb.net, which aggregates publicly available Spotify data. Spotify does not make exact counts easily available, so these are a close approximation rather than guaranteed exact, and they are updated regularly rather than in real time.",
+  },
+  {
+    question: "Is Top Songs affiliated with Spotify?",
+    answer:
+      "No. Top Songs is an independent fan project. All artist names, images and trademarks belong to their respective owners.",
+  },
+  {
+    question: "Is my data stored anywhere?",
+    answer:
+      "Your game history and preferences are saved in your browser's localStorage and never leave your device. Analytics are privacy-friendly and cookieless.",
+  },
+];
 
 export default function FAQPage() {
   return (
     <div className="min-h-screen flex flex-col bg-bg-primary">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: toJsonLd(faqPageSchema(FAQ_SCHEMA)),
+        }}
+      />
       <Header logoHref="/" showNewArtist asHeading={false} />
 
       <main className="flex-1 container mx-auto px-4 py-8 max-w-2xl">
@@ -24,14 +55,56 @@ export default function FAQPage() {
           {/* How to Play */}
           <section>
             <h2 className="font-display text-lg font-bold text-text-primary mb-2">
-              How do I play?
+              What games are there on Top Songs?
             </h2>
             <p>
-              Pick any artist and try to guess their 10 most-streamed songs on
+              Three, all built on the same Spotify streaming figures.
+            </p>
+            <p className="mt-3">
+              <strong className="text-text-primary">Guess the top 10.</strong>{" "}
+              Pick any artist and try to name their 10 most-streamed songs on
               Spotify. Type a song title into the search box and, if it&apos;s
               in the top 10, it slots into the correct rank. There&apos;s no
-              limit on guesses, but the game tracks how many you use, so the fewer
-              it takes, the better your score.
+              limit on guesses, but the game tracks how many you use, so the
+              fewer it takes, the better your score. There are nearly 3,000
+              artists in the{" "}
+              <Link
+                href="/directory"
+                className="text-mustard dark:text-mint underline underline-offset-2"
+              >
+                directory
+              </Link>
+              .
+            </p>
+            <p className="mt-3">
+              <strong className="text-text-primary">
+                <Link
+                  href="/higher-lower"
+                  className="text-mustard dark:text-mint underline underline-offset-2"
+                >
+                  Higher or Lower
+                </Link>
+                .
+              </strong>{" "}
+              You&apos;re shown two songs and asked which has more Spotify
+              plays. Get it right and it keeps going. This one needs no recall
+              at all, so it&apos;s the one to try if an artist comes up whose
+              back catalogue you don&apos;t know.
+            </p>
+            <p className="mt-3">
+              <strong className="text-text-primary">
+                <Link
+                  href="/daily"
+                  className="text-mustard dark:text-mint underline underline-offset-2"
+                >
+                  The Daily Challenge
+                </Link>
+                .
+              </strong>{" "}
+              The same idea, but fifteen songs, one attempt, and everybody
+              playing that day gets the identical chain. It resets at midnight
+              UTC. Your streak is shareable precisely because whoever you send
+              it to played exactly the same puzzle.
             </p>
           </section>
 
@@ -71,7 +144,7 @@ export default function FAQPage() {
 
           <section>
             <h2 className="font-display text-lg font-bold text-text-primary mb-2">
-              Is this affiliated with Spotify?
+              Is Top Songs affiliated with Spotify?
             </h2>
             <p>
               No. Top Songs is an independent fan project. All artist names,
