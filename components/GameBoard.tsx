@@ -3,20 +3,14 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useGameStore, getHintsUsed } from "@/lib/gameStore";
-import { trackGameAbandoned, trackNextArtist, trackShare } from "@/lib/analytics";
-import { formatTime, possessive, pluralize, spotifyImage } from "@/lib/format";
 import {
-  Music2,
-  Trophy,
-  Flag,
-  RotateCcw,
-  ExternalLink,
-  Share2,
-  Check,
-  Clock,
-  Hash,
-  Lightbulb,
-} from "lucide-react";
+  trackGameAbandoned,
+  trackModeSwitch,
+  trackNextArtist,
+  trackShare,
+} from "@/lib/analytics";
+import { formatTime, possessive, pluralize, spotifyImage } from "@/lib/format";
+import { Check, Clock, ExternalLink, Flag, Hash, Lightbulb, Music2, RotateCcw, Share2, TrendingUp, Trophy } from "lucide-react";
 import SlotCard from "./SlotCard";
 import OverflowList from "./OverflowList";
 import GuessInput from "./GuessInput";
@@ -302,6 +296,31 @@ export default function GameBoard({
               Think you&apos;re the biggest {artistName} fan of your friends?
               Share your results and find out!
             </p>
+
+            {/* A different game for whoever just struggled. Scores here are
+                bimodal: 49% get 10/10, 12% get zero, and the low scorers did
+                not fail at the game so much as not know the artist. Sending
+                them to another artist is offering more of what just did not
+                work. Higher/lower needs no recall, so it is the one exit that
+                suits them. */}
+            {score <= 5 && (
+              <Link
+                href="/higher-lower"
+                onClick={() => trackModeSwitch({ from: artistName, score })}
+                className="w-full card p-4 flex items-center gap-3 hover:border-mustard dark:hover:border-mint transition-colors text-left"
+              >
+                <TrendingUp className="w-5 h-5 text-sage-dark shrink-0" />
+                <span>
+                  <span className="block text-sm font-sans font-semibold text-text-primary">
+                    Not your artist? Try Higher or Lower
+                  </span>
+                  <span className="block text-xs text-text-muted font-sans">
+                    No song titles to remember. Just guess which track has more
+                    streams.
+                  </span>
+                </span>
+              </Link>
+            )}
 
             {/* Onward route. Finishing a round and stopping is where players
                 are lost: only 17% of those who finish one game go on to a

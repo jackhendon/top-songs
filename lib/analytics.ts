@@ -304,6 +304,15 @@ export function trackNextArtist(props: {
   });
 }
 
+/**
+ * A player leaving the artist quiz for higher/lower after a low score. Offered
+ * only below 6/10, so this measures whether the lower-floor game actually
+ * rescues the people the recall format loses.
+ */
+export function trackModeSwitch(props: { from: string; score: number }) {
+  capture("mode_switch", { from_artist: props.from, score: props.score });
+}
+
 export function trackDonationClick() {
   capture("donation_click");
 }

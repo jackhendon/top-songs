@@ -1,4 +1,4 @@
-import { Music, User, RotateCcw, CircleHelp } from "lucide-react";
+import { Music, User, RotateCcw, CircleHelp, Sparkles } from "lucide-react";
 import Link from "next/link";
 import ThemeToggle from "./ThemeToggle";
 
@@ -59,6 +59,17 @@ export default function Header({
           )}
 
           <div className="flex items-center gap-1">
+            {/* On every page, not just the homepage. 74% of visitors arrive on
+                an artist page from search and never see /, so this is the only
+                place most people can discover the daily. */}
+            <Link
+              href="/daily"
+              className="btn-secondary text-sm whitespace-nowrap w-9 h-9 p-0 flex items-center justify-center sm:w-auto sm:h-auto sm:px-4 sm:py-2"
+              aria-label="Daily challenge"
+            >
+              <Sparkles className="w-4 h-4 sm:hidden" />
+              <span className="hidden sm:inline">Daily</span>
+            </Link>
             {showNewArtist && (onReset ? (
               <button
                 onClick={onReset}

@@ -48,6 +48,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...directoryEntries,
     ...artistEntries,
     {
+      // Both games are real pages with their own search intent ("higher or
+      // lower music game", "daily music quiz"), so they belong in the sitemap
+      // rather than being reachable only through the header.
+      url: `${baseUrl}/daily`,
+      lastModified,
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/higher-lower`,
+      lastModified,
+      priority: 0.8,
+    },
+    {
       url: `${baseUrl}/faq`,
       lastModified,
       priority: 0.4,

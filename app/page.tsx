@@ -1,6 +1,7 @@
 import Header from "@/components/Header";
 import ArtistSelector from "@/components/ArtistSelector";
 import Footer from "@/components/Footer";
+import ModePicker from "@/components/ModePicker";
 import { getDailyArtistSlug, ARTIST_BIOS } from "@/lib/artistBios";
 import { getArtistMetadata } from "@/lib/getArtistMetadata";
 import { slugToArtistName } from "@/lib/slugs";
@@ -22,6 +23,7 @@ export default async function HomePage() {
 
       <main className="flex-1 container mx-auto px-4 py-8 max-w-4xl">
         <ArtistSelector dailyArtist={dailyArtist} />
+        <ModePicker />
         <section className="mt-8 px-2">
           <h2 className="font-display text-base font-bold text-text-secondary mb-2 tracking-[-0.02em]">
             Why Play Top Songs?
