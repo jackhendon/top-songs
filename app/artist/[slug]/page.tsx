@@ -173,8 +173,8 @@ export default async function ArtistPage({ params }: PageProps) {
             </h1>
             <p className="text-sm text-text-secondary leading-relaxed">
               Guess {possessive(name)} ten most-streamed songs on Spotify in as few
-              guesses as you can. Every answer is ranked by real play count, not
-              by chart position or opinion.
+              guesses as you can. Every answer is ranked by estimated Spotify
+              streams, not by opinion.
             </p>
           </div>
 
@@ -241,6 +241,11 @@ export default async function ArtistPage({ params }: PageProps) {
                     ))}
                   </tbody>
                 </table>
+                <p className="mt-3 text-xs text-text-faint font-sans">
+                  Figures are Kworb.net estimates derived from Spotify chart
+                  performance, not official play counts, and are refreshed
+                  weekly.
+                </p>
               </div>
             </details>
           </div>

@@ -180,7 +180,7 @@ export function aboutParagraph(facts: ArtistFacts): string {
         [
           `${name} has a streaming catalogue big enough that naming the ${many} most-played tracks is harder than it sounds.`,
           `Spotify lists no genre tags for ${name}, so the streaming figures are the clearest guide to what actually landed.`,
-          `The ${many} biggest ${name} tracks on Spotify are decided by play count alone, which is not the same as the best known.`,
+          `The ${many} biggest ${name} tracks on Spotify are decided by streaming figures alone, which is not the same as the best known.`,
         ],
         slug,
       ),

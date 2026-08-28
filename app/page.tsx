@@ -29,14 +29,15 @@ export default async function HomePage() {
             Why Play Top Songs?
           </h2>
           <p className="text-sm text-text-muted font-sans leading-relaxed">
-            TopSongs.io is a set of free browser games built on real Spotify
-            play counts rather than opinion. Guess any artist&apos;s ten
+            TopSongs.io is a set of free browser games built on Spotify
+            streaming data rather than opinion. Guess any artist&apos;s ten
             most-streamed songs across nearly 3,000 artists, play higher or
             lower on stream counts, or take the daily challenge, where everyone
             gets the same chain and a single attempt. The figures come from
-            Kworb.net and are refreshed every week, so what you are being tested
-            on is what people actually played, which is rarely what the charts
-            remember.
+            Kworb.net, which estimates totals from Spotify chart performance,
+            and are refreshed every week. They are approximations rather than
+            official counts, but they are consistent, which is what makes them
+            worth guessing at.
           </p>
         </section>
       </main>

@@ -57,7 +57,7 @@ export default function ArtistSchema({
     genre: "Music trivia",
     gamePlatform: "Web browser",
     numberOfPlayers: { "@type": "QuantitativeValue", value: 1 },
-    description: `Guess ${possessive(artistName)} ten most-streamed songs on Spotify, ranked by total play count.`,
+    description: `Guess ${possessive(artistName)} ten most-streamed songs on Spotify, ranked by estimated total streams.`,
     isAccessibleForFree: true,
   };
   if (artistImage) gameSchema.image = artistImage;

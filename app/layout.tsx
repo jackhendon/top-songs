@@ -19,9 +19,9 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_BASE_URL || "https://www.topsongs.io",
   ),
-  title: "Top Songs - Music Games Built on Real Spotify Data",
+  title: "Top Songs - Music Games Built on Spotify Streaming Data",
   description:
-    "Three free music games built on real Spotify play counts: guess an artist's top 10, play higher or lower on stream counts, or take the daily challenge.",
+    "Three free music games built on Spotify streaming data: guess an artist's top 10, play higher or lower on stream counts, or take the daily challenge.",
   alternates: { canonical: "/" },
 };
 

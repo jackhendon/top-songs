@@ -95,7 +95,8 @@ export default function DailyPage() {
               It is harder than it looks. The songs are all enormous, so you are
               never choosing between a hit and an obscurity. You are choosing
               between two tracks you know, and being asked which of them the
-              world actually played more.
+              world played more, which is not the one that felt bigger at the
+              time nearly as often as you would expect.
             </p>
           </div>
 
@@ -104,12 +105,14 @@ export default function DailyPage() {
               Where the numbers come from
             </h2>
             <p className="text-sm text-text-secondary font-sans leading-relaxed">
-              Every figure is a real all-time Spotify play count, sourced from
-              Kworb.net and refreshed weekly. Nothing is adjusted to make a
-              round closer or fairer. When a pair feels wrong, it is usually
-              because streaming does not reward the songs you would expect:
-              chart position, radio play and cultural memory all pull in
-              different directions from raw plays.
+              The figures come from Kworb.net, which estimates each track&apos;s
+              all-time total from how long it spent in Spotify&apos;s daily top
+              200. Spotify does not publish exact per-track counts, so these are
+              approximations, not official numbers. They are refreshed weekly
+              and nothing is adjusted here to make a round closer or fairer.
+              When a pair feels wrong, it is usually because streaming does not
+              reward the songs you would expect: chart position, radio play and
+              cultural memory all pull in different directions.
             </p>
           </div>
 

@@ -29,10 +29,10 @@ export default function Header({
       </div>
       <div className="text-left">
         <Wordmark className="block font-display text-2xl md:text-3xl font-extrabold text-text-primary tracking-[-0.04em]">
-          Top Songs<span className="sr-only">: Music Games Built on Real Spotify Data</span>
+          Top Songs<span className="sr-only">: Music Games Built on Spotify Streaming Data</span>
         </Wordmark>
         <p className="text-xs text-text-muted hidden sm:block font-sans font-medium">
-          Music games built on real Spotify play counts.
+          Music games built on Spotify streaming data.
         </p>
       </div>
     </>

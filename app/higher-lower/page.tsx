@@ -21,7 +21,7 @@ const FAQ = [
   {
     question: "How are the stream counts worked out?",
     answer:
-      "Every figure is a track's total all-time play count on Spotify, taken from Kworb.net, which aggregates public Spotify chart data. Nothing is estimated or rounded for difficulty: if a track shows 1.2 billion plays, that is the number Kworb reports.",
+      "They come from Kworb.net, which estimates a track's all-time total from how long it spent in Spotify's daily top 200. Spotify does not publish exact per-track play counts, so these are approximations rather than official figures. Nothing is adjusted here to make a round harder or easier: whatever Kworb reports is what you are shown.",
   },
   {
     question: "How often do the numbers change?",
@@ -31,7 +31,7 @@ const FAQ = [
   {
     question: "Which songs can come up?",
     answer:
-      "Tracks with at least 500 million plays, by artists with at least 20 million Spotify followers. That is 949 tracks from 110 artists. The floor exists because comparing two songs you have never heard of is a coin flip rather than a question.",
+      "Tracks estimated at 500 million plays or more, by artists with at least 20 million Spotify followers. That is 949 tracks from 110 artists. The floor exists because comparing two songs you have never heard of is a coin flip rather than a question.",
   },
   {
     question: "What counts as a good streak?",
@@ -93,9 +93,9 @@ export default function HigherLowerPage() {
             </h2>
             <p className="text-sm text-text-secondary font-sans leading-relaxed">
               The pool is {poolSize.toLocaleString("en-GB")} tracks, every one
-              with at least 500 million Spotify plays, drawn from artists with
-              20 million or more followers. Between them they have been played
-              over 1.4 trillion times.
+              estimated at 500 million Spotify plays or more, drawn from artists
+              with 20 million or more followers. Between them they account for
+              something over 1.4 trillion estimated plays.
             </p>
             <p className="text-sm text-text-secondary font-sans leading-relaxed">
               Consecutive tracks are always between 1.2 and 3 times apart. Wider
