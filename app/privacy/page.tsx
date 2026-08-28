@@ -88,6 +88,12 @@ export default function PrivacyPage() {
                 set only if you choose to opt out above
               </li>
               <li>
+                <span className="text-text-secondary">Daily challenge result:</span>{" "}
+                your streak for each day you play the daily, so it can be shown
+                back to you instead of letting you replay a puzzle that is meant
+                to be one attempt
+              </li>
+              <li>
                 <span className="text-text-secondary">Visit count:</span> how
                 many times you have visited and the dates of your first and most
                 recent visit, so we can tell how many people come back. It is a

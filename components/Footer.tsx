@@ -38,6 +38,18 @@ export default function Footer() {
             Privacy
           </Link>
           <Link
+            href="/daily"
+            className="underline underline-offset-2 hover:text-text-secondary transition-colors"
+          >
+            Daily Challenge
+          </Link>
+          <Link
+            href="/higher-lower"
+            className="underline underline-offset-2 hover:text-text-secondary transition-colors"
+          >
+            Higher or Lower
+          </Link>
+          <Link
             href="/directory"
             className="underline underline-offset-2 hover:text-text-secondary transition-colors"
           >

@@ -29,7 +29,14 @@ export default async function HomePage() {
             Why Play Top Songs?
           </h2>
           <p className="text-sm text-text-muted font-sans leading-relaxed">
-            TopSongs.io is a free browser-based music game that tests your knowledge of the streaming era. Unlike traditional music quizzes, we focus on real Spotify data. Test your memory against the charts with thousands of artists from Taylor Swift to indie legends.
+            TopSongs.io is a set of free browser games built on real Spotify
+            play counts rather than opinion. Guess any artist&apos;s ten
+            most-streamed songs across nearly 3,000 artists, play higher or
+            lower on stream counts, or take the daily challenge, where everyone
+            gets the same chain and a single attempt. The figures come from
+            Kworb.net and are refreshed every week, so what you are being tested
+            on is what people actually played, which is rarely what the charts
+            remember.
           </p>
         </section>
       </main>
