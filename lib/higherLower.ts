@@ -1,3 +1,4 @@
+import scenesJson from "@/data/artist-scenes.json";
 import { getArtistSnapshot, INDEXABLE_SLUGS } from "./artistSnapshot";
 
 /**
@@ -22,14 +23,46 @@ import { getArtistSnapshot, INDEXABLE_SLUGS } from "./artistSnapshot";
  *    "Morad - Sigue" against "Tainy - Adicto", undecidable for most players.
  *    Requiring a well-followed artist as well is what fixes it.
  *
- * Honest limit: no single pool solves this globally. A catalogue this
- * international means any threshold favours whoever the player already listens
- * to. These constants are tuned for breadth, not fairness, and they are the
- * first thing to revisit if the format underperforms.
+ * A stream-and-follower floor alone did not solve it. Measured against the real
+ * data, 39% of pairs still crossed musical scenes, pitting a track the player
+ * knows against one they have never heard of. That was equally unplayable in
+ * both directions: 37% of players are not English-speaking, and for them
+ * Arctic Monkeys against Bad Bunny is just as arbitrary the other way round.
+ *
+ * So the fix is not a smaller catalogue but no mixing. Every run stays inside
+ * one scene, which lets the thresholds come down and the pool get deeper
+ * without the questions getting worse. Scenes live in data/artist-scenes.json
+ * so they can be corrected by hand.
  */
 
-const MIN_STREAMS = 500_000_000;
-const MIN_ARTIST_FOLLOWERS = 20_000_000;
+const MIN_STREAMS = 300_000_000;
+const MIN_ARTIST_FOLLOWERS = 10_000_000;
+
+/** The scene used by the daily and by an unlimited run that asks for nothing else. */
+export const DEFAULT_SCENE = "anglo";
+
+const SCENES = scenesJson as unknown as {
+  genreScenes: Record<string, string>;
+  artistScenes: Record<string, string>;
+};
+
+/**
+ * Artist overrides win, then the first genre with a mapping, then anglo.
+ *
+ * Genres are looked up by exact key, never matched as substrings. A regex
+ * version of this filed Ed Sheeran as k-pop, because his genre tag "folk-pop"
+ * contains the characters "k-pop".
+ */
+export function artistScene(slug: string, genres: string[]): string {
+  const override = SCENES.artistScenes[slug];
+  if (override) return override;
+
+  for (const genre of genres) {
+    const mapped = SCENES.genreScenes[genre];
+    if (mapped) return mapped;
+  }
+  return DEFAULT_SCENE;
+}
 
 /** Ratio band that makes a pair a real question rather than a gimme or a toss-up. */
 const MIN_RATIO = 1.2;
@@ -40,38 +73,81 @@ export interface HLTrack {
   artist: string;
   artistSlug: string;
   streams: number;
+  scene: string;
   imageUrl?: string;
 }
 
-let pool: HLTrack[] | null = null;
+/**
+ * A scene needs to be deep enough that a run is not most of it.
+ *
+ * Measured over 30 consecutive dailies: at 578 tracks a run uses 3% of the pool
+ * and repeats 0.6 of its 16 tracks from the day before, which nobody notices. At
+ * 122 it repeats 2.3 and exhausts the entire pool inside a month; at 56 it
+ * repeats 5.3. The pair quality holds up at every size, so this is not about
+ * whether the questions are answerable, only about whether a returning player
+ * keeps seeing the same songs. 300 is where a run drops to roughly 5% of the
+ * pool and overlap falls back to about one track.
+ */
+const MIN_PLAYABLE_SCENE_TRACKS = 300;
 
-/** Every track above the recognisability floor. Built once per process. */
-export function getPool(): HLTrack[] {
-  if (pool) return pool;
+/** Built in one pass over the snapshot, then cached for the process. */
+let allPools: Map<string, HLTrack[]> | null = null;
 
-  const built: HLTrack[] = [];
+function buildAllPools(): Map<string, HLTrack[]> {
+  if (allPools) return allPools;
+
+  const pools = new Map<string, HLTrack[]>();
   for (const slug of INDEXABLE_SLUGS) {
     const record = getArtistSnapshot(slug);
     if (!record?.topTen) continue;
-
     if ((record.followers ?? 0) < MIN_ARTIST_FOLLOWERS) continue;
+
+    const artistsScene = artistScene(slug, record.genres ?? []);
+    // "excluded" is for artists that should never appear, such as a duplicate
+    // entry for a band the same person already appears under.
+    if (artistsScene === "excluded") continue;
 
     for (const track of record.topTen) {
       if (track.totalStreams < MIN_STREAMS) continue;
-      built.push({
+      const bucket = pools.get(artistsScene) ?? [];
+      bucket.push({
         title: track.title,
         artist: record.spotifyName || record.name,
         artistSlug: slug,
         streams: track.totalStreams,
+        scene: artistsScene,
         imageUrl: record.imageUrl ?? undefined,
       });
+      pools.set(artistsScene, bucket);
     }
   }
 
   // Sorted so candidate lookup for a ratio band is a slice rather than a scan.
-  built.sort((a, b) => a.streams - b.streams);
-  pool = built;
-  return pool;
+  for (const bucket of pools.values()) bucket.sort((a, b) => a.streams - b.streams);
+
+  allPools = pools;
+  return pools;
+}
+
+/** Every usable track in one scene. Empty for a scene nobody is in. */
+export function getPool(scene: string = DEFAULT_SCENE): HLTrack[] {
+  return buildAllPools().get(scene) ?? [];
+}
+
+/**
+ * Scenes deep enough to actually offer. Everything else stays tagged, because
+ * the tag is what keeps those artists out of anglo, but is not playable on its
+ * own until the catalogue grows into it.
+ */
+export function playableScenes(): string[] {
+  return [...buildAllPools().entries()]
+    .filter(([, tracks]) => tracks.length >= MIN_PLAYABLE_SCENE_TRACKS)
+    .map(([scene]) => scene)
+    .sort();
+}
+
+export function isPlayableScene(scene: string): boolean {
+  return getPool(scene).length >= MIN_PLAYABLE_SCENE_TRACKS;
 }
 
 /**
@@ -116,8 +192,15 @@ function lowerBound(sorted: HLTrack[], streams: number): number {
  * different, easier question (you are ranking within a discography you may
  * already know) and it makes the chain feel repetitive.
  */
-export function buildChain(seed: string, length: number): HLTrack[] {
-  const all = getPool();
+export function buildChain(
+  seed: string,
+  length: number,
+  scene: string = DEFAULT_SCENE,
+): HLTrack[] {
+  // A scene below the depth floor falls back rather than serving a run that
+  // repeats yesterday's songs. Callers pass user input here.
+  const chosen = isPlayableScene(scene) ? scene : DEFAULT_SCENE;
+  const all = getPool(chosen);
   if (all.length < length + 1) return [];
 
   const random = rng(hashSeed(seed));

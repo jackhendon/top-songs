@@ -13,7 +13,7 @@ import { getPool } from "@/lib/higherLower";
 export const metadata: Metadata = {
   title: "Higher or Lower: Spotify Streams | Top Songs",
   description:
-    "Does this song have more Spotify streams than the last? Build a streak across 949 of the most-played tracks ever. Free, unlimited, no sign-up.",
+    "Does this song have more Spotify streams than the last? Build a streak across 1,750 of the most-played tracks ever. Free, unlimited, no sign-up.",
   alternates: { canonical: "/higher-lower" },
 };
 
@@ -31,7 +31,7 @@ const FAQ = [
   {
     question: "Which songs can come up?",
     answer:
-      "Tracks estimated at 500 million plays or more, by artists with at least 20 million Spotify followers. That is 949 tracks from 110 artists. The floor exists because comparing two songs you have never heard of is a coin flip rather than a question.",
+      "Tracks past 300 million streams, by artists with at least 10 million Spotify followers. A run also stays within one musical scene rather than mixing them, because a song you know against one you have never heard of is a coin flip rather than a question, and that is true whichever half you happen to recognise.",
   },
   {
     question: "What counts as a good streak?",
@@ -93,8 +93,8 @@ export default function HigherLowerPage() {
             </h2>
             <p className="text-sm text-text-secondary font-sans leading-relaxed">
               The pool is {poolSize.toLocaleString("en-GB")} tracks, every one
-              past 500 million Spotify streams, drawn from artists with 20
-              million or more followers. Between them they account for over 1.4
+              past 300 million Spotify streams, drawn from artists with 10
+              million or more followers. Between them they account for over 2
               trillion plays.
             </p>
             <p className="text-sm text-text-secondary font-sans leading-relaxed">
@@ -103,6 +103,13 @@ export default function HigherLowerPage() {
               rather than a judgement. The same artist never appears twice in a
               row either, since ranking two songs within one discography is a
               different and easier question.
+            </p>
+            <p className="text-sm text-text-secondary font-sans leading-relaxed">
+              A run also stays within one musical scene. Mixing them produced
+              pairs like a chart-topping reggaeton track against a stadium rock
+              single, which is not a hard question so much as an unanswerable
+              one, and it was unanswerable in both directions depending on what
+              you happen to listen to.
             </p>
           </div>
 

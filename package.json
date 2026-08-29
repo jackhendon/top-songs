@@ -10,7 +10,8 @@
     "snapshot": "node scripts/build-artist-snapshot.mjs",
     "related": "node scripts/build-related-artists.mjs",
     "check:spoilers": "node scripts/check-no-spoilers.mjs",
-    "check:style": "node scripts/check-no-em-dashes.mjs"
+    "check:style": "node scripts/check-no-em-dashes.mjs",
+    "check:scenes": "node scripts/check-scenes.mjs"
   },
   "dependencies": {
     "cheerio": "^1.2.0",

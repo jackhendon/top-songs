@@ -6,8 +6,8 @@ import { buildChain } from "@/lib/higherLower";
  *
  * The page itself stays static and CDN-cached; only the chain is dynamic, so a
  * player costs one small function call per run rather than a full render per
- * page load. The pool lives on the server: shipping all 948 tracks to the
- * browser would give away every answer.
+ * page load. The pool lives on the server: shipping it to the browser would give away
+ * every answer.
  */
 export async function GET(request: NextRequest) {
   const requested = Number(request.nextUrl.searchParams.get("length") ?? 25);
