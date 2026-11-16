@@ -129,7 +129,7 @@ export default async function ArtistPage({ params }: PageProps) {
             so the notes and stats shown on other artist pages are not available
             here yet.
           </p>
-          <Link
+          <Link prefetch={false}
             href="/directory"
             className="text-sm text-mustard dark:text-mint underline underline-offset-2"
           >
@@ -283,7 +283,7 @@ export default async function ArtistPage({ params }: PageProps) {
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               {related.map(({ slug: s, name: n }) => (
-                <Link
+                <Link prefetch={false}
                   key={s}
                   href={`/artist/${s}`}
                   className="artist-card text-sm"
@@ -294,7 +294,7 @@ export default async function ArtistPage({ params }: PageProps) {
             </div>
             <p className="text-xs text-text-faint font-sans">
               Or{" "}
-              <Link
+              <Link prefetch={false}
                 href="/directory"
                 className="underline underline-offset-2 text-mustard dark:text-mint"
               >

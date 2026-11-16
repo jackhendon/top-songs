@@ -25,31 +25,31 @@ export default function Footer() {
           affiliated with Spotify or any listed artist.
         </p>
         <p className="space-x-3">
-          <Link
+          <Link prefetch={false}
             href="/faq"
             className="underline underline-offset-2 hover:text-text-secondary transition-colors"
           >
             FAQ
           </Link>
-          <Link
+          <Link prefetch={false}
             href="/privacy"
             className="underline underline-offset-2 hover:text-text-secondary transition-colors"
           >
             Privacy
           </Link>
-          <Link
+          <Link prefetch={false}
             href="/daily"
             className="underline underline-offset-2 hover:text-text-secondary transition-colors"
           >
             Daily Challenge
           </Link>
-          <Link
+          <Link prefetch={false}
             href="/higher-lower"
             className="underline underline-offset-2 hover:text-text-secondary transition-colors"
           >
             Higher or Lower
           </Link>
-          <Link
+          <Link prefetch={false}
             href="/directory"
             className="underline underline-offset-2 hover:text-text-secondary transition-colors"
           >

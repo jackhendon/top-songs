@@ -304,7 +304,7 @@ export default function GameBoard({
                 work. Higher/lower needs no recall, so it is the one exit that
                 suits them. */}
             {score <= 5 && (
-              <Link
+              <Link prefetch={false}
                 href="/higher-lower"
                 onClick={() => trackModeSwitch({ from: artistName, score })}
                 className="w-full card p-4 flex items-center gap-3 hover:border-mustard dark:hover:border-mint transition-colors text-left"
@@ -334,7 +334,7 @@ export default function GameBoard({
                 </p>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                   {relatedArtists.slice(0, 6).map(({ slug, name }) => (
-                    <Link
+                    <Link prefetch={false}
                       key={slug}
                       href={`/artist/${slug}`}
                       onClick={() =>

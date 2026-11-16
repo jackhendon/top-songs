@@ -133,14 +133,14 @@ export default function HigherLowerPage() {
 
           <p className="text-sm text-text-muted font-sans">
             Playing for a score?{" "}
-            <Link
+            <Link prefetch={false}
               href="/daily"
               className="underline underline-offset-2 text-mustard dark:text-mint"
             >
               Try today&apos;s daily challenge
             </Link>
             , where everyone gets the same chain and one attempt. Or{" "}
-            <Link
+            <Link prefetch={false}
               href="/directory"
               className="underline underline-offset-2 text-mustard dark:text-mint"
             >

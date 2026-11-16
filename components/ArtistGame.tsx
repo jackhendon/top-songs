@@ -106,7 +106,7 @@ export default function ArtistGame({
         <main className="flex-1 container mx-auto px-4 py-8 max-w-4xl">
           <div className="card p-6 sm:p-8 text-center space-y-4">
             <p className="text-error-dark font-medium font-sans">{error}</p>
-            <Link href="/" className="btn-primary inline-block">
+            <Link prefetch={false} href="/" className="btn-primary inline-block">
               Back to Home
             </Link>
           </div>

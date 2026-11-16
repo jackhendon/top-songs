@@ -271,7 +271,7 @@ export default function HigherLowerGame({
               </span>
             </button>
           ) : (
-            <Link href="/higher-lower" className="btn-secondary text-sm">
+            <Link prefetch={false} href="/higher-lower" className="btn-secondary text-sm">
               Keep playing
             </Link>
           )}
@@ -280,7 +280,7 @@ export default function HigherLowerGame({
         {mode === "daily" && (
           <p className="text-xs text-text-faint font-sans">
             A new daily lands at midnight UTC. Until then,{" "}
-            <Link
+            <Link prefetch={false}
               href="/higher-lower"
               className="underline underline-offset-2 text-mustard dark:text-mint"
             >

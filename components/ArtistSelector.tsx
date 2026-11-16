@@ -123,7 +123,7 @@ export default function ArtistSelector({ dailyArtist }: { dailyArtist: DailyArti
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-4 gap-2">
           {popularArtists.map((artist) => (
-            <Link
+            <Link prefetch={false}
               key={artist}
               href={`/artist/${artistNameToSlug(artist)}`}
               className="artist-card text-sm"

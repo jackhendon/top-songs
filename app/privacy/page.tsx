@@ -104,7 +104,7 @@ export default function PrivacyPage() {
             <p className="mt-2">
               This data never leaves your device. You can clear it at any time
               from your browser settings or the{" "}
-              <Link
+              <Link prefetch={false}
                 href="/profile"
                 className="text-mustard dark:text-mint underline underline-offset-2"
               >

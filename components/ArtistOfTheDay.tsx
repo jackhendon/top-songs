@@ -46,7 +46,7 @@ export default function ArtistOfTheDay({ slug, name, imageUrl, bio }: ArtistOfTh
             </p>
           </div>
 
-          <Link
+          <Link prefetch={false}
             href={`/artist/${slug}`}
             className="btn btn-primary shrink-0 text-sm"
           >

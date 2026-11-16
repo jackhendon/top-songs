@@ -111,7 +111,7 @@ export default async function DirectoryPage({ searchParams }: PageProps) {
         {pageArtists.length > 0 ? (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
             {pageArtists.map((artist) => (
-              <Link
+              <Link prefetch={false}
                 key={artist.slug}
                 href={`/artist/${artist.slug}`}
                 className="artist-card text-sm"
@@ -135,7 +135,7 @@ export default async function DirectoryPage({ searchParams }: PageProps) {
             aria-label="Pagination"
           >
             {page > 1 ? (
-              <Link
+              <Link prefetch={false}
                 href={buildHref(page - 1)}
                 className="btn-secondary text-sm px-5 py-2"
               >
@@ -152,7 +152,7 @@ export default async function DirectoryPage({ searchParams }: PageProps) {
             </span>
 
             {page < totalPages ? (
-              <Link
+              <Link prefetch={false}
                 href={buildHref(page + 1)}
                 className="btn-secondary text-sm px-5 py-2"
               >

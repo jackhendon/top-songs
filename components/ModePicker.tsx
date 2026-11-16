@@ -20,7 +20,7 @@ export default function ModePicker() {
       </h2>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <Link
+        <Link prefetch={false}
           href="/daily"
           className="card p-5 flex items-start gap-3 hover:border-mustard dark:hover:border-mint transition-colors"
         >
@@ -38,7 +38,7 @@ export default function ModePicker() {
           </span>
         </Link>
 
-        <Link
+        <Link prefetch={false}
           href="/higher-lower"
           className="card p-5 flex items-start gap-3 hover:border-mustard dark:hover:border-mint transition-colors"
         >

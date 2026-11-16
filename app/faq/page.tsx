@@ -68,7 +68,7 @@ export default function FAQPage() {
               limit on guesses, but the game tracks how many you use, so the
               fewer it takes, the better your score. There are nearly 3,000
               artists in the{" "}
-              <Link
+              <Link prefetch={false}
                 href="/directory"
                 className="text-mustard dark:text-mint underline underline-offset-2"
               >
@@ -78,7 +78,7 @@ export default function FAQPage() {
             </p>
             <p className="mt-3">
               <strong className="text-text-primary">
-                <Link
+                <Link prefetch={false}
                   href="/higher-lower"
                   className="text-mustard dark:text-mint underline underline-offset-2"
                 >
@@ -93,7 +93,7 @@ export default function FAQPage() {
             </p>
             <p className="mt-3">
               <strong className="text-text-primary">
-                <Link
+                <Link prefetch={false}
                   href="/daily"
                   className="text-mustard dark:text-mint underline underline-offset-2"
                 >
@@ -160,7 +160,7 @@ export default function FAQPage() {
               Your game history and preferences are saved in your browser&apos;s
               localStorage and never leave your device. We use privacy-friendly,
               cookieless analytics. See the{" "}
-              <Link
+              <Link prefetch={false}
                 href="/privacy"
                 className="text-mustard dark:text-mint underline underline-offset-2"
               >

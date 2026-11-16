@@ -133,14 +133,14 @@ export default function DailyPage() {
 
           <p className="text-sm text-text-muted font-sans">
             Already played today?{" "}
-            <Link
+            <Link prefetch={false}
               href="/higher-lower"
               className="underline underline-offset-2 text-mustard dark:text-mint"
             >
               Play unlimited
             </Link>{" "}
             with no cap on the streak, or{" "}
-            <Link
+            <Link prefetch={false}
               href="/directory"
               className="underline underline-offset-2 text-mustard dark:text-mint"
             >

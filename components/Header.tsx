@@ -46,7 +46,7 @@ export default function Header({
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           {logoHref ? (
-            <Link href={logoHref} className="flex items-center gap-3">
+            <Link prefetch={false} href={logoHref} className="flex items-center gap-3">
               {logoContent}
             </Link>
           ) : (
@@ -62,7 +62,7 @@ export default function Header({
             {/* On every page, not just the homepage. 74% of visitors arrive on
                 an artist page from search and never see /, so this is the only
                 place most people can discover the daily. */}
-            <Link
+            <Link prefetch={false}
               href="/daily"
               className="btn-secondary text-sm whitespace-nowrap w-9 h-9 p-0 flex items-center justify-center sm:w-auto sm:h-auto sm:px-4 sm:py-2"
               aria-label="Daily challenge"
@@ -80,7 +80,7 @@ export default function Header({
                 <span className="hidden sm:inline">New Game</span>
               </button>
             ) : (
-              <Link
+              <Link prefetch={false}
                 href="/"
                 className="btn-secondary text-sm whitespace-nowrap w-9 h-9 p-0 flex items-center justify-center sm:w-auto sm:h-auto sm:px-4 sm:py-2"
                 aria-label="New Game"
@@ -90,14 +90,14 @@ export default function Header({
               </Link>
             ))}
             <ThemeToggle />
-            <Link
+            <Link prefetch={false}
               href="/faq"
               className="w-9 h-9 flex items-center justify-center rounded-full text-text-muted hover:text-text-primary hover:bg-bg-tertiary transition-colors"
               aria-label="FAQ & About"
             >
               <CircleHelp className="w-5 h-5" />
             </Link>
-            <Link
+            <Link prefetch={false}
               href="/profile"
               className="w-9 h-9 flex items-center justify-center rounded-full text-text-muted hover:text-text-primary hover:bg-bg-tertiary transition-colors"
               aria-label="Profile"

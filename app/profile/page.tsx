@@ -52,7 +52,7 @@ export default function ProfilePage() {
             <p className="text-sm text-text-muted mb-6 font-sans">
               Play a game to see your history here.
             </p>
-            <Link href="/" className="btn-primary inline-flex items-center gap-2">
+            <Link prefetch={false} href="/" className="btn-primary inline-flex items-center gap-2">
               <Play className="w-4 h-4" />
               Start Playing
             </Link>
