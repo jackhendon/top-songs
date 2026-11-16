@@ -1,4 +1,5 @@
 import posthog from "posthog-js";
+import { SHARE_REF_PARAM, SHARE_REF_VALUE } from "./share";
 
 const OPT_OUT_KEY = "analytics-opt-out";
 const VISITOR_KEY = "top-songs-visitor";
@@ -155,6 +156,8 @@ export function initPostHog() {
       days_since_first_visit: daysBetween(visitor.first, visitor.last),
     });
   }
+
+  trackShareArrival();
 }
 
 function capture(event: string, properties?: Record<string, unknown>) {
@@ -227,8 +230,31 @@ export function trackGameAbandoned(props: {
 export function trackShare(
   artistName: string,
   platform: "clipboard" | "twitter" | "native",
+  // Optional so older call sites keep working. Which game and how well it went
+  // are what say whether sharing is a winners-only behaviour.
+  detail?: { mode: "quiz" | "daily" | "higher-lower"; score: number },
 ) {
-  capture("share", { artist_name: artistName, platform });
+  capture("share", {
+    artist_name: artistName,
+    platform,
+    mode: detail?.mode,
+    score: detail?.score,
+  });
+}
+
+/**
+ * A visit that began from a shared result. Shares were 0.3% of finished games
+ * with no way to tell whether any of them brought anyone back; this is the
+ * other half of that loop. Fired once, on the page the link landed on.
+ */
+function trackShareArrival() {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get(SHARE_REF_PARAM) !== SHARE_REF_VALUE) return;
+    capture("share_arrival", { landing_path: window.location.pathname });
+  } catch {
+    // Never let a malformed URL break analytics.
+  }
 }
 
 /**

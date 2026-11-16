@@ -10,18 +10,22 @@ import {
   trackShare,
 } from "@/lib/analytics";
 import { formatTime, possessive, pluralize, spotifyImage } from "@/lib/format";
+import { buildQuizShare, shareResult } from "@/lib/share";
 import { Check, Clock, ExternalLink, Flag, Hash, Lightbulb, Music2, RotateCcw, Share2, TrendingUp, Trophy } from "lucide-react";
 import SlotCard from "./SlotCard";
 import OverflowList from "./OverflowList";
 import GuessInput from "./GuessInput";
 
 interface GameBoardProps {
+  /** The artist page this game lives on, so a shared result links back to it. */
+  slug: string;
   onPlayAgain: () => void;
   /** Suggestions for the end-of-game screen. Server-provided; see ArtistGame. */
   relatedArtists?: { slug: string; name: string }[];
 }
 
 export default function GameBoard({
+  slug,
   onPlayAgain,
   relatedArtists,
 }: GameBoardProps) {
@@ -83,20 +87,20 @@ export default function GameBoard({
   };
 
   const handleShare = async () => {
-    const row1 = Array.from({ length: 5 }, (_, i) => guessedIndices.has(i) ? "🟩" : "🟥").join("");
-    const row2 = Array.from({ length: 5 }, (_, i) => guessedIndices.has(i + 5) ? "🟩" : "🟥").join("");
-    const text = `TopSongs.io - ${artistName}\n${row1}\n${row2}\n🎉 Score: ${score}/10\n\nCan you beat me?\ntopsongs.io`;
+    const payload = buildQuizShare({
+      artistName,
+      slug,
+      guessed: Array.from({ length: 10 }, (_, i) => guessedIndices.has(i)),
+      totalGuesses,
+      hintsUsed,
+      elapsedSeconds: elapsed,
+    });
 
-    if (window.matchMedia("(pointer: coarse)").matches && navigator.share) {
-      try {
-        await navigator.share({ text });
-        trackShare(artistName, "native");
-      } catch {
-        // User cancelled
-      }
-    } else {
-      await navigator.clipboard.writeText(text);
-      trackShare(artistName, "clipboard");
+    const method = await shareResult(payload);
+    if (!method) return;
+
+    trackShare(artistName, method, { mode: "quiz", score });
+    if (method === "clipboard") {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     }
@@ -267,17 +271,13 @@ export default function GameBoard({
             </div>
           </div>
           <div className="space-y-2 flex flex-col items-center">
+            {/* Share leads. Replaying an artist whose answers are now on screen
+                is the weaker next step, and sharing is the only route by which
+                one player brings another. */}
             <div className="flex items-center gap-3">
               <button
-                onClick={onPlayAgain}
-                className="btn-primary inline-flex items-center gap-1.5 sm:gap-2 cursor-pointer text-sm sm:text-base !px-4 !py-2 sm:!px-6 sm:!py-3 whitespace-nowrap"
-              >
-                <RotateCcw className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                Play Again
-              </button>
-              <button
                 onClick={handleShare}
-                className="btn-secondary inline-flex items-center gap-1.5 sm:gap-2 cursor-pointer text-sm sm:text-base !px-4 !py-2 sm:!px-6 sm:!py-3 whitespace-nowrap"
+                className="btn-primary inline-flex items-center gap-1.5 sm:gap-2 cursor-pointer text-sm sm:text-base !px-4 !py-2 sm:!px-6 sm:!py-3 whitespace-nowrap"
               >
                 {copied ? (
                   <>
@@ -287,14 +287,22 @@ export default function GameBoard({
                 ) : (
                   <>
                     <Share2 className="w-4 h-4" />
-                    Share Result
+                    {score <= 5 ? "Challenge a Friend" : "Share Result"}
                   </>
                 )}
               </button>
+              <button
+                onClick={onPlayAgain}
+                className="btn-secondary inline-flex items-center gap-1.5 sm:gap-2 cursor-pointer text-sm sm:text-base !px-4 !py-2 sm:!px-6 sm:!py-3 whitespace-nowrap"
+              >
+                <RotateCcw className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                Play Again
+              </button>
             </div>
             <p className="text-xs text-center text-text-muted font-sans">
-              Think you&apos;re the biggest {artistName} fan of your friends?
-              Share your results and find out!
+              {score <= 5
+                ? `Know someone who thinks they know ${artistName}? Send them this one.`
+                : `Think you're the biggest ${artistName} fan of your friends? Send them your score to beat.`}
             </p>
 
             {/* A different game for whoever just struggled. Scores here are

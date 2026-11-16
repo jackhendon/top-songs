@@ -185,6 +185,7 @@ export default function ArtistGame({
 
       <main className="flex-1 container mx-auto px-4 py-8 max-w-4xl">
         <GameBoard
+          slug={slug}
           onPlayAgain={handlePlayAgain}
           relatedArtists={relatedArtists}
         />

@@ -1,10 +1,11 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowDown, ArrowUp, Check, RotateCcw, Share2, X } from "lucide-react";
 import type { HLTrack } from "@/lib/higherLower";
 import { spotifyImage } from "@/lib/format";
+import { buildHigherLowerShare, shareResult } from "@/lib/share";
 import {
   trackHigherLowerEnd,
   trackHigherLowerStart,
@@ -187,28 +188,18 @@ export default function HigherLowerGame({
     }
   };
 
-  const shareText = useMemo(() => {
-    const heading =
-      mode === "daily"
-        ? `Top Songs Daily #${puzzleNumber}`
-        : "Top Songs: Higher or Lower";
-    return `${heading}\nStreak: ${streak}\n${resultGrid(results)}\n\ntopsongs.io/${mode === "daily" ? "daily" : "higher-lower"}`;
-  }, [mode, puzzleNumber, streak, results]);
-
   const handleShare = async () => {
-    if (window.matchMedia("(pointer: coarse)").matches && navigator.share) {
-      try {
-        await navigator.share({ text: shareText });
-        trackShare(mode === "daily" ? "daily" : "higher-lower", "native");
-      } catch {
-        // Cancelled.
-      }
-      return;
+    const method = await shareResult(
+      buildHigherLowerShare({ mode, puzzleNumber, streak, results }),
+    );
+    if (!method) return;
+
+    const shareMode = mode === "daily" ? "daily" : "higher-lower";
+    trackShare(shareMode, method, { mode: shareMode, score: streak });
+    if (method === "clipboard") {
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
     }
-    await navigator.clipboard.writeText(shareText);
-    trackShare(mode === "daily" ? "daily" : "higher-lower", "clipboard");
-    setCopied(true);
-    window.setTimeout(() => setCopied(false), 2000);
   };
 
   const playAgain = () => {
